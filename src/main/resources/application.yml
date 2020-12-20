@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: "jdbc:mysql://188.240.221.18:3306/test?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=true"
+    username: "USERNAME"
+    password: "PASSWORD"
+  mustache:
+    check-template-location: false
+
+settings:
+  test-scenario-scheduler:
+    pool-size: 2
+    thread-name-prefix: "test-scenario-pool-"
