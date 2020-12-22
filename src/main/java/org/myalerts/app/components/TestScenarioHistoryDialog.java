@@ -54,8 +54,7 @@ public class TestScenarioHistoryDialog extends Dialog {
 
     @RequiresUIThread
     private Component renderDuration(TestScenarioResult testScenarioResult) {
-        return new Label(getTranslation("millis", testScenarioResult.getDurationInMillis()));
-       // return new Label( + " ms");
+        return new Label(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDurationInMillis()));
     }
 
     @RequiresUIThread
