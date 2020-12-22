@@ -28,9 +28,9 @@ public class CustomI18NProvider implements I18NProvider {
     }
 
     @Override
-    public String getTranslation(String key, Locale locale, Object... objects) {
+    public String getTranslation(String key, Locale locale, Object... args) {
         if (RESOURCE_BUNDLE_EN.containsKey(key)) {
-            return RESOURCE_BUNDLE_EN.getString(key);
+            return String.format(RESOURCE_BUNDLE_EN.getString(key), args);
         }
 
         log.warn("Missing translation for key {}", key);

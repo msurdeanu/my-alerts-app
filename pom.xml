@@ -3,11 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ro.aventurata</groupId>
-    <artifactId>travel-tip-aggregator</artifactId>
-    <name>Simple application for defining alerts and monitoring production environments</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <groupId>org.myalerts</groupId>
+    <artifactId>myalerts-app</artifactId>
+    <name>My Alerts</name>
+    <description>My Alerts is an open source Alerting Framework based on Java as programming language.</description>
+    <version>0.9.9-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.1</version>
+    </parent>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -15,13 +22,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <vaadin.version>18.0.2</vaadin.version>
+        <grid.pagination.version>2.0.10</grid.pagination.version>
+        <toggle.button.version>1.0.0</toggle.button.version>
+        <vaadin.security.version>0.9.5</vaadin.security.version>
+        <slugify.version>2.4</slugify.version>
+        <lombok.version>1.18.12</lombok.version>
     </properties>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
-    </parent>
 
     <repositories>
         <repository>
@@ -71,34 +77,29 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.vaadin.klaudeta</groupId>
             <artifactId>grid-pagination</artifactId>
-            <version>2.0.10</version>
+            <version>${grid.pagination.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin.componentfactory</groupId>
             <artifactId>togglebutton</artifactId>
-            <version>1.0.0</version>
+            <version>${toggle.button.version}</version>
         </dependency>
         <dependency>
             <groupId>de.codecamp.vaadin</groupId>
             <artifactId>vaadin-security-spring-boot-starter</artifactId>
-            <version>0.9.5</version>
+            <version>${vaadin.security.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.slugify</groupId>
             <artifactId>slugify</artifactId>
-            <version>2.4</version>
+            <version>${slugify.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -110,6 +111,16 @@
             <artifactId>webdrivermanager</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

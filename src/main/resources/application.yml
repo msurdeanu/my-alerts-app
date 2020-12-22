@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: "jdbc:mysql://188.240.221.18:3306/test?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=true"
-    username: "USERNAME"
-    password: "PASSWORD"
+    username: "test_usr"
+    password: "t3s!_Userp@ss"
   mustache:
     check-template-location: false
 
