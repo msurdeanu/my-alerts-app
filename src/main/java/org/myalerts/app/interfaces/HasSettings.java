@@ -55,14 +55,14 @@ public interface HasSettings {
 
     private Optional<Method> findGetter(String fieldName, boolean isInvokedOnSuperClass) {
         return Arrays.stream(getInvocationClass(isInvokedOnSuperClass).getDeclaredMethods())
-                .filter(method -> isGetter(method))
+                .filter(this::isGetter)
                 .filter(method -> method.getName().endsWith(StringUtils.capitalize(fieldName)))
                 .findFirst();
     }
 
     private Optional<Method> findSetter(String fieldName, boolean isInvokedOnSuperClass) {
         return Arrays.stream(getInvocationClass(isInvokedOnSuperClass).getDeclaredMethods())
-                .filter(method -> isSetter(method))
+                .filter(this::isSetter)
                 .filter(method -> method.getName().endsWith(StringUtils.capitalize(fieldName)))
                 .findFirst();
     }

@@ -24,6 +24,6 @@ public class CookieStoreConfig implements HasSettings {
             label = "settings.cookie-store.expiry-time.label",
             helper = "settings.cookie-store.expiry-time.helper"
     )
-    private int expiryInSeconds = 2592000;
+    private final int expiryInSeconds = 2592000;
 
 }

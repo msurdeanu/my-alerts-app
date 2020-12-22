@@ -13,6 +13,6 @@ public @interface DisplaySetting {
     String helper();
 
     enum Type {
-        TEXT, PASSWORD, INTEGER;
+        TEXT, PASSWORD, INTEGER
     }
 }

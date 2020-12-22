@@ -1,7 +1,6 @@
 package org.myalerts.app.configs;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.myalerts.app.interfaces.DisplaySetting;
 import org.myalerts.app.interfaces.HasSettings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,7 +27,7 @@ public class TestScenarioSchedulerConfig implements HasSettings {
             label = "Test Scenario - Pool Size",
             helper = "Defines total number of threads used to run scenarios periodically."
     )
-    private int poolSize = 2;
+    private final int poolSize = 2;
 
     @Getter
     @DisplaySetting(
@@ -36,7 +35,7 @@ public class TestScenarioSchedulerConfig implements HasSettings {
             label = "Test Scenario - Thread Name Prefix",
             helper = "Defines a prefix for thread names to identify them easily."
     )
-    private String threadNamePrefix = "test-scenario-pool-";
+    private final String threadNamePrefix = "test-scenario-pool-";
 
     @Bean
     public TaskScheduler taskScheduler() {
