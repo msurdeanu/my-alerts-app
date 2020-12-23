@@ -14,14 +14,11 @@ import java.util.Optional;
 public interface HasSettings {
 
     default Object findAndInvokeGetterFor(String fieldName, boolean isInvokedOnSuperClass) {
-        Optional<Method> getterMethod = findGetter(fieldName, isInvokedOnSuperClass);
-        if (getterMethod.isPresent()) {
-            try {
-                return getterMethod.get().invoke(this);
-            } catch (Exception e) {
-                throw new NoSuchElementException("No getter found for field " + fieldName);
-            }
-        } else {
+        try {
+            return findGetter(fieldName, isInvokedOnSuperClass)
+                    .orElseThrow(() -> new NoSuchElementException("No getter found for field " + fieldName))
+                    .invoke(this);
+        } catch (Exception e) {
             throw new NoSuchElementException("No getter found for field " + fieldName);
         }
     }
