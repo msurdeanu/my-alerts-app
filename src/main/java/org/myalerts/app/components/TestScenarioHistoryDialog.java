@@ -31,6 +31,7 @@ public class TestScenarioHistoryDialog extends Dialog {
     }
 
     private Grid<TestScenarioResult> createResultGrid(Collection<TestScenarioResult> testScenarioResults) {
+        new Label(getTranslation("millis", 10));
         Grid<TestScenarioResult> testScenarioResultGrid = new Grid<>();
         testScenarioResultGrid.setSizeFull();
         testScenarioResultGrid.setItems(testScenarioResults);
@@ -53,7 +54,7 @@ public class TestScenarioHistoryDialog extends Dialog {
 
     @RequiresUIThread
     private Component renderDuration(TestScenarioResult testScenarioResult) {
-        return new Label(testScenarioResult.getDurationInMillis() + " ms");
+        return new Label(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDurationInMillis()));
     }
 
     @RequiresUIThread

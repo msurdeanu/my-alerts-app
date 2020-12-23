@@ -21,6 +21,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.Lumo;
 import de.codecamp.vaadin.security.spring.access.VaadinSecurity;
 import org.myalerts.app.components.IconButton;
+import org.myalerts.app.services.CookieStoreService;
 import org.myalerts.app.views.LoginView;
 import org.myalerts.app.views.LogoutView;
 import org.myalerts.app.views.SettingsView;
@@ -39,7 +40,11 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
 
     private final Tabs tabs = new Tabs();
 
-    public BaseLayout() {
+    private final CookieStoreService cookieStoreService;
+
+    public BaseLayout(CookieStoreService cookieStoreService) {
+        this.cookieStoreService = cookieStoreService;
+
         init();
     }
 
@@ -51,15 +56,13 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
     private void init() {
         setPrimarySection(Section.NAVBAR);
 
-        Image img = new Image("logo.png", "Vaadin Logo"); // TODO: create our own logo
+        Image img = new Image("logo.png", "Vaadin Logo");
         img.setHeight("44px");
         addToNavbar(IS_OPTIMIZED_FOR_MOBILE, new DrawerToggle(), img);
 
         addMenuTab("Test scenarios", VaadinIcon.LIST.create(), TestScenarioView.class);
+        addMenuTab("Settings", VaadinIcon.EDIT.create(), SettingsView.class);
         if (VaadinSecurity.check().isAuthenticated()) {
-            if (VaadinSecurity.check().hasRole("ROLE_ADMIN")) {
-                addMenuTab("Settings", VaadinIcon.EDIT.create(), SettingsView.class);
-            }
             addMenuTab("Logout", VaadinIcon.SIGN_OUT.create(), LogoutView.class);
         } else {
             addMenuTab("Login", VaadinIcon.SIGN_IN.create(), LoginView.class);
@@ -81,17 +84,21 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
         VerticalLayout layout = new VerticalLayout();
         layout.setWidth("100%");
         layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        IconButton button = new IconButton(new Icon(VaadinIcon.PALETE));
-        button.addClickListener(event -> {
-            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
-
-            if (themeList.contains(Lumo.DARK)) {
-                themeList.remove(Lumo.DARK);
-            } else {
-                themeList.add(Lumo.DARK);
-            }
-        });
-        layout.add(button);
+        IconButton darkThemeButton = new IconButton(new Icon(VaadinIcon.PALETE));
+        darkThemeButton.addClickListener(event -> toggleDarkTheme());
+        layout.add(darkThemeButton);
         return layout;
     }
+
+    private void toggleDarkTheme() {
+        ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+        if (themeList.contains(Lumo.DARK)) {
+            themeList.remove(Lumo.DARK);
+            cookieStoreService.set(CookieStoreService.THEME_DARK_COOKIE, false);
+        } else {
+            themeList.add(Lumo.DARK);
+            cookieStoreService.set(CookieStoreService.THEME_DARK_COOKIE, true);
+        }
+    }
+
 }

@@ -14,11 +14,11 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.apache.commons.lang3.StringUtils;
-import org.vaadin.klaudeta.PaginatedGrid;
 import org.myalerts.app.events.TestScenarioEventHandler;
 import org.myalerts.app.interfaces.markers.RequiresUIThread;
 import org.myalerts.app.models.TestScenario;
 import org.myalerts.app.models.TestScenarioType;
+import org.vaadin.klaudeta.PaginatedGrid;
 
 /**
  * @author Mihai Surdeanu
@@ -35,13 +35,22 @@ public class TestScenarioGrid extends VerticalLayout {
     public TestScenarioGrid(TestScenarioEventHandler eventHandler) {
         this.eventHandler = eventHandler;
 
-        initialize();
+        init();
     }
 
-    private void initialize() {
+    public void refreshPage() {
+        paginatedGrid.refreshPaginator();
+    }
+
+    public void setDataProvider(DataProvider<TestScenario, ?> dataProvider) {
+        paginatedGrid.setDataProvider(dataProvider);
+    }
+
+    private void init() {
         setSizeFull();
         paginatedGrid.setHeightByRows(true);
-        paginatedGrid.addColumn(new ComponentRenderer<>(this::renderIsEnabled)).setWidth("5%");
+        paginatedGrid.addColumn(new ComponentRenderer<>(this::renderIsEnabled))
+                .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderName))
                 .setHeader(getTranslation("test-scenario.main-grid.name.column"))
                 .setClassNameGenerator(this::getClassNameForName)
@@ -93,20 +102,20 @@ public class TestScenarioGrid extends VerticalLayout {
 
     @RequiresUIThread
     private Component renderCronExpression(TestScenario testScenario) {
-        if (testScenario.isEditable()) {
-            TextField textField = new TextField();
-            testScenarioBinder.forField(textField)
-                    .withValidator(cron -> true, StringUtils.EMPTY)
-                    .bind(TestScenario::getCronExpression, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
-            testScenarioBinder.setBean(testScenario);
-
-            textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-            textField.addBlurListener(event -> onCronExpressionCancelled(testScenario));
-
-            return textField;
-        } else {
+        if (!testScenario.isEditable()) {
             return new Label(testScenario.getCronExpression());
         }
+
+        TextField textField = new TextField();
+        testScenarioBinder.forField(textField)
+                .withValidator(cron -> true, StringUtils.EMPTY)
+                .bind(TestScenario::getCronExpression, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
+        testScenarioBinder.setBean(testScenario);
+
+        textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
+        textField.addBlurListener(event -> onCronExpressionCancelled(testScenario));
+
+        return textField;
     }
 
     @RequiresUIThread
@@ -132,14 +141,6 @@ public class TestScenarioGrid extends VerticalLayout {
     private void onCronExpressionCancelled(TestScenario testScenario) {
         testScenario.setEditable(false);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
-    }
-
-    public void refreshPage() {
-        paginatedGrid.refreshPaginator();
-    }
-
-    public void setDataProvider(DataProvider<TestScenario, ?> dataProvider) {
-        paginatedGrid.setDataProvider(dataProvider);
     }
 
 }

@@ -5,7 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecuredPasswordGenerator {
 
     public static void main(String[] args) {
-        System.out.println(encode("TODO"));
+        System.out.println(encode("myPassword"));
     }
 
     private static String encode(String password) {
