@@ -14,10 +14,10 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.apache.commons.lang3.StringUtils;
-import org.myalerts.app.events.TestScenarioEventHandler;
-import org.myalerts.app.interfaces.markers.RequiresUIThread;
-import org.myalerts.app.models.TestScenario;
-import org.myalerts.app.models.TestScenarioType;
+import org.myalerts.app.event.TestScenarioEventHandler;
+import org.myalerts.app.interfaces.marker.RequiresUIThread;
+import org.myalerts.app.model.TestScenario;
+import org.myalerts.app.model.TestScenarioType;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 /**
@@ -50,20 +50,20 @@ public class TestScenarioGrid extends VerticalLayout {
         setSizeFull();
         paginatedGrid.setHeightByRows(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderIsEnabled))
-                .setAutoWidth(true);
+            .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderName))
-                .setHeader(getTranslation("test-scenario.main-grid.name.column"))
-                .setClassNameGenerator(this::getClassNameForName)
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.main-grid.name.column"))
+            .setClassNameGenerator(this::getClassNameForName)
+            .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderLastRun))
-                .setHeader(getTranslation("test-scenario.main-grid.last-run.column"))
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.main-grid.last-run.column"))
+            .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderCronExpression))
-                .setHeader(getTranslation("test-scenario.main-grid.cron-expression.column"))
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.main-grid.cron-expression.column"))
+            .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderActions))
-                .setHeader(getTranslation("test-scenario.main-grid.actions.column"))
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.main-grid.actions.column"))
+            .setAutoWidth(true);
         paginatedGrid.setPageSize(10);
         paginatedGrid.setPaginatorSize(5);
 
@@ -72,7 +72,7 @@ public class TestScenarioGrid extends VerticalLayout {
 
     @RequiresUIThread
     private Component renderIsEnabled(TestScenario testScenario) {
-        ToggleButton toggleButton = new ToggleButton(testScenario.isEnabled());
+        final ToggleButton toggleButton = new ToggleButton(testScenario.isEnabled());
         toggleButton.addValueChangeListener(event -> eventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
@@ -88,14 +88,12 @@ public class TestScenarioGrid extends VerticalLayout {
             return TestScenarioType.DISABLED.getLabelAsLowercase();
         }
 
-        return testScenario.isFailed()
-                ? TestScenarioType.FAILED.getLabelAsLowercase()
-                : TestScenarioType.PASSED.getLabelAsLowercase();
+        return testScenario.isFailed() ? TestScenarioType.FAILED.getLabelAsLowercase() : TestScenarioType.PASSED.getLabelAsLowercase();
     }
 
     @RequiresUIThread
     private Component renderLastRun(TestScenario testScenario) {
-        Button lastRunButton = new Button(getTranslation("test-scenario.main-grid.not-available"));
+        final Button lastRunButton = new Button(getTranslation("test-scenario.main-grid.not-available"));
         lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(testScenario.getFullHistory()).open());
         return lastRunButton;
     }
@@ -103,13 +101,13 @@ public class TestScenarioGrid extends VerticalLayout {
     @RequiresUIThread
     private Component renderCronExpression(TestScenario testScenario) {
         if (!testScenario.isEditable()) {
-            return new Label(testScenario.getCronExpression());
+            return new Label(testScenario.getCron());
         }
 
         TextField textField = new TextField();
         testScenarioBinder.forField(textField)
-                .withValidator(cron -> true, StringUtils.EMPTY)
-                .bind(TestScenario::getCronExpression, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
+            .withValidator(cron -> true, StringUtils.EMPTY)
+            .bind(TestScenario::getCron, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
         testScenarioBinder.setBean(testScenario);
 
         textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
@@ -120,10 +118,11 @@ public class TestScenarioGrid extends VerticalLayout {
 
     @RequiresUIThread
     private Component renderActions(TestScenario testScenario) {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        final HorizontalLayout horizontalLayout = new HorizontalLayout();
 
-        Button editButton = new Button(VaadinIcon.EDIT.create());
+        final Button editButton = new Button(VaadinIcon.EDIT.create());
         editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
+
         horizontalLayout.add(editButton);
 
         return horizontalLayout;

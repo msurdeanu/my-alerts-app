@@ -1,5 +1,8 @@
 package org.myalerts.app.components;
 
+import java.util.Collection;
+import java.util.Optional;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -7,10 +10,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import org.myalerts.app.interfaces.markers.RequiresUIThread;
-import org.myalerts.app.models.TestScenarioResult;
-
-import java.util.Collection;
+import org.myalerts.app.interfaces.marker.RequiresUIThread;
+import org.myalerts.app.model.TestScenarioResult;
 
 /**
  * @author Mihai Surdeanu
@@ -36,40 +37,38 @@ public class TestScenarioHistoryDialog extends Dialog {
         testScenarioResultGrid.setSizeFull();
         testScenarioResultGrid.setItems(testScenarioResults);
         testScenarioResultGrid.addColumn(new ComponentRenderer<>(this::renderRunTime))
-                .setHeader(getTranslation("test-scenario.history.run-time.column"))
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.history.run-time.column"))
+            .setAutoWidth(true);
         testScenarioResultGrid.addColumn(new ComponentRenderer<>(this::renderDuration))
-                .setHeader(getTranslation("test-scenario.history.duration.column"))
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.history.duration.column"))
+            .setAutoWidth(true);
         testScenarioResultGrid.addColumn(new ComponentRenderer<>(this::renderResult))
-                .setHeader(getTranslation("test-scenario.history.result.column"))
-                .setAutoWidth(true);
+            .setHeader(getTranslation("test-scenario.history.result.column"))
+            .setAutoWidth(true);
         return testScenarioResultGrid;
     }
 
     @RequiresUIThread
     private Component renderRunTime(TestScenarioResult testScenarioResult) {
-        return new Label(testScenarioResult.getRunTime().toString());
+        return new Label(testScenarioResult.getCreated().toString());
     }
 
     @RequiresUIThread
     private Component renderDuration(TestScenarioResult testScenarioResult) {
-        return new Label(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDurationInMillis()));
+        return new Label(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDuration()));
     }
 
     @RequiresUIThread
     private Component renderResult(TestScenarioResult testScenarioResult) {
-        String failingCause = testScenarioResult.getFailingCause();
-
-        if (failingCause != null) {
-            TextArea resultTextArea = new TextArea();
-            resultTextArea.setReadOnly(true);
-            resultTextArea.setWidth("100%");
-            resultTextArea.setValue(failingCause);
-            return resultTextArea;
-        }
-
-        return new Label(getTranslation("test-scenario.history.no-failure-detected"));
+        return Optional.ofNullable(testScenarioResult.getCause())
+            .map(cause -> {
+                final TextArea resultTextArea = new TextArea();
+                resultTextArea.setReadOnly(true);
+                resultTextArea.setWidth("100%");
+                resultTextArea.setValue(cause);
+                return (Component) resultTextArea;
+            })
+            .orElseGet(() -> new Label(getTranslation("test-scenario.history.no-failure-detected")));
     }
 
     @RequiresUIThread

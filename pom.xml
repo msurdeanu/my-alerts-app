@@ -5,15 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.myalerts</groupId>
     <artifactId>myalerts-app</artifactId>
+
     <name>My Alerts</name>
     <description>My Alerts is an open source Alerting Framework based on Java as programming language.</description>
     <version>0.9.9-SNAPSHOT</version>
+
     <packaging>war</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.1</version>
+        <version>2.4.3</version>
     </parent>
 
     <properties>
@@ -21,12 +23,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>18.0.2</vaadin.version>
+        <vaadin.version>18.0.6</vaadin.version>
         <grid.pagination.version>2.0.10</grid.pagination.version>
-        <toggle.button.version>1.0.0</toggle.button.version>
-        <vaadin.security.version>0.9.5</vaadin.security.version>
-        <slugify.version>2.4</slugify.version>
-        <lombok.version>1.18.12</lombok.version>
+        <toggle.button.version>1.0.1</toggle.button.version>
+        <vaadin.security.version>1.0.0</vaadin.security.version>
+        <lombok.version>1.18.18</lombok.version>
+        <jool.version>0.9.14</jool.version>
     </properties>
 
     <repositories>
@@ -72,9 +74,8 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.vaadin.klaudeta</groupId>
@@ -92,19 +93,14 @@
             <version>${vaadin.security.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.slugify</groupId>
-            <artifactId>slugify</artifactId>
-            <version>${slugify.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench</artifactId>
-            <scope>test</scope>
+            <groupId>org.jooq</groupId>
+            <artifactId>jool</artifactId>
+            <version>${jool.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -150,6 +146,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -157,6 +154,32 @@
                     <source>11</source>
                     <target>11</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>verify-style</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>8.40</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
