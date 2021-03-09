@@ -42,7 +42,7 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
 
     private static final Map<Class<?>, Tab> CLASS_TAB_MAP = new HashMap<>();
 
-    private static final Tabs TABS = new Tabs();
+    private final Tabs tabs = new Tabs();
 
     private final CookieStoreService cookieStoreService;
 
@@ -54,7 +54,7 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        TABS.setSelectedTab(CLASS_TAB_MAP.get(beforeEnterEvent.getNavigationTarget()));
+        tabs.setSelectedTab(CLASS_TAB_MAP.get(beforeEnterEvent.getNavigationTarget()));
     }
 
     private void init() {
@@ -72,8 +72,8 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
             addMenuTab("Login", VaadinIcon.SIGN_IN.create(), LoginView.class);
         }
 
-        TABS.setOrientation(Tabs.Orientation.VERTICAL);
-        addToDrawer(new Hr(), TABS, new Hr(), createMenuButtons());
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+        addToDrawer(new Hr(), tabs, new Hr(), createMenuButtons());
     }
 
     private void addMenuTab(String label, Icon icon, Class<? extends Component> target) {
@@ -81,7 +81,7 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
 
         Tab tab = new Tab(layout);
         CLASS_TAB_MAP.put(target, tab);
-        TABS.add(tab);
+        tabs.add(tab);
     }
 
     private Component createMenuButtons() {
