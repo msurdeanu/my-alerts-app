@@ -215,7 +215,7 @@
         </module>
         <!-- Define an ordering for all imports present in source code -->
         <module name="ImportOrder">
-            <property name="groups" value="java,javax,*,ro.mihaisurdeanu"/>
+            <property name="groups" value="java,javax,*,org.myalerts"/>
             <property name="ordered" value="true"/>
             <property name="separated" value="true"/>
             <property name="separatedStaticGroups" value="true"/>

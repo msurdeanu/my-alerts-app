@@ -1,5 +1,6 @@
 package org.myalerts.app.transformer;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class MenuItemsToTabMapTransformer implements Transformer<List<MenuItem>,
             .filter(menuItem -> Objects.nonNull(menuItem.getTarget()))
             .filter(menuItem -> (authOption & menuItem.getOption()) == 0)
             .map(menuItem -> Tuple.tuple(menuItem.getTarget(), new Tab(createComponent(menuItem))))
-            .collect(Collectors.toMap(Tuple2::v1, Tuple2::v2));
+            .collect(Collectors.toMap(Tuple2::v1, Tuple2::v2, (item1, item2) -> item2, LinkedHashMap::new));
     }
 
     private Component createComponent(MenuItem menuItem) {
