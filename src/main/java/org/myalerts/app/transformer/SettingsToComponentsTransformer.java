@@ -13,7 +13,6 @@ import com.vaadin.flow.data.binder.Binder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.myalerts.app.interfaces.Transformer;
 import org.myalerts.app.model.Setting;
 import org.myalerts.app.provider.SettingProvider;
 

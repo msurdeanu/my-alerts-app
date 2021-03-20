@@ -1,4 +1,4 @@
-package org.myalerts.app.components;
+package org.myalerts.app.component;
 
 import java.util.Collection;
 import java.util.Optional;

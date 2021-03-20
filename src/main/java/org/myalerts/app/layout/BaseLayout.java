@@ -1,6 +1,5 @@
 package org.myalerts.app.layout;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.vaadin.flow.component.Component;
@@ -13,22 +12,17 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.Lumo;
-import de.codecamp.vaadin.security.spring.access.VaadinSecurity;
-import org.myalerts.app.components.IconButton;
+import org.myalerts.app.component.IconButton;
+import org.myalerts.app.repository.MenuItemRepository;
 import org.myalerts.app.service.CookieStoreService;
-import org.myalerts.app.view.LoginView;
-import org.myalerts.app.view.LogoutView;
-import org.myalerts.app.view.SettingsView;
-import org.myalerts.app.view.TestScenarioView;
+import org.myalerts.app.transformer.MenuItemsToTabMapTransformer;
 
 /**
  * @author Mihai Surdeanu
@@ -40,21 +34,22 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
 
     private static final boolean IS_OPTIMIZED_FOR_MOBILE = true;
 
-    private static final Map<Class<?>, Tab> CLASS_TAB_MAP = new HashMap<>();
+    private final Map<Class<?>, Tab> tabMap;
 
     private final Tabs tabs = new Tabs();
 
     private final CookieStoreService cookieStoreService;
 
-    public BaseLayout(CookieStoreService cookieStoreService) {
+    public BaseLayout(CookieStoreService cookieStoreService, MenuItemRepository menuItemRepository) {
         this.cookieStoreService = cookieStoreService;
+        this.tabMap = new MenuItemsToTabMapTransformer().transform(menuItemRepository.findByOrderBySequenceAsc());
 
         init();
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        tabs.setSelectedTab(CLASS_TAB_MAP.get(beforeEnterEvent.getNavigationTarget()));
+        tabs.setSelectedTab(tabMap.get(beforeEnterEvent.getNavigationTarget()));
     }
 
     private void init() {
@@ -64,24 +59,9 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
         img.setHeight("44px");
         addToNavbar(IS_OPTIMIZED_FOR_MOBILE, new DrawerToggle(), img);
 
-        addMenuTab("Test scenarios", VaadinIcon.LIST.create(), TestScenarioView.class);
-        addMenuTab("Settings", VaadinIcon.EDIT.create(), SettingsView.class);
-        if (VaadinSecurity.check().isAuthenticated()) {
-            addMenuTab("Logout", VaadinIcon.SIGN_OUT.create(), LogoutView.class);
-        } else {
-            addMenuTab("Login", VaadinIcon.SIGN_IN.create(), LoginView.class);
-        }
-
+        tabMap.values().stream().forEach(tabs::add);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(new Hr(), tabs, new Hr(), createMenuButtons());
-    }
-
-    private void addMenuTab(String label, Icon icon, Class<? extends Component> target) {
-        HorizontalLayout layout = new HorizontalLayout(icon, new RouterLink(label, target));
-
-        Tab tab = new Tab(layout);
-        CLASS_TAB_MAP.put(target, tab);
-        tabs.add(tab);
     }
 
     private Component createMenuButtons() {

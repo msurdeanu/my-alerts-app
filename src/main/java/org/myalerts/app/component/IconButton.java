@@ -1,4 +1,4 @@
-package org.myalerts.app.components;
+package org.myalerts.app.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

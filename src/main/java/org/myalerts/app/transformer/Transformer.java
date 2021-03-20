@@ -1,4 +1,4 @@
-package org.myalerts.app.interfaces;
+package org.myalerts.app.transformer;
 
 /**
  * @author Mihai Surdeanu

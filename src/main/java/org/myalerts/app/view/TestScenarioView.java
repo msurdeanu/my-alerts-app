@@ -13,7 +13,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.app.components.TestScenarioGrid;
+import org.myalerts.app.component.TestScenarioGrid;
 import org.myalerts.app.event.TestScenarioEventHandler;
 import org.myalerts.app.layout.BaseLayout;
 import org.myalerts.app.layout.ResponsiveLayout;
