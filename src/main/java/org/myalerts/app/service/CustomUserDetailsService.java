@@ -3,11 +3,12 @@ package org.myalerts.app.service;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import org.myalerts.app.model.CustomUserDetails;
-import org.myalerts.app.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import org.myalerts.app.model.CustomUserDetails;
+import org.myalerts.app.repository.UserRepository;
 
 /**
  * @author Mihai Surdeanu

@@ -19,6 +19,7 @@ import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.theme.lumo.Lumo;
+
 import org.myalerts.app.component.IconButton;
 import org.myalerts.app.repository.MenuItemRepository;
 import org.myalerts.app.service.CookieStoreService;

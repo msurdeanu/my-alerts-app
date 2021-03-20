@@ -13,6 +13,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
+
 import org.myalerts.app.component.TestScenarioGrid;
 import org.myalerts.app.event.TestScenarioEventHandler;
 import org.myalerts.app.layout.BaseLayout;
@@ -38,7 +39,7 @@ public class TestScenarioView extends ResponsiveLayout implements TestScenarioEv
         super();
         this.testScenarioService = testScenarioService;
 
-        ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
+        final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
             .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
             .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
@@ -67,7 +68,7 @@ public class TestScenarioView extends ResponsiveLayout implements TestScenarioEv
     }
 
     private Component createFilterByName() {
-        TextField filterByNameTextField = new TextField();
+        final TextField filterByNameTextField = new TextField();
         filterByNameTextField.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-name.placeholder"));
         filterByNameTextField.setClearButtonVisible(true);
         filterByNameTextField.setValueChangeMode(ValueChangeMode.LAZY);
@@ -77,7 +78,7 @@ public class TestScenarioView extends ResponsiveLayout implements TestScenarioEv
     }
 
     private Component createFilterByType() {
-        ComboBox<TestScenarioType> filterByTypeComboBox = new ComboBox<>();
+        final ComboBox<TestScenarioType> filterByTypeComboBox = new ComboBox<>();
         filterByTypeComboBox.setItems(TestScenarioType::findByQuery);
         filterByTypeComboBox.setItemLabelGenerator(TestScenarioType::getLabel);
         filterByTypeComboBox.addValueChangeListener(event -> onFilteringByType(event.getValue()));

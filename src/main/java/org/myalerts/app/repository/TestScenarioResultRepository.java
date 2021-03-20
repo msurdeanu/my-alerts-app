@@ -1,9 +1,10 @@
 package org.myalerts.app.repository;
 
-import org.myalerts.app.model.TestScenarioResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import org.myalerts.app.model.TestScenarioResult;
 
 /**
  * @author Mihai Surdeanu

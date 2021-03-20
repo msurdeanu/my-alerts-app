@@ -13,11 +13,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.app.interfaces.marker.ThreadSafe;
-import org.myalerts.app.model.TestScenario;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
+
+import org.myalerts.app.interfaces.marker.ThreadSafe;
+import org.myalerts.app.model.TestScenario;
 
 /**
  * @author Mihai Surdeanu

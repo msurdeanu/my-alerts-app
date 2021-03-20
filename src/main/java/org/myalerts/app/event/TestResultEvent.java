@@ -2,6 +2,7 @@ package org.myalerts.app.event;
 
 import lombok.Builder;
 import lombok.Getter;
+
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioResult;
 

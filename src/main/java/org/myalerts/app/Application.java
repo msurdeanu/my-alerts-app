@@ -4,15 +4,16 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import lombok.RequiredArgsConstructor;
-import org.myalerts.app.event.Event;
-import org.myalerts.app.event.EventBroadcaster;
-import org.myalerts.app.i18n.CustomI18NProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+
+import org.myalerts.app.event.Event;
+import org.myalerts.app.event.EventBroadcaster;
+import org.myalerts.app.i18n.CustomI18NProvider;
 
 @SpringBootApplication
 @RequiredArgsConstructor

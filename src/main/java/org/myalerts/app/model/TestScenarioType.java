@@ -26,13 +26,6 @@ public enum TestScenarioType {
         return label.toLowerCase();
     }
 
-    public static TestScenarioType getEnum(String value) {
-        return Arrays.stream(values())
-            .filter(testScenarioType -> testScenarioType.getLabel().equalsIgnoreCase(value))
-            .findFirst()
-            .orElse(TestScenarioType.ALL);
-    }
-
     public static Stream<TestScenarioType> findByQuery(Query<TestScenarioType, String> query) {
         return query.getFilter().map(value -> Arrays.stream(values())
             .filter(testScenarioType -> testScenarioType.getLabel().contains(value))

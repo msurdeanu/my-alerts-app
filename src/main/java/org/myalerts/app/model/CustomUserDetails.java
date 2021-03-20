@@ -1,7 +1,7 @@
 package org.myalerts.app.model;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,8 +19,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-        return Collections.singletonList(authority);
+        return List.of(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override

@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import org.myalerts.app.event.EventBroadcaster;
 import org.myalerts.app.event.TestResultEvent;
 

@@ -13,6 +13,7 @@ import com.vaadin.flow.router.RouterLink;
 import de.codecamp.vaadin.security.spring.access.VaadinSecurity;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
+
 import org.myalerts.app.model.MenuItem;
 
 /**

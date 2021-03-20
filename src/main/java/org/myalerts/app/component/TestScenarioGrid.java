@@ -14,11 +14,12 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.apache.commons.lang3.StringUtils;
+import org.vaadin.klaudeta.PaginatedGrid;
+
 import org.myalerts.app.event.TestScenarioEventHandler;
 import org.myalerts.app.interfaces.marker.RequiresUIThread;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioType;
-import org.vaadin.klaudeta.PaginatedGrid;
 
 /**
  * @author Mihai Surdeanu

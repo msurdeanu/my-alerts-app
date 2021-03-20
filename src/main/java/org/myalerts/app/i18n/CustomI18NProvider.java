@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import com.vaadin.flow.i18n.I18NProvider;
 import lombok.extern.slf4j.Slf4j;
 
-import static java.util.Collections.singletonList;
 import static java.util.Locale.ENGLISH;
 import static java.util.ResourceBundle.getBundle;
 
@@ -22,7 +21,7 @@ public class CustomI18NProvider implements I18NProvider {
 
     @Override
     public List<Locale> getProvidedLocales() {
-        return singletonList(ENGLISH);
+        return List.of(ENGLISH);
     }
 
     @Override

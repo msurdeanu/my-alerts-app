@@ -10,6 +10,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+
 import org.myalerts.app.interfaces.marker.RequiresUIThread;
 import org.myalerts.app.model.TestScenarioResult;
 
@@ -32,8 +33,7 @@ public class TestScenarioHistoryDialog extends Dialog {
     }
 
     private Grid<TestScenarioResult> createResultGrid(Collection<TestScenarioResult> testScenarioResults) {
-        new Label(getTranslation("millis", 10));
-        Grid<TestScenarioResult> testScenarioResultGrid = new Grid<>();
+        final Grid<TestScenarioResult> testScenarioResultGrid = new Grid<>();
         testScenarioResultGrid.setSizeFull();
         testScenarioResultGrid.setItems(testScenarioResults);
         testScenarioResultGrid.addColumn(new ComponentRenderer<>(this::renderRunTime))
@@ -61,14 +61,17 @@ public class TestScenarioHistoryDialog extends Dialog {
     @RequiresUIThread
     private Component renderResult(TestScenarioResult testScenarioResult) {
         return Optional.ofNullable(testScenarioResult.getCause())
-            .map(cause -> {
-                final TextArea resultTextArea = new TextArea();
-                resultTextArea.setReadOnly(true);
-                resultTextArea.setWidth("100%");
-                resultTextArea.setValue(cause);
-                return (Component) resultTextArea;
-            })
+            .map(this::mapToTextArea)
             .orElseGet(() -> new Label(getTranslation("test-scenario.history.no-failure-detected")));
+    }
+
+    @RequiresUIThread
+    private Component mapToTextArea(String value) {
+        final TextArea resultTextArea = new TextArea();
+        resultTextArea.setReadOnly(true);
+        resultTextArea.setWidth("100%");
+        resultTextArea.setValue(value);
+        return resultTextArea;
     }
 
     @RequiresUIThread

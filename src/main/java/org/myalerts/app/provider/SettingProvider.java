@@ -10,14 +10,6 @@ import org.myalerts.app.model.Setting;
  */
 public interface SettingProvider {
 
-    String STRING_TYPE = "str";
-
-    String PASSWORD_TYPE = "pass";
-
-    String INTEGER_TYPE = "int";
-
-    String BOOLEAN_TYPE = "bool";
-
     List<Setting> getAll();
 
     Integer getOrDefault(Setting.Key key, Integer defaultValue);

@@ -4,13 +4,14 @@ import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
 import org.myalerts.app.event.EventListener;
 import org.myalerts.app.event.TestResultEvent;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.repository.TestScenarioRepository;
 import org.myalerts.app.repository.TestScenarioResultRepository;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Mihai Surdeanu

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.Route;
+
 import org.myalerts.app.interfaces.RequiresAdminRole;
 import org.myalerts.app.layout.BaseLayout;
 import org.myalerts.app.layout.ResponsiveLayout;
@@ -33,7 +34,7 @@ public class SettingsView extends ResponsiveLayout {
     }
 
     private Component createFormLayout() {
-        FormLayout layout = new FormLayout();
+        final FormLayout layout = new FormLayout();
 
         new SettingsToComponentsTransformer(binder).transform(settingProvider.getAll()).forEach(layout::add);
         binder.readBean(settingProvider);
@@ -42,11 +43,8 @@ public class SettingsView extends ResponsiveLayout {
         binder.addStatusChangeListener(event -> saveButton.setEnabled(event.getBinder().hasChanges() && event.getBinder().isValid()));
         layout.add(saveButton);
 
-        layout.setResponsiveSteps(
-            new FormLayout.ResponsiveStep("250px", 1),
-            new FormLayout.ResponsiveStep("500px", 2),
-            new FormLayout.ResponsiveStep("750px", 3),
-            new FormLayout.ResponsiveStep("1000px", 4));
+        layout.setResponsiveSteps(new FormLayout.ResponsiveStep("250px", 1), new FormLayout.ResponsiveStep("500px", 2),
+            new FormLayout.ResponsiveStep("750px", 3), new FormLayout.ResponsiveStep("1000px", 4));
 
         return layout;
     }

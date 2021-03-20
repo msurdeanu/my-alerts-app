@@ -1,12 +1,12 @@
 package org.myalerts.app.view;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import de.codecamp.vaadin.security.spring.authentication.VaadinAuthenticationService;
+
 import org.myalerts.app.layout.BaseLayout;
 
 /**
@@ -26,12 +26,10 @@ public class LoginView extends Composite<VerticalLayout> {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        LoginForm loginForm = new LoginForm();
+        final LoginForm loginForm = new LoginForm();
         loginForm.setForgotPasswordButtonVisible(false);
         layout.add(loginForm);
-        Checkbox rememberMe = new Checkbox("Remember me");
-        layout.add(rememberMe);
-        loginForm.addLoginListener(event -> VaadinAuthenticationService.get().login(this, event.getUsername(), event.getPassword(), rememberMe.isEnabled(),
+        loginForm.addLoginListener(event -> VaadinAuthenticationService.get().login(this, event.getUsername(), event.getPassword(), true,
             result -> {
                 loginForm.setEnabled(true);
                 loginForm.setError(result.isFailure());

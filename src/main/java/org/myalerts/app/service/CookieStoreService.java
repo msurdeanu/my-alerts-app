@@ -8,9 +8,10 @@ import javax.servlet.http.Cookie;
 
 import com.vaadin.flow.server.VaadinService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import org.myalerts.app.model.Setting;
 import org.myalerts.app.provider.SettingProvider;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Mihai Surdeanu

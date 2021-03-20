@@ -2,23 +2,25 @@ package org.myalerts.app.provider;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jooq.lambda.Unchecked;
+
+import org.myalerts.app.mapper.Mapper1;
 import org.myalerts.app.model.Setting;
+import org.myalerts.app.model.SettingType;
 import org.myalerts.app.repository.SettingRepository;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static org.myalerts.app.provider.SettingProvider.BOOLEAN_TYPE;
-import static org.myalerts.app.provider.SettingProvider.INTEGER_TYPE;
-import static org.myalerts.app.provider.SettingProvider.PASSWORD_TYPE;
-import static org.myalerts.app.provider.SettingProvider.STRING_TYPE;
 
 /**
  * @author Mihai Surdeanu
@@ -26,7 +28,9 @@ import static org.myalerts.app.provider.SettingProvider.STRING_TYPE;
  */
 public final class DatabaseSettingProvider implements InvocationHandler {
 
-    private final Object lock = new Object();
+    private static final Mapper1<SettingType, String, Optional<Object>> SETTING_TO_OBJECT_MAPPING = createMapper();
+
+    private final Lock lock = new ReentrantLock();
 
     private final DefaultSettingProvider defaultSettingProvider;
 
@@ -60,18 +64,18 @@ public final class DatabaseSettingProvider implements InvocationHandler {
         }
     }
 
-    private Optional<Object> transformTo(String type, String value) {
-        switch (type) {
-            case STRING_TYPE:
-            case PASSWORD_TYPE:
-                return of(value);
-            case INTEGER_TYPE:
-                return of(Integer.parseInt(value));
-            case BOOLEAN_TYPE:
-                return of(Boolean.parseBoolean(value));
-            default:
-                return empty();
-        }
+    private static Mapper1<SettingType, String, Optional<Object>> createMapper() {
+        return Mapper1.<SettingType, String, Optional<Object>>builder(new EnumMap<>(SettingType.class))
+            .map(SettingType.TEXT, value -> of(value))
+            .map(SettingType.PASSWORD, value -> of(value))
+            .map(SettingType.INTEGER, value -> of(Integer.parseInt(value)))
+            .map(SettingType.BOOLEAN, value -> of(Boolean.parseBoolean(value)))
+            .unmapped(value -> empty())
+            .build();
+    }
+
+    private Optional<Object> transformTo(SettingType type, String value) {
+        return SETTING_TO_OBJECT_MAPPING.map(type, value);
     }
 
     private boolean isGetOrDefault(Method method) {
@@ -103,7 +107,8 @@ public final class DatabaseSettingProvider implements InvocationHandler {
             return null;
         }
 
-        synchronized (lock) {
+        lock.lock();
+        try {
             availableSettings.stream()
                 .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
                 .filter(setting -> !setting.getComputedValue().equals(args[1]))
@@ -114,6 +119,8 @@ public final class DatabaseSettingProvider implements InvocationHandler {
                     setting.setValue(newValue + StringUtils.EMPTY);
                     settingRepository.save(setting);
                 });
+        } finally {
+            lock.unlock();
         }
 
         return null;

@@ -2,6 +2,7 @@ package org.myalerts.app.model;
 
 import java.util.Arrays;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,6 +11,8 @@ import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import org.myalerts.app.converter.SettingTypeToStringConverter;
 
 /**
  * @author Mihai Surdeanu
@@ -23,7 +26,12 @@ public class Setting {
     @Id
     private String key;
 
-    private String type;
+    private String title;
+
+    private String description;
+
+    @Convert(converter = SettingTypeToStringConverter.class)
+    private SettingType type;
 
     @Setter
     private String value;
@@ -31,10 +39,6 @@ public class Setting {
     private boolean editable;
 
     private int sequence;
-
-    private String title;
-
-    private String description;
 
     @Transient
     @Setter
@@ -50,7 +54,7 @@ public class Setting {
         @Getter
         private final String key;
 
-        public static Key fromString(String value) {
+        public static Key from(String value) {
             return Arrays.stream(Key.values())
                 .filter(item -> item.getKey().equals(value))
                 .findFirst()

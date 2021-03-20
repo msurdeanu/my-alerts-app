@@ -1,11 +1,12 @@
 package org.myalerts.app.service;
 
 import lombok.RequiredArgsConstructor;
-import org.myalerts.app.repository.TestScenarioRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.myalerts.app.repository.TestScenarioRepository;
 
 /**
  * @author Mihai Surdeanu

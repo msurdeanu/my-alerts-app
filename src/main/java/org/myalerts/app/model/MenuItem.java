@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import lombok.Getter;
+
 import org.myalerts.app.converter.ClassOfComponentToStringConverter;
 import org.myalerts.app.converter.VaadinIconToStringConverter;
 

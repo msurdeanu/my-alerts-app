@@ -5,16 +5,17 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.vaadin.flow.server.connect.VaadinEndpointProperties;
-import org.myalerts.app.model.Setting;
-import org.myalerts.app.provider.DatabaseSettingProvider;
-import org.myalerts.app.provider.DefaultSettingProvider;
-import org.myalerts.app.provider.SettingProvider;
-import org.myalerts.app.repository.SettingRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+
+import org.myalerts.app.model.Setting;
+import org.myalerts.app.provider.DatabaseSettingProvider;
+import org.myalerts.app.provider.DefaultSettingProvider;
+import org.myalerts.app.provider.SettingProvider;
+import org.myalerts.app.repository.SettingRepository;
 
 /**
  * @author Mihai Surdeanu

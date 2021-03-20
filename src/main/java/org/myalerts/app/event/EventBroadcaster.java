@@ -14,6 +14,7 @@ import com.vaadin.flow.shared.Registration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.myalerts.app.interfaces.marker.ThreadSafe;
 
 /**
@@ -50,7 +51,7 @@ public class EventBroadcaster {
                 if (existingConsumers != null) {
                     existingConsumers.remove(consumer);
 
-                    log.info("A new broadcast consumer was deregistered. The total number of consumers for event type {} is {}",
+                    log.info("A new broadcast consumer was de-registered. The total number of consumers for event type {} is {}",
                         acceptedEvent.getName(), existingConsumers.size());
                 }
             }

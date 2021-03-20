@@ -17,10 +17,11 @@ import com.vaadin.flow.data.provider.Query;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
 import org.myalerts.app.interfaces.marker.ThreadSafe;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioFilter;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Mihai Surdeanu
