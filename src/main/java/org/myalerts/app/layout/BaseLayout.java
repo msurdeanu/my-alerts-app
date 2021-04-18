@@ -74,7 +74,6 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
         themeButton.addClickListener(event -> toggleDarkTheme());
 
         verticalLayout.add(themeButton);
-
         return verticalLayout;
     }
 

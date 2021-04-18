@@ -36,7 +36,7 @@ public class CookieStoreService {
     }
 
     public void set(String name, String value, int expiryInSeconds) {
-        Cookie cookie = new Cookie(name, value);
+        final Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(expiryInSeconds);
         VaadinService.getCurrentResponse().addCookie(cookie);
     }

@@ -5,6 +5,10 @@ import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 public enum SettingType {
 

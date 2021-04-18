@@ -105,7 +105,7 @@ public class TestScenarioGrid extends VerticalLayout {
             return new Label(testScenario.getCron());
         }
 
-        TextField textField = new TextField();
+        final TextField textField = new TextField();
         testScenarioBinder.forField(textField)
             .withValidator(cron -> true, StringUtils.EMPTY)
             .bind(TestScenario::getCron, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
@@ -125,7 +125,6 @@ public class TestScenarioGrid extends VerticalLayout {
         editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
 
         horizontalLayout.add(editButton);
-
         return horizontalLayout;
     }
 

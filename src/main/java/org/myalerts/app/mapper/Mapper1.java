@@ -5,6 +5,10 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.jooq.lambda.function.Function1;
 
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 public class Mapper1<T, I1, R> {
 

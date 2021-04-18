@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Mihai Surdeanu
@@ -21,18 +22,23 @@ public class User {
     private int id;
 
     @Getter
+    @Setter
     private boolean enabled;
 
     @Getter
+    @Setter
     private String username;
 
     @Getter
+    @Setter
     private String password;
 
     @Getter
+    @Setter
     private String email;
 
     @Getter
+    @Setter
     private String role;
 
 }

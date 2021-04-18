@@ -3,6 +3,10 @@ package org.myalerts.app.dialect;
 import org.hibernate.MappingException;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 public class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
 
     @Override

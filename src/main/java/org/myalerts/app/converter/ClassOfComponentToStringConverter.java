@@ -4,6 +4,7 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 import com.vaadin.flow.component.Component;
+import lombok.extern.slf4j.Slf4j;
 
 import static java.util.Optional.ofNullable;
 
@@ -11,6 +12,7 @@ import static java.util.Optional.ofNullable;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
+@Slf4j
 @Converter
 public class ClassOfComponentToStringConverter implements AttributeConverter<Class<? extends Component>, String> {
 
@@ -31,7 +33,9 @@ public class ClassOfComponentToStringConverter implements AttributeConverter<Cla
             final Class<?> targetClass = Class.forName(target);
             return Component.class.isAssignableFrom(targetClass) ? (Class<? extends Component>) targetClass : null;
         } catch (ClassNotFoundException notUsed) {
-            // If class is not found, the target component will be null and will not appear in the final menu
+            // If class is not found, the target component will be null and will not appear in the final menu.
+            // Enable logging on debug to investigate possible issues.
+            log.debug("Component class could not be found for target '{}'", target);
         }
 
         return null;

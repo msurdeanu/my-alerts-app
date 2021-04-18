@@ -6,6 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {
