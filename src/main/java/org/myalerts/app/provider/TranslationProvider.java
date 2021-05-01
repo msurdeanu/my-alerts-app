@@ -1,4 +1,4 @@
-package org.myalerts.app.i18n;
+package org.myalerts.app.provider;
 
 import java.util.List;
 import java.util.Locale;
@@ -15,7 +15,7 @@ import static java.util.ResourceBundle.getBundle;
  * @since 1.0.0
  */
 @Slf4j
-public class CustomI18NProvider implements I18NProvider {
+public class TranslationProvider implements I18NProvider {
 
     private static final ResourceBundle RESOURCE_BUNDLE_EN = getBundle("translation", ENGLISH);
 

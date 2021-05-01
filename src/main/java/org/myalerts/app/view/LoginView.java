@@ -7,13 +7,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import de.codecamp.vaadin.security.spring.authentication.VaadinAuthenticationService;
 
-import org.myalerts.app.layout.BaseLayout;
-
 /**
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@Route(value = LoginView.ROUTE, layout = BaseLayout.class)
+@Route(value = LoginView.ROUTE)
 public class LoginView extends Composite<VerticalLayout> {
 
     public static final String ROUTE = "login";

@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
 import org.myalerts.app.interfaces.RequiresAdminRole;
@@ -19,7 +20,7 @@ import org.myalerts.app.transformer.SettingsToComponentsTransformer;
  */
 @RequiresAdminRole
 @Route(value = SettingsView.ROUTE, layout = BaseLayout.class)
-public class SettingsView extends ResponsiveLayout {
+public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
 
     public static final String ROUTE = "settings";
 
@@ -30,7 +31,12 @@ public class SettingsView extends ResponsiveLayout {
     public SettingsView(SettingProvider settingProvider) {
         this.settingProvider = settingProvider;
 
-        add(createHeader(getTranslation("settings.page.title")), createContent(createFormLayout()), createFooter());
+        add(createHeader(getTranslation("settings.page.subtitle")), createContent(createFormLayout()), createFooter());
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation("site.base.title", getTranslation("menu.main.settings"));
     }
 
     private Component createFormLayout() {

@@ -4,7 +4,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -62,11 +61,11 @@ public class RegisterView extends ResponsiveLayout {
 
         final Button submitButton = new Button(getTranslation("register.form.field.submit"));
 
-        submitButton.addClickListener(e -> {
+        submitButton.addClickListener(event -> {
             User user = new User();
 
             if (userBinder.writeBeanIfValid(user) && userDetailsService.registerUser(user)) {
-                Notification.show(getTranslation("register.form.successful"));
+                //Notification.show(getTranslation("register.form.successful"));
             } else {
                 errorMessage.setText(getTranslation("register.form.not-successful"));
             }
@@ -90,7 +89,7 @@ public class RegisterView extends ResponsiveLayout {
         userBinder.forField(emailField).asRequired(new EmailValidator(getTranslation("register.form.invalid-email-address"))).bind("email");
         userBinder.forField(passwordField1).asRequired().withValidator(this::passwordValidator).bind("password");
 
-        passwordField2.addValueChangeListener(e -> {
+        passwordField2.addValueChangeListener(event -> {
             enablePasswordValidation = true;
 
             userBinder.validate();

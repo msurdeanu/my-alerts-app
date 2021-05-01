@@ -1,6 +1,7 @@
 package org.myalerts.app;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,11 @@ import org.springframework.core.annotation.Order;
 
 import org.myalerts.app.event.Event;
 import org.myalerts.app.event.EventBroadcaster;
-import org.myalerts.app.i18n.CustomI18NProvider;
+import org.myalerts.app.provider.TranslationProvider;
 
 @SpringBootApplication
 @RequiredArgsConstructor
+@Push
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator, VaadinServiceInitListener {
 
     public static void main(String[] args) {
@@ -25,7 +27,7 @@ public class Application extends SpringBootServletInitializer implements AppShel
 
     @Override
     public void serviceInit(ServiceInitEvent serviceInitEvent) {
-        System.setProperty("vaadin.i18n.provider", CustomI18NProvider.class.getName());
+        System.setProperty("vaadin.i18n.provider", TranslationProvider.class.getName());
     }
 
     @EventListener

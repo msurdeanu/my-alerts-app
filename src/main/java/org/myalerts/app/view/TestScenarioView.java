@@ -11,6 +11,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,7 @@ import org.myalerts.app.service.TestScenarioService;
 
 @Slf4j
 @Route(value = TestScenarioView.ROUTE, layout = BaseLayout.class)
-public class TestScenarioView extends ResponsiveLayout implements TestScenarioEventHandler {
+public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitle, TestScenarioEventHandler {
 
     public static final String ROUTE = "test-scenarios";
 
@@ -50,6 +51,11 @@ public class TestScenarioView extends ResponsiveLayout implements TestScenarioEv
         add(createHeader(getTranslation("test-scenario.page.subtitle"), createFilterByName(), createFilterByType()));
         add(createContent(testScenarioGrid));
         add(createFooter());
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation("site.base.title", getTranslation("menu.main.test-scenarios"));
     }
 
     @Override
@@ -79,7 +85,7 @@ public class TestScenarioView extends ResponsiveLayout implements TestScenarioEv
 
     private Component createFilterByType() {
         final ComboBox<TestScenarioType> filterByTypeComboBox = new ComboBox<>();
-        filterByTypeComboBox.setItems(TestScenarioType::findByQuery);
+        //filterByTypeComboBox.setItems(TestScenarioType::findByQuery); TODO
         filterByTypeComboBox.setItemLabelGenerator(TestScenarioType::getLabel);
         filterByTypeComboBox.addValueChangeListener(event -> onFilteringByType(event.getValue()));
         return filterByTypeComboBox;

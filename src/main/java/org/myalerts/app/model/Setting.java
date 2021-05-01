@@ -58,7 +58,7 @@ public class Setting {
             return Arrays.stream(Key.values())
                 .filter(item -> item.getKey().equals(value))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No key found for given value"));
+                .orElseThrow(() -> new RuntimeException("No key found for given setting value " + value));
         }
 
     }

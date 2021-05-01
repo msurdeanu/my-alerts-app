@@ -56,13 +56,15 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
     private void init() {
         setPrimarySection(Section.NAVBAR);
 
-        Image img = new Image("logo.png", "Logo");
-        img.setHeight("44px");
-        addToNavbar(IS_OPTIMIZED_FOR_MOBILE, new DrawerToggle(), img);
+        final Image logo = new Image("logo.png", "Logo");
+        logo.setHeight("44px");
+        addToNavbar(IS_OPTIMIZED_FOR_MOBILE, new DrawerToggle(), logo);
 
         tabMap.values().stream().forEach(tabs::add);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(new Hr(), tabs, new Hr(), createMenuButtons());
+
+        initTheme();
     }
 
     private Component createMenuButtons() {
@@ -75,6 +77,13 @@ public class BaseLayout extends AppLayout implements BeforeEnterObserver {
 
         verticalLayout.add(themeButton);
         return verticalLayout;
+    }
+
+    private void initTheme() {
+        final ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+        if (cookieStoreService.isSetAndTrue(CookieStoreService.THEME_DARK_COOKIE) && !themeList.contains(Lumo.DARK)) {
+            themeList.add(Lumo.DARK);
+        }
     }
 
     private void toggleDarkTheme() {

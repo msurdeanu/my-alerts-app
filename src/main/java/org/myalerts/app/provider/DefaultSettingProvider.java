@@ -16,7 +16,7 @@ public class DefaultSettingProvider implements SettingProvider {
 
     @Override
     public List<Setting> getAll() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

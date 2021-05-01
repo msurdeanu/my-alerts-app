@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>19.0.4</vaadin.version>
+        <vaadin.version>19.0.6</vaadin.version>
         <grid.pagination.version>2.0.10</grid.pagination.version>
         <toggle.button.version>1.0.1</toggle.button.version>
         <vaadin.security.version>1.0.0</vaadin.security.version>
@@ -101,12 +101,6 @@
             <groupId>org.jooq</groupId>
             <artifactId>jool</artifactId>
             <version>${jool.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

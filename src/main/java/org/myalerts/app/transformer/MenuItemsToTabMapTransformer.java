@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.RouterLink;
@@ -35,8 +36,20 @@ public class MenuItemsToTabMapTransformer implements Transformer<List<MenuItem>,
 
     private Component createComponent(MenuItem menuItem) {
         return Optional.ofNullable(menuItem.getIcon())
-            .map(icon -> new HorizontalLayout(icon.create(), new RouterLink(menuItem.getLabel(), menuItem.getTarget())))
-            .orElseGet(() -> new HorizontalLayout(new RouterLink(menuItem.getLabel(), menuItem.getTarget())));
+            .map(icon -> createComponentWithIcon(menuItem, icon))
+            .orElseGet(() -> createComponentWithoutIcon(menuItem));
+    }
+
+    private HorizontalLayout createComponentWithIcon(MenuItem menuItem, VaadinIcon icon) {
+        final HorizontalLayout horizontalLayout = new HorizontalLayout(icon.create());
+        horizontalLayout.add(new RouterLink(horizontalLayout.getTranslation(menuItem.getLabel()), menuItem.getTarget()));
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout createComponentWithoutIcon(MenuItem menuItem) {
+        final HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(new RouterLink(horizontalLayout.getTranslation(menuItem.getLabel()), menuItem.getTarget()));
+        return horizontalLayout;
     }
 
 }

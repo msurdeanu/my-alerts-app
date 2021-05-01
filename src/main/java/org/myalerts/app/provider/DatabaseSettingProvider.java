@@ -66,8 +66,8 @@ public final class DatabaseSettingProvider implements InvocationHandler {
 
     private static Mapper1<SettingType, String, Optional<Object>> createMapper() {
         return Mapper1.<SettingType, String, Optional<Object>>builder(new EnumMap<>(SettingType.class))
-            .map(SettingType.TEXT, value -> of(value))
-            .map(SettingType.PASSWORD, value -> of(value))
+            .map(SettingType.TEXT, Optional::of)
+            .map(SettingType.PASSWORD, Optional::of)
             .map(SettingType.INTEGER, value -> of(Integer.parseInt(value)))
             .map(SettingType.BOOLEAN, value -> of(Boolean.parseBoolean(value)))
             .unmapped(value -> empty())
