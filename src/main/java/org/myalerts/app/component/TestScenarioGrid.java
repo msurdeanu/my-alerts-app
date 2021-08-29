@@ -73,7 +73,7 @@ public class TestScenarioGrid extends VerticalLayout {
 
     @RequiresUIThread
     private Component renderIsEnabled(TestScenario testScenario) {
-        final ToggleButton toggleButton = new ToggleButton(testScenario.isEnabled());
+        final var toggleButton = new ToggleButton(testScenario.isEnabled());
         toggleButton.addValueChangeListener(event -> eventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
@@ -89,12 +89,14 @@ public class TestScenarioGrid extends VerticalLayout {
             return TestScenarioType.DISABLED.getLabelAsLowercase();
         }
 
-        return testScenario.isFailed() ? TestScenarioType.FAILED.getLabelAsLowercase() : TestScenarioType.PASSED.getLabelAsLowercase();
+        return testScenario.isFailed()
+            ? TestScenarioType.FAILED.getLabelAsLowercase()
+            : TestScenarioType.PASSED.getLabelAsLowercase();
     }
 
     @RequiresUIThread
     private Component renderLastRun(TestScenario testScenario) {
-        final Button lastRunButton = new Button(getTranslation("test-scenario.main-grid.not-available"));
+        final var lastRunButton = new Button(getTranslation("test-scenario.main-grid.not-available"));
         lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(testScenario.getFullHistory()).open());
         return lastRunButton;
     }
@@ -105,7 +107,7 @@ public class TestScenarioGrid extends VerticalLayout {
             return new Label(testScenario.getCron());
         }
 
-        final TextField textField = new TextField();
+        final var textField = new TextField();
         testScenarioBinder.forField(textField)
             .withValidator(cron -> true, StringUtils.EMPTY)
             .bind(TestScenario::getCron, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
@@ -119,9 +121,9 @@ public class TestScenarioGrid extends VerticalLayout {
 
     @RequiresUIThread
     private Component renderActions(TestScenario testScenario) {
-        final HorizontalLayout horizontalLayout = new HorizontalLayout();
+        final var horizontalLayout = new HorizontalLayout();
 
-        final Button editButton = new Button(VaadinIcon.EDIT.create());
+        final var editButton = new Button(VaadinIcon.EDIT.create());
         editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
 
         horizontalLayout.add(editButton);

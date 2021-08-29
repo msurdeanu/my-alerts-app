@@ -17,16 +17,16 @@ public abstract class ResponsiveLayout extends FlexLayout {
     }
 
     protected Component createHeader(String subTitleOnLeft, Component... componentsOnRight) {
-        final Div headerDiv = new Div();
+        final var headerDiv = new Div();
         headerDiv.addClassName("header");
 
-        final Div leftHeaderDiv = new Div();
+        final var leftHeaderDiv = new Div();
         leftHeaderDiv.addClassName("header-left");
-        H3 pageSubTitle = new H3(subTitleOnLeft);
+        final var pageSubTitle = new H3(subTitleOnLeft);
         leftHeaderDiv.add(pageSubTitle);
         headerDiv.add(leftHeaderDiv);
 
-        final Div rightHeaderDiv = new Div();
+        final var rightHeaderDiv = new Div();
         rightHeaderDiv.addClassName("header-right");
         rightHeaderDiv.add(componentsOnRight);
         headerDiv.add(rightHeaderDiv);
@@ -35,14 +35,14 @@ public abstract class ResponsiveLayout extends FlexLayout {
     }
 
     protected Component createContent(Component... components) {
-        final Div contentDiv = new Div();
+        final var contentDiv = new Div();
         contentDiv.addClassName("content");
         contentDiv.add(components);
         return contentDiv;
     }
 
     protected Component createFooter() {
-        final Div footerDiv = new Div();
+        final var footerDiv = new Div();
         footerDiv.addClassName("footer");
         footerDiv.add(new Html(getTranslation("footer.copyright")));
         return footerDiv;

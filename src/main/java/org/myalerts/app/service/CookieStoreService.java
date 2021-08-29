@@ -32,7 +32,7 @@ public class CookieStoreService {
     }
 
     public void set(String name, boolean value) {
-        set(name, Boolean.toString(value), settingProvider.getOrDefault(Setting.Key.CookieExpiryInSeconds, (int) TimeUnit.MINUTES.toSeconds(15)));
+        set(name, Boolean.toString(value), settingProvider.getOrDefault(Setting.Key.COOKIE_EXPIRY_IN_SECONDS, (int) TimeUnit.MINUTES.toSeconds(15)));
     }
 
     public void set(String name, String value, int expiryInSeconds) {

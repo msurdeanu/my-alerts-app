@@ -41,7 +41,7 @@ public final class DatabaseSettingProvider implements InvocationHandler {
     public DatabaseSettingProvider(@NonNull DefaultSettingProvider defaultSettingProvider, @NonNull SettingRepository settingRepository) {
         this.defaultSettingProvider = defaultSettingProvider;
         this.settingRepository = settingRepository;
-        this.availableSettings = settingRepository.findAllByOrderBySequence().stream()
+        this.availableSettings = settingRepository.findAllByOrderByPosition().stream()
             .map(setting -> Pair.of(setting, transformTo(setting.getType(), setting.getValue())))
             .filter(pair -> pair.getRight().isPresent())
             .map(pair -> {

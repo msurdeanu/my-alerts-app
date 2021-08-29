@@ -38,7 +38,7 @@ public class Setting {
 
     private boolean editable;
 
-    private int sequence;
+    private int position;
 
     @Transient
     @Setter
@@ -47,14 +47,14 @@ public class Setting {
     @RequiredArgsConstructor
     public enum Key {
 
-        CookieExpiryInSeconds("cookieExpiryInSeconds"),
-        TestScenarioPoolSize("testScenarioPoolSize"),
-        TestScenarioThreadNamePrefix("testScenarioThreadNamePrefix");
+        COOKIE_EXPIRY_IN_SECONDS("cookieExpiryInSeconds"),
+        TEST_SCENARIO_POOL_SIZE("testScenarioPoolSize"),
+        TEST_SCENARIO_THREAD_NAME_PREFIX("testScenarioThreadNamePrefix");
 
         @Getter
         private final String key;
 
-        public static Key from(String value) {
+        public static Key of(String value) {
             return Arrays.stream(Key.values())
                 .filter(item -> item.getKey().equals(value))
                 .findFirst()

@@ -38,9 +38,9 @@ public class ApplicationConfig {
 
     @Bean
     public TaskScheduler taskScheduler(SettingProvider settingProvider) {
-        final ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(settingProvider.getOrDefault(Setting.Key.TestScenarioPoolSize, 2));
-        threadPoolTaskScheduler.setThreadNamePrefix(settingProvider.getOrDefault(Setting.Key.TestScenarioThreadNamePrefix, "test-scenario-pool-"));
+        final var threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_POOL_SIZE, 2));
+        threadPoolTaskScheduler.setThreadNamePrefix(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_THREAD_NAME_PREFIX, "test-scenario-pool-"));
         threadPoolTaskScheduler.initialize();
         return threadPoolTaskScheduler;
     }

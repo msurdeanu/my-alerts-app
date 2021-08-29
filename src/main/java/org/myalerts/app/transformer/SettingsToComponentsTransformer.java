@@ -48,17 +48,17 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
 
     private Mapper1<SettingType, Setting, Component> createMapper() {
         return Mapper1.<SettingType, Setting, Component>builder(new EnumMap<>(SettingType.class))
-            .map(TEXT, setting -> createTextField(setting))
-            .map(PASSWORD, setting -> createPasswordField(setting))
-            .map(INTEGER, setting -> createIntegerField(setting))
-            .map(BOOLEAN, setting -> createToggleButton(setting))
+            .map(TEXT, this::createTextField)
+            .map(PASSWORD, this::createPasswordField)
+            .map(INTEGER, this::createIntegerField)
+            .map(BOOLEAN, this::createToggleButton)
             .unmapped(setting -> {
                 throw new NoSuchElementException("Unsupported type given as input for setting key " + setting.getKey());
             }).build();
     }
 
     private Component createTextField(Setting setting) {
-        final TextField textField = new TextField();
+        final var textField = new TextField();
         textField.setLabel(textField.getTranslation(setting.getTitle()));
         textField.setHelperText(textField.getTranslation(setting.getDescription()));
         if (!setting.isEditable()) {
@@ -66,15 +66,15 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(textField).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.from(setting.getKey()), StringUtils.EMPTY),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.from(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return textField;
     }
 
     private PasswordField createPasswordField(Setting setting) {
-        final PasswordField passwordField = new PasswordField();
+        final var passwordField = new PasswordField();
         passwordField.setLabel(passwordField.getTranslation(setting.getTitle()));
         passwordField.setHelperText(passwordField.getTranslation(setting.getDescription()));
         if (!setting.isEditable()) {
@@ -82,15 +82,15 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(passwordField).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.from(setting.getKey()), StringUtils.EMPTY),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.from(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return passwordField;
     }
 
     private IntegerField createIntegerField(Setting setting) {
-        IntegerField integerField = new IntegerField();
+        final var integerField = new IntegerField();
         integerField.setLabel(integerField.getTranslation(setting.getTitle()));
         integerField.setHelperText(integerField.getTranslation(setting.getDescription()));
         if (!setting.isEditable()) {
@@ -98,23 +98,23 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(integerField).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.from(setting.getKey()), 0),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.from(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), 0),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return integerField;
     }
 
     private ToggleButton createToggleButton(Setting setting) {
-        ToggleButton toggleButton = new ToggleButton();
+        final var toggleButton = new ToggleButton();
         toggleButton.setLabel(toggleButton.getTranslation(setting.getTitle()));
         if (!setting.isEditable()) {
             toggleButton.setReadOnly(true);
         }
 
         binder.forField(toggleButton).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.from(setting.getKey()), Boolean.FALSE),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.from(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), Boolean.FALSE),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return toggleButton;

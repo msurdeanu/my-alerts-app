@@ -40,23 +40,25 @@ public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
     }
 
     private Component createFormLayout() {
-        final FormLayout layout = new FormLayout();
+        final var layout = new FormLayout();
 
         new SettingsToComponentsTransformer(binder).transform(settingProvider.getAll()).forEach(layout::add);
         binder.readBean(settingProvider);
 
-        final Button saveButton = createSaveButton();
+        final var saveButton = createSaveButton();
         binder.addStatusChangeListener(event -> saveButton.setEnabled(event.getBinder().hasChanges() && event.getBinder().isValid()));
         layout.add(saveButton);
 
-        layout.setResponsiveSteps(new FormLayout.ResponsiveStep("250px", 1), new FormLayout.ResponsiveStep("500px", 2),
-            new FormLayout.ResponsiveStep("750px", 3), new FormLayout.ResponsiveStep("1000px", 4));
+        layout.setResponsiveSteps(
+            new FormLayout.ResponsiveStep("250px", 1), new FormLayout.ResponsiveStep("500px", 2),
+            new FormLayout.ResponsiveStep("750px", 3), new FormLayout.ResponsiveStep("1000px", 4)
+        );
 
         return layout;
     }
 
     private Button createSaveButton() {
-        final Button saveButton = new Button(getTranslation("settings.button.save"), event -> {
+        final var saveButton = new Button(getTranslation("settings.button.save"), event -> {
             try {
                 binder.writeBean(settingProvider);
             } catch (ValidationException e) {

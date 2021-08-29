@@ -12,6 +12,6 @@ import org.myalerts.app.model.Setting;
  */
 public interface SettingRepository extends JpaRepository<Setting, String> {
 
-    List<Setting> findAllByOrderBySequence();
+    List<Setting> findAllByOrderByPosition();
 
 }

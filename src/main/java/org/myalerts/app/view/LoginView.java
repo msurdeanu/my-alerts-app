@@ -18,13 +18,13 @@ public class LoginView extends Composite<VerticalLayout> {
 
     @Override
     protected VerticalLayout initContent() {
-        final VerticalLayout layout = super.initContent();
+        final var layout = super.initContent();
 
         layout.setSizeFull();
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        final LoginForm loginForm = new LoginForm();
+        final var loginForm = new LoginForm();
         loginForm.setForgotPasswordButtonVisible(false);
         layout.add(loginForm);
         loginForm.addLoginListener(event -> VaadinAuthenticationService.get().login(this, event.getUsername(), event.getPassword(), true,

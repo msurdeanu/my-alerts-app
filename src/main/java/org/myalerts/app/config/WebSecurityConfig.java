@@ -1,7 +1,7 @@
 package org.myalerts.app.config;
 
-import de.codecamp.vaadin.security.spring.autoconfigure.VaadinSecurityProperties;
 import de.codecamp.vaadin.security.spring.config.VaadinSecurityConfigurerAdapter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,14 +19,10 @@ import org.myalerts.app.service.CustomUserDetailsService;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends VaadinSecurityConfigurerAdapter {
 
     private final UserRepository userRepository;
-
-    public WebSecurityConfig(VaadinSecurityProperties properties, UserRepository userRepository) {
-        super(properties);
-        this.userRepository = userRepository;
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
@@ -45,7 +41,7 @@ public class WebSecurityConfig extends VaadinSecurityConfigurerAdapter {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        final var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;

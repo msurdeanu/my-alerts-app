@@ -67,7 +67,7 @@ public class TestScenarioHistoryDialog extends Dialog {
 
     @RequiresUIThread
     private Component mapToTextArea(String value) {
-        final TextArea resultTextArea = new TextArea();
+        final var resultTextArea = new TextArea();
         resultTextArea.setReadOnly(true);
         resultTextArea.setWidth("100%");
         resultTextArea.setValue(value);

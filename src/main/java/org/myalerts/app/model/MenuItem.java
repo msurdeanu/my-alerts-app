@@ -6,11 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import lombok.Getter;
 
 import org.myalerts.app.converter.ClassOfComponentToStringConverter;
-import org.myalerts.app.converter.VaadinIconToStringConverter;
+import org.myalerts.app.converter.UserRoleToStringConverter;
 
 /**
  * @author Mihai Surdeanu
@@ -24,14 +23,14 @@ public class MenuItem {
     @Id
     private String label;
 
-    @Convert(converter = VaadinIconToStringConverter.class)
-    private VaadinIcon icon;
+    private String icon;
 
     @Convert(converter = ClassOfComponentToStringConverter.class)
     private Class<? extends Component> target;
 
-    private int option;
+    @Convert(converter = UserRoleToStringConverter.class)
+    private UserRole role;
 
-    private int sequence;
+    private int position;
 
 }

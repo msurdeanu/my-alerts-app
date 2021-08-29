@@ -31,7 +31,7 @@ public class ScheduleTestScenarioService {
 
     private static final Map<Integer, ScheduledFuture<?>> SCENARIOS_SCHEDULED_MAP = new HashMap<>();
 
-    private final ReentrantLock reentrantLock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private final TaskScheduler taskScheduler;
 
@@ -42,12 +42,12 @@ public class ScheduleTestScenarioService {
         final ScheduledFuture<?> scheduledFuture = taskScheduler.schedule(testScenario,
             new CronTrigger(cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
 
-        reentrantLock.lock();
+        lock.lock();
         try {
             remove(testScenario);
             SCENARIOS_SCHEDULED_MAP.put(id, scheduledFuture);
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
 
         log.info("A new test scenario {} was added to scheduling pool. Running frequency is {}", id, cron);
@@ -57,7 +57,7 @@ public class ScheduleTestScenarioService {
     public void remove(TestScenario testScenario) {
         final Integer id = testScenario.getId();
 
-        reentrantLock.lock();
+        lock.lock();
         try {
             Optional.ofNullable(SCENARIOS_SCHEDULED_MAP.get(id))
                 .ifPresent(scheduledFuture -> {
@@ -67,7 +67,7 @@ public class ScheduleTestScenarioService {
                     log.info("A new test scenario {} was removed from scheduling pool.", id);
                 });
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
