@@ -11,7 +11,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-import org.myalerts.app.interfaces.marker.RequiresUIThread;
+import org.myalerts.app.marker.RequiresUIThread;
 import org.myalerts.app.model.TestScenarioResult;
 
 /**

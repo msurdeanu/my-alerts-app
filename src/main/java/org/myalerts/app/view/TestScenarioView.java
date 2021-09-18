@@ -1,9 +1,5 @@
 package org.myalerts.app.view;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.validation.constraints.NotNull;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.notification.Notification;
@@ -13,8 +9,8 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
-
 import org.myalerts.app.component.TestScenarioGrid;
 import org.myalerts.app.event.TestScenarioEventHandler;
 import org.myalerts.app.layout.BaseLayout;
@@ -24,7 +20,11 @@ import org.myalerts.app.model.TestScenarioFilter;
 import org.myalerts.app.model.TestScenarioType;
 import org.myalerts.app.service.TestScenarioService;
 
+import javax.validation.constraints.NotNull;
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
+@AnonymousAllowed
 @Route(value = TestScenarioView.ROUTE, layout = BaseLayout.class)
 public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitle, TestScenarioEventHandler {
 
@@ -41,8 +41,8 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         this.testScenarioService = testScenarioService;
 
         final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
-            .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
-            .withConfigurableFilter();
+                .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
+                .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
 
         testScenarioGrid = new TestScenarioGrid(this);

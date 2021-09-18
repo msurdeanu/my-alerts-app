@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import org.myalerts.app.converter.SettingTypeToStringConverter;
+import org.myalerts.app.exception.AlertingException;
 
 /**
  * @author Mihai Surdeanu
@@ -49,7 +50,8 @@ public class Setting {
 
         COOKIE_EXPIRY_IN_SECONDS("cookieExpiryInSeconds"),
         TEST_SCENARIO_POOL_SIZE("testScenarioPoolSize"),
-        TEST_SCENARIO_THREAD_NAME_PREFIX("testScenarioThreadNamePrefix");
+        TEST_SCENARIO_THREAD_NAME_PREFIX("testScenarioThreadNamePrefix"),
+        TEST_SCENARIO_EXEC_TIMEOUT("testScenarioExecTimeout");
 
         @Getter
         private final String key;
@@ -58,7 +60,7 @@ public class Setting {
             return Arrays.stream(Key.values())
                 .filter(item -> item.getKey().equals(value))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No key found for given setting value " + value));
+                .orElseThrow(() -> new AlertingException("No key found for '" + value + "'"));
         }
 
     }

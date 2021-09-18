@@ -30,7 +30,7 @@ public class TranslationProvider implements I18NProvider {
             return String.format(RESOURCE_BUNDLE_EN.getString(key), args);
         }
 
-        log.warn("Missing translation for key {}", key);
+        log.warn("Missing translation for key '{}'", key);
         return key;
     }
 

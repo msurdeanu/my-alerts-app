@@ -1,10 +1,12 @@
 package org.myalerts.app.model;
 
 import java.util.Arrays;
+import java.util.Optional;
 
-import de.codecamp.vaadin.security.spring.access.VaadinSecurity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * @author Mihai Surdeanu
@@ -22,8 +24,17 @@ public enum UserRole {
     private final String label;
 
     public boolean validate() {
-        return UserRole.GUEST.equals(this) || UserRole.NOT_GUEST.equals(this) && VaadinSecurity.check().isAuthenticated() ||
-            VaadinSecurity.check().hasRole(getLabel());
+        return UserRole.GUEST.equals(this) || UserRole.NOT_GUEST.equals(this) && isAuthenticated() || hasRole(getLabel());
+    }
+
+    private boolean isAuthenticated() {
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
+    }
+
+    private boolean hasRole(final String role) {
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+            .map(auth -> auth.getAuthorities().stream().anyMatch(granted -> granted.getAuthority().equals(role)))
+            .orElse(false);
     }
 
     public static UserRole of(final String label) {

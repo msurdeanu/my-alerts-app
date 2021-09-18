@@ -25,23 +25,23 @@ public class CookieStoreService {
 
     private final SettingProvider settingProvider;
 
-    public boolean isSetAndTrue(String name) {
+    public boolean isSetAndTrue(final String name) {
         return findByName(name)
             .map(cookie -> Boolean.TRUE.toString().equalsIgnoreCase(cookie.getValue()))
             .orElse(false);
     }
 
-    public void set(String name, boolean value) {
+    public void set(final String name, final boolean value) {
         set(name, Boolean.toString(value), settingProvider.getOrDefault(Setting.Key.COOKIE_EXPIRY_IN_SECONDS, (int) TimeUnit.MINUTES.toSeconds(15)));
     }
 
-    public void set(String name, String value, int expiryInSeconds) {
-        final Cookie cookie = new Cookie(name, value);
+    public void set(final String name, final String value, final int expiryInSeconds) {
+        final var cookie = new Cookie(name, value);
         cookie.setMaxAge(expiryInSeconds);
         VaadinService.getCurrentResponse().addCookie(cookie);
     }
 
-    private Optional<Cookie> findByName(String name) {
+    private Optional<Cookie> findByName(final String name) {
         return Arrays.stream(VaadinService.getCurrentRequest().getCookies())
             .filter(cookie -> cookie.getName().equals(name))
             .findFirst();

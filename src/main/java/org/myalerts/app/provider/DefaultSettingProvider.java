@@ -21,35 +21,35 @@ public class DefaultSettingProvider implements SettingProvider {
 
     @Override
     public Integer getOrDefault(Setting.Key key, Integer defaultValue) {
-        log.warn("Default value for setting key = {} was provided.", key.getKey());
+        log.warn("Default value for setting key '{}' is provided", key.getKey());
         return defaultValue;
     }
 
     @Override
     public Boolean getOrDefault(Setting.Key key, Boolean defaultValue) {
-        log.warn("Default value for setting key = {} was provided.", key.getKey());
+        log.warn("Default value for setting key '{}' is provided", key.getKey());
         return defaultValue;
     }
 
     @Override
     public String getOrDefault(Setting.Key key, String defaultValue) {
-        log.warn("Default value for setting key = {} was provided.", key.getKey());
+        log.warn("Default value for setting key '{}' is provided", key.getKey());
         return defaultValue;
     }
 
     @Override
     public void set(Setting.Key key, Integer toValue) {
-        // Nothing to do by default
+        // Nothing to do
     }
 
     @Override
     public void set(Setting.Key key, Boolean toValue) {
-        // Nothing to do by default
+        // Nothing to do
     }
 
     @Override
     public void set(Setting.Key key, String toValue) {
-        // Nothing to do by default
+        // Nothing to do
     }
 
 }

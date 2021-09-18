@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>20.0.7</vaadin.version>
+        <vaadin.version>21.0.1</vaadin.version>
         <grid.pagination.version>2.0.10</grid.pagination.version>
         <toggle.button.version>1.0.1</toggle.button.version>
         <vaadin.security.version>2.1.1</vaadin.security.version>
@@ -64,6 +64,12 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>swagger-core</artifactId>
+                    <groupId>io.swagger</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -72,6 +78,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javassist</artifactId>
+                    <groupId>org.javassist</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -86,11 +102,6 @@
             <groupId>com.vaadin.componentfactory</groupId>
             <artifactId>togglebutton</artifactId>
             <version>${toggle.button.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.codecamp.vaadin</groupId>
-            <artifactId>vaadin-security-spring-boot-starter</artifactId>
-            <version>${vaadin.security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

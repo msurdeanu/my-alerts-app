@@ -1,6 +1,7 @@
 package org.myalerts.app.model;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.vaadin.flow.data.provider.Query;
@@ -14,13 +15,16 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TestScenarioType {
 
-    DISABLED("disabled"),
-    FAILED("failed"),
-    PASSED("passed"),
-    ALL("all");
+    DISABLED("disabled", testScenario -> !testScenario.isEnabled()),
+    FAILED("failed", TestScenario::isFailed),
+    PASSED("passed", testScenario -> !testScenario.isFailed()),
+    ALL("all", testScenario -> true);
 
     @Getter
     private final String label;
+
+    @Getter
+    private final Predicate<? super TestScenario> filter;
 
     public String getLabelAsLowercase() {
         return label.toLowerCase();

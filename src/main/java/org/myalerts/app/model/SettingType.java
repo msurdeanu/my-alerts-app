@@ -20,7 +20,7 @@ public enum SettingType {
     @Getter
     private final String value;
 
-    public static SettingType from(String value) {
+    public static SettingType of(final String value) {
         return Arrays.stream(values())
             .filter(settingType -> settingType.getValue().equalsIgnoreCase(value))
             .findFirst()

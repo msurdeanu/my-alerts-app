@@ -2,10 +2,12 @@ package org.myalerts.app.component;
 
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -13,11 +15,12 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import org.myalerts.app.event.TestScenarioEventHandler;
-import org.myalerts.app.interfaces.marker.RequiresUIThread;
+import org.myalerts.app.marker.RequiresUIThread;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioType;
 
@@ -25,19 +28,14 @@ import org.myalerts.app.model.TestScenarioType;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-public class TestScenarioGrid extends VerticalLayout {
+@RequiredArgsConstructor
+public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     private final TestScenarioEventHandler eventHandler;
 
     private final PaginatedGrid<TestScenario> paginatedGrid = new PaginatedGrid<>();
 
     private final Binder<TestScenario> testScenarioBinder = new Binder<>(TestScenario.class);
-
-    public TestScenarioGrid(TestScenarioEventHandler eventHandler) {
-        this.eventHandler = eventHandler;
-
-        init();
-    }
 
     public void refreshPage() {
         paginatedGrid.refreshPaginator();
@@ -47,8 +45,11 @@ public class TestScenarioGrid extends VerticalLayout {
         paginatedGrid.setDataProvider(dataProvider);
     }
 
-    private void init() {
-        setSizeFull();
+    @Override
+    protected VerticalLayout initContent() {
+        final var layout = super.initContent();
+
+        layout.setSizeFull();
         paginatedGrid.setHeightByRows(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderIsEnabled))
             .setAutoWidth(true);
@@ -67,8 +68,9 @@ public class TestScenarioGrid extends VerticalLayout {
             .setAutoWidth(true);
         paginatedGrid.setPageSize(10);
         paginatedGrid.setPaginatorSize(5);
+        layout.add(paginatedGrid);
 
-        add(paginatedGrid);
+        return layout;
     }
 
     @RequiresUIThread

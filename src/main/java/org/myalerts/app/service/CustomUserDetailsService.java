@@ -22,13 +22,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return Optional.ofNullable(userRepository.getUserByUsername(username))
             .map(CustomUserDetails::new)
             .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
     }
 
-    public boolean registerUser(User user) {
+    public boolean registerUser(final User user) {
         user.setEnabled(true);
         user.setRole("ROLE_USER");
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));

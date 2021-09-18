@@ -1,5 +1,7 @@
 package org.myalerts.app.view;
 
+import javax.annotation.security.RolesAllowed;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -8,7 +10,6 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
-import org.myalerts.app.interfaces.RequiresAdminRole;
 import org.myalerts.app.layout.BaseLayout;
 import org.myalerts.app.layout.ResponsiveLayout;
 import org.myalerts.app.provider.SettingProvider;
@@ -18,7 +19,7 @@ import org.myalerts.app.transformer.SettingsToComponentsTransformer;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@RequiresAdminRole
+@RolesAllowed("ROLE_ADMIN")
 @Route(value = SettingsView.ROUTE, layout = BaseLayout.class)
 public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
 
@@ -61,7 +62,7 @@ public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
         final var saveButton = new Button(getTranslation("settings.button.save"), event -> {
             try {
                 binder.writeBean(settingProvider);
-            } catch (ValidationException e) {
+            } catch (ValidationException notUsed) {
                 // Nothing to do
             }
         });

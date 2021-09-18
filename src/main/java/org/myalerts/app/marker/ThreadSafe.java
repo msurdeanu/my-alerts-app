@@ -1,4 +1,4 @@
-package org.myalerts.app.interfaces.marker;
+package org.myalerts.app.marker;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

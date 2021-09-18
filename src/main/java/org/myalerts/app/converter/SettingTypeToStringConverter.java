@@ -21,7 +21,7 @@ public class SettingTypeToStringConverter implements AttributeConverter<SettingT
 
     @Override
     public SettingType convertToEntityAttribute(String data) {
-        return ofNullable(data).map(SettingType::from).orElse(null);
+        return ofNullable(data).map(SettingType::of).orElse(null);
     }
 
 }

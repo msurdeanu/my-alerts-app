@@ -1,17 +1,18 @@
 package org.myalerts.app.config;
 
-import de.codecamp.vaadin.security.spring.config.VaadinSecurityConfigurerAdapter;
+import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import lombok.RequiredArgsConstructor;
+import org.myalerts.app.repository.UserRepository;
+import org.myalerts.app.service.CustomUserDetailsService;
+import org.myalerts.app.view.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import org.myalerts.app.repository.UserRepository;
-import org.myalerts.app.service.CustomUserDetailsService;
 
 /**
  * @author Mihai Surdeanu
@@ -20,13 +21,22 @@ import org.myalerts.app.service.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig extends VaadinSecurityConfigurerAdapter {
+public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
 
     private final UserRepository userRepository;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) {
-        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        super.configure(httpSecurity);
+
+        setLoginView(httpSecurity, LoginView.class);
+    }
+
+    @Override
+    public void configure(final WebSecurity webSecurity) throws Exception {
+        webSecurity.ignoring().antMatchers("/logo.png");
+
+        super.configure(webSecurity);
     }
 
     @Bean

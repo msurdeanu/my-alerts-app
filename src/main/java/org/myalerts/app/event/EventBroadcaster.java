@@ -15,7 +15,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.myalerts.app.interfaces.marker.ThreadSafe;
+import org.myalerts.app.marker.ThreadSafe;
 
 /**
  * @author Mihai Surdeanu

@@ -4,7 +4,6 @@ import java.lang.reflect.Proxy;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.vaadin.flow.server.connect.VaadinEndpointProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
@@ -43,11 +42,6 @@ public class ApplicationConfig {
         threadPoolTaskScheduler.setThreadNamePrefix(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_THREAD_NAME_PREFIX, "test-scenario-pool-"));
         threadPoolTaskScheduler.initialize();
         return threadPoolTaskScheduler;
-    }
-
-    @Bean
-    public VaadinEndpointProperties vaadinEndpointProperties() {
-        return new VaadinEndpointProperties();
     }
 
 }

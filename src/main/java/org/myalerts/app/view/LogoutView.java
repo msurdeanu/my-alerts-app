@@ -1,5 +1,7 @@
 package org.myalerts.app.view;
 
+import javax.annotation.security.PermitAll;
+
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -11,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
+@PermitAll
 @Route(value = LogoutView.ROUTE)
 public class LogoutView extends Div implements BeforeEnterObserver {
 
