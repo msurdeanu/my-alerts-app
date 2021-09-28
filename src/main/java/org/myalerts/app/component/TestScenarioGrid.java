@@ -22,6 +22,7 @@ import org.myalerts.app.event.TestScenarioEventHandler;
 import org.myalerts.app.marker.RequiresUIThread;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioType;
+import org.myalerts.app.model.UserRole;
 
 /**
  * @author Mihai Surdeanu
@@ -35,6 +36,8 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     private final Binder<TestScenario> testScenarioBinder = new Binder<>(TestScenario.class);
 
     private final TestScenarioEventHandler eventHandler;
+
+    private boolean isLoggedAsAdmin = UserRole.ADMIN.validate();
 
     public void refreshPage() {
         paginatedGrid.refreshPaginator();
@@ -122,10 +125,27 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     private Component renderActions(final TestScenario testScenario) {
         final var horizontalLayout = new HorizontalLayout();
 
+        final var scheduleNowButton = new Button(VaadinIcon.START_COG.create());
+        scheduleNowButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.schedule.title"));
         final var editButton = new Button(VaadinIcon.EDIT.create());
-        editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
+        editButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.edit.title"));
+        final var deleteButton = new Button(VaadinIcon.TRASH.create());
+        deleteButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.delete.title"));
+        if (isLoggedAsAdmin) {
+            scheduleNowButton.addClickListener(event -> eventHandler.onScheduleNow(testScenario));
+            editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
+            if (!testScenario.isEnabled()) {
+                deleteButton.addClickListener(event -> eventHandler.onDelete(testScenario));
+            } else {
+                deleteButton.setEnabled(false);
+            }
+        } else {
+            scheduleNowButton.setEnabled(false);
+            editButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+        }
 
-        horizontalLayout.add(editButton);
+        horizontalLayout.add(scheduleNowButton, editButton, deleteButton);
         return horizontalLayout;
     }
 

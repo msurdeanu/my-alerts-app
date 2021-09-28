@@ -95,7 +95,7 @@ public class TestScenarioService {
     }
 
     @ThreadSafe
-    public void changeCronExpression(TestScenario testScenario, String newCronExpression) {
+    public void changeCronExpression(final TestScenario testScenario, final String newCronExpression) {
         if (testScenario.isEnabled()) {
             scheduleTestScenarioService.unschedule(testScenario);
         }
@@ -107,13 +107,27 @@ public class TestScenarioService {
         }
     }
 
+    @ThreadSafe
+    public void delete(final TestScenario testScenario) {
+        lock.lock();
+        try {
+            if (testScenario.isEnabled()) {
+                scheduleTestScenarioService.unschedule(testScenario);
+            }
+
+            ALL_TESTS.remove(testScenario.getId());
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public void scheduleAllNowInAsyncMode() {
         ALL_TESTS.values().stream()
             .filter(TestScenario::isEnabled)
             .forEach(scheduleTestScenarioService::scheduleInAsyncMode);
     }
 
-    public void scheduleNowInSyncMode(TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
+    public void scheduleNowInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
         scheduleTestScenarioService.scheduleInSyncMode(testScenario);
     }
 

@@ -2,8 +2,6 @@ package org.myalerts.app.view;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.validation.constraints.NotNull;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.select.Select;
@@ -38,7 +36,7 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
 
     private final TestScenarioService testScenarioService;
 
-    public TestScenarioView(TestScenarioService testScenarioService) {
+    public TestScenarioView(final TestScenarioService testScenarioService) {
         super();
         this.testScenarioService = testScenarioService;
 
@@ -61,7 +59,7 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     }
 
     @Override
-    public void onActivationChanged(TestScenario testScenario) {
+    public void onActivationChanged(final TestScenario testScenario) {
         testScenarioService.changeActivation(testScenario);
         testScenarioGrid.refreshPage();
 
@@ -69,10 +67,26 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     }
 
     @Override
-    public void onCronExpressionChanged(@NotNull TestScenario testScenario, @NotNull String newCronExpression) {
+    public void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression) {
         testScenarioService.changeCronExpression(testScenario, newCronExpression);
 
         Notification.show("Cron expression for test scenario '" + testScenario.getName() + "' changed successfully to '" + newCronExpression + "'.");
+    }
+
+    @Override
+    public void onDelete(final TestScenario testScenario) {
+        testScenarioService.delete(testScenario);
+        testScenarioGrid.refreshPage();
+    }
+
+    @Override
+    public void onScheduleNow(final TestScenario testScenario) {
+        try {
+            testScenarioService.scheduleNowInSyncMode(testScenario);
+        } catch (Exception e) {
+            log.error("An error occurred during scheduling immediately a test scenario.", e);
+            Notification.show("An error occurred during scheduling immediately a test scenario. More details about exception are present in the logs.");
+        }
     }
 
     private Component createFilterByName() {
@@ -97,13 +111,13 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         return filterByTypeSelect;
     }
 
-    private void onFilteringByName(String value) {
+    private void onFilteringByName(final String value) {
         testScenarioFilter.setByNameCriteria(value.toLowerCase());
 
         testScenarioGrid.refreshPage();
     }
 
-    private void onFilteringByType(TestScenarioType value) {
+    private void onFilteringByType(final TestScenarioType value) {
         testScenarioFilter.setByTypeCriteria(value);
 
         testScenarioGrid.refreshPage();

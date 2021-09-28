@@ -7,7 +7,9 @@
     <artifactId>myalerts-app</artifactId>
 
     <name>My Alerts</name>
-    <description>My Alerts is an open source Alerting Framework based on Java as programming language and Vaadin as UI framework.</description>
+    <description>My Alerts is an open source Alerting Framework based on Java as programming language and Vaadin as UI
+        framework.
+    </description>
     <version>0.9.9-SNAPSHOT</version>
 
     <packaging>war</packaging>
@@ -15,7 +17,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.5.5</version>
     </parent>
 
     <properties>
@@ -23,12 +25,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>21.0.1</vaadin.version>
+        <vaadin.version>21.0.2</vaadin.version>
         <grid.pagination.version>2.0.10</grid.pagination.version>
         <toggle.button.version>1.0.1</toggle.button.version>
         <vaadin.security.version>2.1.1</vaadin.security.version>
         <lombok.version>1.18.20</lombok.version>
         <jool.version>0.9.14</jool.version>
+        <graalvm.js.version>21.2.0</graalvm.js.version>
     </properties>
 
     <repositories>
@@ -116,12 +119,12 @@
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>21.2.0</version>
+            <version>${graalvm.js.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>21.2.0</version>
+            <version>${graalvm.js.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

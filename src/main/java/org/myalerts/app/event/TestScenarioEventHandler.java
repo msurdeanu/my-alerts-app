@@ -8,8 +8,12 @@ import org.myalerts.app.model.TestScenario;
  */
 public interface TestScenarioEventHandler {
 
-    void onActivationChanged(TestScenario testScenario);
+    void onActivationChanged(final TestScenario testScenario);
 
-    void onCronExpressionChanged(TestScenario testScenario, String newCronExpression);
+    void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression);
+
+    void onDelete(final TestScenario testScenario);
+
+    void onScheduleNow(final TestScenario testScenario);
 
 }

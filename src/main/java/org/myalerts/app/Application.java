@@ -25,6 +25,7 @@ import org.myalerts.app.provider.TranslationProvider;
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator, VaadinServiceInitListener {
 
     public static void main(String[] args) {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         SpringApplication.run(Application.class, args);
     }
 
