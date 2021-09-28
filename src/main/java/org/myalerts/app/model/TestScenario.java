@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,14 +35,17 @@ public class TestScenario implements Runnable {
     private Integer id;
 
     @Getter
+    @Setter
+    private boolean enabled;
+
+    @Getter
     private String name;
 
     @Getter
     private String cron;
 
     @Getter
-    @Setter
-    private boolean enabled;
+    private String definition;
 
     @Transient
     @Getter
@@ -57,21 +62,25 @@ public class TestScenario implements Runnable {
 
     @Override
     public void run() {
+        Object result = null;
         Throwable throwable = null;
-        final long startTime = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         try {
-            // TODO: implement custom logic here
-            Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+            final ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
+            engine.eval(definition);
+            final Invocable invocable = (Invocable) engine;
+            result = invocable.invokeFunction("execute", 0);
             failed = false;
         } catch (Throwable t) {
             throwable = t;
             failed = true;
         } finally {
             final TestScenarioResult.TestScenarioResultBuilder testScenarioResultBuilder = TestScenarioResult.builder()
-                .duration(System.currentTimeMillis() - startTime)
                 .scenarioId(id)
+                .duration(System.currentTimeMillis() - start)
+                .cause(throwable)
                 .created(Instant.now());
-            Optional.ofNullable(throwable).ifPresent(testScenarioResultBuilder::cause);
+            Optional.ofNullable(result).map(Object::toString).ifPresent(testScenarioResultBuilder::cause);
 
             EventBroadcaster.broadcast(TestResultEvent.builder().testScenario(this).testScenarioResult(testScenarioResultBuilder.build()).build());
         }
@@ -93,7 +102,7 @@ public class TestScenario implements Runnable {
 
     public Collection<TestScenarioResult> getFullHistory() {
         // TODO: implement logic for retrieving full history of runs
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
 }

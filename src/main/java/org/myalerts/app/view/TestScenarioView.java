@@ -1,8 +1,12 @@
 package org.myalerts.app.view;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.validation.constraints.NotNull;
+
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -11,6 +15,7 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
+
 import org.myalerts.app.component.TestScenarioGrid;
 import org.myalerts.app.event.TestScenarioEventHandler;
 import org.myalerts.app.layout.BaseLayout;
@@ -19,9 +24,6 @@ import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioFilter;
 import org.myalerts.app.model.TestScenarioType;
 import org.myalerts.app.service.TestScenarioService;
-
-import javax.validation.constraints.NotNull;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @AnonymousAllowed
@@ -41,8 +43,8 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         this.testScenarioService = testScenarioService;
 
         final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
-                .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
-                .withConfigurableFilter();
+            .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
+            .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
 
         testScenarioGrid = new TestScenarioGrid(this);
@@ -63,19 +65,20 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         testScenarioService.changeActivation(testScenario);
         testScenarioGrid.refreshPage();
 
-        Notification.show("Activation status for test scenario " + testScenario.getName() + " was changed successfully.");
+        Notification.show("Activation status for test scenario '" + testScenario.getName() + "' is changed successfully.");
     }
 
     @Override
     public void onCronExpressionChanged(@NotNull TestScenario testScenario, @NotNull String newCronExpression) {
         testScenarioService.changeCronExpression(testScenario, newCronExpression);
 
-        Notification.show("Cron expression for test scenario " + testScenario.getName() + " was changed successfully to " + newCronExpression + ".");
+        Notification.show("Cron expression for test scenario '" + testScenario.getName() + "' changed successfully to '" + newCronExpression + "'.");
     }
 
     private Component createFilterByName() {
         final TextField filterByNameTextField = new TextField();
         filterByNameTextField.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-name.placeholder"));
+        filterByNameTextField.setHelperText(getTranslation("test-scenario.main-grid.filter.by-name.helper"));
         filterByNameTextField.setClearButtonVisible(true);
         filterByNameTextField.setValueChangeMode(ValueChangeMode.LAZY);
         filterByNameTextField.setValueChangeTimeout((int) TimeUnit.SECONDS.toMillis(1));
@@ -84,11 +87,14 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     }
 
     private Component createFilterByType() {
-        final ComboBox<TestScenarioType> filterByTypeComboBox = new ComboBox<>();
-        //filterByTypeComboBox.setItems(TestScenarioType::findByQuery); TODO
-        filterByTypeComboBox.setItemLabelGenerator(TestScenarioType::getLabel);
-        filterByTypeComboBox.addValueChangeListener(event -> onFilteringByType(event.getValue()));
-        return filterByTypeComboBox;
+        final Select<TestScenarioType> filterByTypeSelect = new Select<>();
+        filterByTypeSelect.setItems(TestScenarioType.getAllItems());
+        filterByTypeSelect.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-type.placeholder"));
+        filterByTypeSelect.setHelperText(getTranslation("test-scenario.main-grid.filter.by-type.helper"));
+        filterByTypeSelect.setItemLabelGenerator(TestScenarioType::getLabel);
+        filterByTypeSelect.setValue(TestScenarioType.ALL);
+        filterByTypeSelect.addValueChangeListener(event -> onFilteringByType(event.getValue()));
+        return filterByTypeSelect;
     }
 
     private void onFilteringByName(String value) {

@@ -121,8 +121,7 @@ public class TestScenarioService {
         Predicate<TestScenario> filterByNamePredicate = testScenario -> true;
         if (StringUtils.isNotEmpty(byNameCriteria)) {
             try {
-                final Pattern filterByNamePattern = Pattern.compile(byNameCriteria, Pattern.CASE_INSENSITIVE);
-                filterByNamePredicate = testScenario -> filterByNamePattern.matcher(testScenario.getName()).find();
+                filterByNamePredicate = testScenario -> Pattern.compile(byNameCriteria, Pattern.CASE_INSENSITIVE).matcher(testScenario.getName()).find();
             } catch (PatternSyntaxException notUsed) {
                 // In case of a syntax exception, no filtering on regex will be applied.
                 // In this case, the tool will do a filtering based on a simple string contains.

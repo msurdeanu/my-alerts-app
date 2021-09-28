@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +38,13 @@ public class ScheduleTestScenarioService {
 
     private final SettingProvider settingProvider;
 
-    private final TaskScheduler taskScheduler;
+    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @ThreadSafe
     public void schedule(final TestScenario testScenario) {
         final var id = testScenario.getId();
         final var cron = testScenario.getCron();
-        final ScheduledFuture<?> scheduledFuture = taskScheduler.schedule(testScenario,
+        final ScheduledFuture<?> scheduledFuture = threadPoolTaskScheduler.schedule(testScenario,
             new CronTrigger(cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
 
         lock.lock();
@@ -79,12 +79,12 @@ public class ScheduleTestScenarioService {
 
     @ThreadSafe
     public void scheduleInAsyncMode(TestScenario testScenario) {
-        taskScheduler.schedule(testScenario, Instant.now());
+        threadPoolTaskScheduler.schedule(testScenario, Instant.now());
     }
 
     @ThreadSafe
     public void scheduleInSyncMode(TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
-        taskScheduler.schedule(testScenario, Instant.now())
+        threadPoolTaskScheduler.schedule(testScenario, Instant.now())
             .get(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
     }
 

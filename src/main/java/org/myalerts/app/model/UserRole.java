@@ -16,15 +16,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 public enum UserRole {
 
     GUEST("ROLE_GUEST"),
+    LOGGED("ROLE_LOGGED"),
+    NOT_LOGGED("ROLE_NOT_LOGGED"),
     USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN"),
-    NOT_GUEST("!ROLE_GUEST");
+    ADMIN("ROLE_ADMIN");
 
     @Getter
     private final String label;
 
     public boolean validate() {
-        return UserRole.GUEST.equals(this) || UserRole.NOT_GUEST.equals(this) && isAuthenticated() || hasRole(getLabel());
+        return UserRole.GUEST.equals(this) || UserRole.LOGGED.equals(this) && isAuthenticated()
+            || UserRole.NOT_LOGGED.equals(this) && !isAuthenticated()
+            || hasRole(getLabel());
     }
 
     private boolean isAuthenticated() {

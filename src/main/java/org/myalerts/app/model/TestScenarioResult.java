@@ -1,6 +1,7 @@
 package org.myalerts.app.model;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,9 +44,16 @@ public class TestScenarioResult {
     private Instant created;
 
     public static class TestScenarioResultBuilder {
-        public TestScenarioResultBuilder cause(Throwable throwable) {
-            // TODO: extract more details about throwable
-            cause = throwable.getMessage();
+        public TestScenarioResultBuilder cause(final String message) {
+            cause = message;
+
+            return this;
+        }
+
+        public TestScenarioResultBuilder cause(final Throwable throwable) {
+            cause = Optional.ofNullable(throwable)
+                .map(item -> Optional.ofNullable(item.getCause()).map(Throwable::getMessage).orElseGet(item::getMessage))
+                .orElse(null);
 
             return this;
         }

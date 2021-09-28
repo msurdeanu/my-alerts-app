@@ -1,10 +1,10 @@
 package org.myalerts.app.model;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
-import com.vaadin.flow.data.provider.Query;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -26,16 +26,8 @@ public enum TestScenarioType {
     @Getter
     private final Predicate<? super TestScenario> filter;
 
-    public String getLabelAsLowercase() {
-        return label.toLowerCase();
-    }
-
-    public static Stream<TestScenarioType> findByQuery(Query<TestScenarioType, String> query) {
-        return query.getFilter().map(value -> Arrays.stream(values())
-            .filter(testScenarioType -> testScenarioType.getLabel().contains(value))
-            .skip(query.getOffset())
-            .limit(query.getLimit()))
-            .orElseGet(() -> Arrays.stream(values()).skip(query.getOffset()).limit(query.getLimit()));
+    public static List<TestScenarioType> getAllItems() {
+        return Arrays.stream(values()).collect(Collectors.toList());
     }
 
 }

@@ -38,7 +38,7 @@ public final class DatabaseSettingProvider implements InvocationHandler {
 
     private final List<Setting> availableSettings;
 
-    public DatabaseSettingProvider(@NonNull DefaultSettingProvider defaultSettingProvider, @NonNull SettingRepository settingRepository) {
+    public DatabaseSettingProvider(@NonNull final DefaultSettingProvider defaultSettingProvider, @NonNull final SettingRepository settingRepository) {
         this.defaultSettingProvider = defaultSettingProvider;
         this.settingRepository = settingRepository;
         this.availableSettings = settingRepository.findAllByOrderByPosition().stream()
@@ -52,7 +52,7 @@ public final class DatabaseSettingProvider implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         if (isGetOrDefault(method)) {
             return getSetting(method, args);
         } else if (isGetAll(method)) {
@@ -74,23 +74,23 @@ public final class DatabaseSettingProvider implements InvocationHandler {
             .build();
     }
 
-    private Optional<Object> transformTo(SettingType type, String value) {
+    private Optional<Object> transformTo(final SettingType type, final String value) {
         return SETTING_TO_OBJECT_MAPPING.map(type, value);
     }
 
-    private boolean isGetOrDefault(Method method) {
+    private boolean isGetOrDefault(final Method method) {
         return "getOrDefault".equals(method.getName());
     }
 
-    private boolean isGetAll(Method method) {
+    private boolean isGetAll(final Method method) {
         return "getAll".equals(method.getName());
     }
 
-    private boolean isSet(Method method) {
+    private boolean isSet(final Method method) {
         return "set".equals(method.getName());
     }
 
-    private Object getSetting(Method method, Object[] args) throws Throwable {
+    private Object getSetting(final Method method, final Object[] args) throws Throwable {
         if (args.length < 1 || !(args[0] instanceof Setting.Key)) {
             return method.invoke(defaultSettingProvider, args);
         }
@@ -102,7 +102,7 @@ public final class DatabaseSettingProvider implements InvocationHandler {
             .orElseGet(() -> Unchecked.supplier(() -> method.invoke(defaultSettingProvider, args)).get());
     }
 
-    private Object setSetting(Object[] args) {
+    private Object setSetting(final Object[] args) {
         if (args.length != 2 || !(args[0] instanceof Setting.Key)) {
             return null;
         }
@@ -113,17 +113,18 @@ public final class DatabaseSettingProvider implements InvocationHandler {
                 .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
                 .filter(setting -> !setting.getComputedValue().equals(args[1]))
                 .findFirst()
-                .ifPresent(setting -> {
-                    final Object newValue = args[1];
-                    setting.setComputedValue(newValue);
-                    setting.setValue(newValue + StringUtils.EMPTY);
-                    settingRepository.save(setting);
-                });
+                .ifPresent(setting -> setSettingValue(setting, args[1]));
         } finally {
             lock.unlock();
         }
 
         return null;
+    }
+
+    private void setSettingValue(final Setting setting, final Object value) {
+        setting.setComputedValue(value);
+        setting.setValue(value + StringUtils.EMPTY);
+        settingRepository.save(setting);
     }
 
 }

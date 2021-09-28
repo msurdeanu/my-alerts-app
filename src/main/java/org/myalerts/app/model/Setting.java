@@ -49,6 +49,8 @@ public class Setting {
     public enum Key {
 
         COOKIE_EXPIRY_IN_SECONDS("cookieExpiryInSeconds"),
+        GRID_PAGE_SIZE("gridPageSize"),
+        GRID_PAGINATOR_SIZE("gridPaginatorSize"),
         TEST_SCENARIO_POOL_SIZE("testScenarioPoolSize"),
         TEST_SCENARIO_THREAD_NAME_PREFIX("testScenarioThreadNamePrefix"),
         TEST_SCENARIO_EXEC_TIMEOUT("testScenarioExecTimeout");

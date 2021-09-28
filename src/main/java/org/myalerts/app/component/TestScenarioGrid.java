@@ -7,7 +7,6 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -31,17 +30,17 @@ import org.myalerts.app.model.TestScenarioType;
 @RequiredArgsConstructor
 public class TestScenarioGrid extends Composite<VerticalLayout> {
 
-    private final TestScenarioEventHandler eventHandler;
-
     private final PaginatedGrid<TestScenario> paginatedGrid = new PaginatedGrid<>();
 
     private final Binder<TestScenario> testScenarioBinder = new Binder<>(TestScenario.class);
+
+    private final TestScenarioEventHandler eventHandler;
 
     public void refreshPage() {
         paginatedGrid.refreshPaginator();
     }
 
-    public void setDataProvider(DataProvider<TestScenario, ?> dataProvider) {
+    public void setDataProvider(final DataProvider<TestScenario, ?> dataProvider) {
         paginatedGrid.setDataProvider(dataProvider);
     }
 
@@ -74,26 +73,24 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     }
 
     @RequiresUIThread
-    private Component renderIsEnabled(TestScenario testScenario) {
+    private Component renderIsEnabled(final TestScenario testScenario) {
         final var toggleButton = new ToggleButton(testScenario.isEnabled());
         toggleButton.addValueChangeListener(event -> eventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
 
     @RequiresUIThread
-    private Component renderName(TestScenario testScenario) {
+    private Component renderName(final TestScenario testScenario) {
         return new Label(testScenario.getName());
     }
 
     @RequiresUIThread
-    private String getClassNameForName(TestScenario testScenario) {
+    private String getClassNameForName(final TestScenario testScenario) {
         if (!testScenario.isEnabled()) {
-            return TestScenarioType.DISABLED.getLabelAsLowercase();
+            return TestScenarioType.DISABLED.getLabel();
         }
 
-        return testScenario.isFailed()
-            ? TestScenarioType.FAILED.getLabelAsLowercase()
-            : TestScenarioType.PASSED.getLabelAsLowercase();
+        return testScenario.isFailed() ? TestScenarioType.FAILED.getLabel() : TestScenarioType.PASSED.getLabel();
     }
 
     @RequiresUIThread
@@ -104,7 +101,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     }
 
     @RequiresUIThread
-    private Component renderCronExpression(TestScenario testScenario) {
+    private Component renderCronExpression(final TestScenario testScenario) {
         if (!testScenario.isEditable()) {
             return new Label(testScenario.getCron());
         }
@@ -122,7 +119,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     }
 
     @RequiresUIThread
-    private Component renderActions(TestScenario testScenario) {
+    private Component renderActions(final TestScenario testScenario) {
         final var horizontalLayout = new HorizontalLayout();
 
         final var editButton = new Button(VaadinIcon.EDIT.create());
@@ -132,16 +129,16 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         return horizontalLayout;
     }
 
-    private void onCronExpressionToEdit(TestScenario testScenario) {
+    private void onCronExpressionToEdit(final TestScenario testScenario) {
         testScenario.setEditable(true);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onCronExpressionUpdated(TestScenario testScenario) {
+    private void onCronExpressionUpdated(final TestScenario testScenario) {
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onCronExpressionCancelled(TestScenario testScenario) {
+    private void onCronExpressionCancelled(final TestScenario testScenario) {
         testScenario.setEditable(false);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }

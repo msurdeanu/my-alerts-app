@@ -29,7 +29,7 @@ public class MenuItemsToRouterLinksTransformer implements Transformer<List<MenuI
             .collect(Collectors.toList());
     }
 
-    private RouterLink createRouterLink(MenuItem menuItem) {
+    private RouterLink createRouterLink(final MenuItem menuItem) {
         final var routerLink = new RouterLink();
         routerLink.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
         routerLink.setRoute(menuItem.getTarget());
@@ -40,7 +40,7 @@ public class MenuItemsToRouterLinksTransformer implements Transformer<List<MenuI
             icon.addClassNames(menuItem.getIcon());
         }
 
-        final var text = new Span(menuItem.getLabel());
+        final var text = new Span(routerLink.getTranslation(menuItem.getLabel()));
         text.addClassNames("font-medium", "text-s");
 
         routerLink.add(icon, text);
