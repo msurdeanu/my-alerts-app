@@ -10,6 +10,10 @@ public class AlertingException extends RuntimeException {
         super(message);
     }
 
+    public AlertingException(final Throwable throwable) {
+        super(throwable);
+    }
+
     public AlertingException(final String message, final Throwable cause) {
         super(message, cause);
     }

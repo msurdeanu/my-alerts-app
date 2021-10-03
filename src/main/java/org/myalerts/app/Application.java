@@ -15,23 +15,17 @@ import org.springframework.core.annotation.Order;
 
 import org.myalerts.app.event.Event;
 import org.myalerts.app.event.EventBroadcaster;
-import org.myalerts.app.provider.TranslationProvider;
 
 @SpringBootApplication
 @RequiredArgsConstructor
 @Theme(value = "simple")
 @NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
 @NpmPackage(value = "line-awesome", version = "1.3.0")
-public class Application extends SpringBootServletInitializer implements AppShellConfigurator, VaadinServiceInitListener {
+public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
     public static void main(String[] args) {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         SpringApplication.run(Application.class, args);
-    }
-
-    @Override
-    public void serviceInit(ServiceInitEvent serviceInitEvent) {
-        System.setProperty("vaadin.i18n.provider", TranslationProvider.class.getName());
     }
 
     @EventListener

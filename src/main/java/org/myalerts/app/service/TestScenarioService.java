@@ -1,5 +1,6 @@
 package org.myalerts.app.service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.myalerts.app.marker.ThreadSafe;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioFilter;
+import org.myalerts.app.model.TestScenarioResult;
 
 /**
  * @author Mihai Surdeanu
@@ -115,6 +117,8 @@ public class TestScenarioService {
                 scheduleTestScenarioService.unschedule(testScenario);
             }
 
+            testScenario.markAsDeleted();
+
             ALL_TESTS.remove(testScenario.getId());
         } finally {
             lock.unlock();
@@ -145,5 +149,6 @@ public class TestScenarioService {
 
         return filterByNamePredicate;
     }
+
 
 }

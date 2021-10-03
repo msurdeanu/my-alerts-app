@@ -48,6 +48,13 @@ public class Setting {
     @RequiredArgsConstructor
     public enum Key {
 
+        LANGUAGE("language"),
+        CACHE_MENU_ITEM_MAX_SIZE("cacheMenuItemMaxSize"),
+        CACHE_MENU_ITEM_EXPIRE_AFTER_ACCESS("cacheMenuItemExpireAfterAccess"),
+        CACHE_MENU_ITEM_EXPIRE_AFTER_WRITE("cacheMenuItemExpireAfterWrite"),
+        CACHE_TEST_SCENARIO_RESULT_MAX_SIZE("cacheTestScenarioResultMaxSize"),
+        CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_ACCESS("cacheTestScenarioResultExpireAfterAccess"),
+        CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_WRITE("cacheTestScenarioResultExpireAfterWrite"),
         COOKIE_EXPIRY_IN_SECONDS("cookieExpiryInSeconds"),
         GRID_PAGE_SIZE("gridPageSize"),
         GRID_PAGINATOR_SIZE("gridPaginatorSize"),

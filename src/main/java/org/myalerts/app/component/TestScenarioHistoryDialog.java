@@ -2,6 +2,7 @@ package org.myalerts.app.component;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -25,17 +26,17 @@ public class TestScenarioHistoryDialog extends Dialog {
 
     private static final String PIXELS = "px";
 
-    public TestScenarioHistoryDialog(Collection<TestScenarioResult> testScenarioResults) {
-        add(createResultGrid(testScenarioResults));
+    public TestScenarioHistoryDialog(final Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
+        add(createResultGrid(testScenarioResultsSupplier));
 
         makeDialogResizableAndDraggable();
         makeDialogResponsive();
     }
 
-    private Grid<TestScenarioResult> createResultGrid(Collection<TestScenarioResult> testScenarioResults) {
+    private Grid<TestScenarioResult> createResultGrid(final Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
         final Grid<TestScenarioResult> testScenarioResultGrid = new Grid<>();
         testScenarioResultGrid.setSizeFull();
-        testScenarioResultGrid.setItems(testScenarioResults);
+        testScenarioResultGrid.setItems(testScenarioResultsSupplier.get());
         testScenarioResultGrid.addColumn(new ComponentRenderer<>(this::renderRunTime))
             .setHeader(getTranslation("test-scenario.history.run-time.column"))
             .setAutoWidth(true);

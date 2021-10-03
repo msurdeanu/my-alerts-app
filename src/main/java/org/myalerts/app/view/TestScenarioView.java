@@ -1,5 +1,6 @@
 package org.myalerts.app.view;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import com.vaadin.flow.component.Component;
@@ -20,9 +21,16 @@ import org.myalerts.app.layout.BaseLayout;
 import org.myalerts.app.layout.ResponsiveLayout;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioFilter;
+import org.myalerts.app.model.TestScenarioResult;
 import org.myalerts.app.model.TestScenarioType;
+import org.myalerts.app.provider.TranslationProvider;
+import org.myalerts.app.service.TestScenarioResultService;
 import org.myalerts.app.service.TestScenarioService;
 
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 @Slf4j
 @AnonymousAllowed
 @Route(value = TestScenarioView.ROUTE, layout = BaseLayout.class)
@@ -36,16 +44,20 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
 
     private final TestScenarioService testScenarioService;
 
-    public TestScenarioView(final TestScenarioService testScenarioService) {
+    private final TestScenarioResultService testScenarioResultService;
+
+    public TestScenarioView(final TestScenarioService testScenarioService, final TestScenarioResultService testScenarioResultService,
+                            final TranslationProvider translationProvider) {
         super();
         this.testScenarioService = testScenarioService;
+        this.testScenarioResultService = testScenarioResultService;
 
         final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
             .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
             .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
 
-        testScenarioGrid = new TestScenarioGrid(this);
+        testScenarioGrid = new TestScenarioGrid(this, translationProvider);
         testScenarioGrid.setDataProvider(configurableFilterDataProvider);
 
         add(createHeader(getTranslation("test-scenario.page.subtitle"), createFilterByName(), createFilterByType()));
@@ -56,6 +68,11 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     @Override
     public String getPageTitle() {
         return getTranslation("site.base.title", getTranslation("menu.main.test-scenarios"));
+    }
+
+    @Override
+    public Collection<TestScenarioResult> getLastResults(final TestScenario testScenario) {
+        return testScenarioResultService.getLastResults(testScenario.getId());
     }
 
     @Override

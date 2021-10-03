@@ -23,7 +23,7 @@ public class TestScenarioLoaderService {
     @Order(10)
     @EventListener(ApplicationReadyEvent.class)
     public void loadAll() {
-        testScenarioRepository.findAll().forEach(testScenarioService::createAndSchedule);
+        testScenarioRepository.findAllWithLastRunTime().forEach(testScenarioService::createAndSchedule);
     }
 
 }

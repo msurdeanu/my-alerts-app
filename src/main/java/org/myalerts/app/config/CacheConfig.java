@@ -1,34 +1,59 @@
 package org.myalerts.app.config;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
-import com.google.common.cache.CacheBuilder;
-import org.springframework.cache.Cache;
+import javax.validation.constraints.NotNull;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
+import org.myalerts.app.model.Setting;
+import org.myalerts.app.provider.SettingProvider;
+
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 @Configuration
 @EnableCaching
-public class CacheConfig extends CachingConfigurerSupport {
+public class CacheConfig {
 
     @Bean
-    @Override
-    public CacheManager cacheManager() {
-        return new DefaultCacheManager();
+    @Primary
+    public CacheManager menuItemCacheManager(final SettingProvider settingProvider) {
+        return new CustomCacheManager(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_MAX_SIZE, 20),
+            Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_EXPIRE_AFTER_ACCESS, 0)),
+            Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_EXPIRE_AFTER_WRITE, 3600)));
     }
 
-    public static class DefaultCacheManager extends ConcurrentMapCacheManager {
+    @Bean
+    public CacheManager testScenarioResultCacheManager(final SettingProvider settingProvider) {
+        return new CustomCacheManager(settingProvider.getOrDefault(Setting.Key.CACHE_TEST_SCENARIO_RESULT_MAX_SIZE, 100),
+            Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_ACCESS, 0)),
+            Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_WRITE, 300)));
+    }
 
-        @Override
-        protected Cache createConcurrentMapCache(final String name) {
-            return new ConcurrentMapCache(name, CacheBuilder.newBuilder()
-                .expireAfterWrite(1, TimeUnit.HOURS)
-                .maximumSize(100).build().asMap(), false);
+    private static class CustomCacheManager extends CaffeineCacheManager {
+
+        public CustomCacheManager(final long maxSize, @NotNull final Duration expireAfterAccess, @NotNull final Duration expireAfterWrite) {
+            final var caffeine = Caffeine.newBuilder()
+                .maximumSize(maxSize)
+                .recordStats();
+
+            if (expireAfterAccess.getSeconds() > 0) {
+                caffeine.expireAfterAccess(expireAfterAccess);
+            }
+
+            if (expireAfterWrite.getSeconds() > 0) {
+                caffeine.expireAfterWrite(expireAfterWrite);
+            }
+
+            setCaffeine(caffeine);
         }
 
     }

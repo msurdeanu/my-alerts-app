@@ -1,11 +1,18 @@
 package org.myalerts.app.provider;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.vaadin.flow.i18n.I18NProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ocpsoft.prettytime.PrettyTime;
+import org.springframework.stereotype.Component;
+
+import org.myalerts.app.model.Setting;
 
 import static java.util.Locale.ENGLISH;
 import static java.util.ResourceBundle.getBundle;
@@ -15,9 +22,17 @@ import static java.util.ResourceBundle.getBundle;
  * @since 1.0.0
  */
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class TranslationProvider implements I18NProvider {
 
-    private static final ResourceBundle RESOURCE_BUNDLE_EN = getBundle("translation", ENGLISH);
+    private static final PrettyTime PRETTY_TIME = new PrettyTime();
+
+    private static final ResourceBundle DEFAULT_RESOURCE_BUNDLE = getBundle("translation", ENGLISH);
+
+    private static final Map<String, ResourceBundle> LANGUAGE_RESOURCE_MAP = Map.of("en", DEFAULT_RESOURCE_BUNDLE);
+
+    private final SettingProvider settingProvider;
 
     @Override
     public List<Locale> getProvidedLocales() {
@@ -25,13 +40,19 @@ public class TranslationProvider implements I18NProvider {
     }
 
     @Override
-    public String getTranslation(String key, Locale locale, Object... args) {
-        if (RESOURCE_BUNDLE_EN.containsKey(key)) {
-            return String.format(RESOURCE_BUNDLE_EN.getString(key), args);
+    public String getTranslation(final String key, final Locale locale, final Object... args) {
+        final String language = settingProvider.getOrDefault(Setting.Key.LANGUAGE, "en");
+        final ResourceBundle resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault(language, DEFAULT_RESOURCE_BUNDLE);
+        if (resourceBundle.containsKey(key)) {
+            return String.format(resourceBundle.getString(key), args);
         }
 
-        log.warn("Missing translation for key '{}'", key);
+        log.warn("Missing translation for key '{}' and language '{}'", key, language);
         return key;
+    }
+
+    public String prettyTimeFormat(final Instant time) {
+        return PRETTY_TIME.format(time);
     }
 
 }

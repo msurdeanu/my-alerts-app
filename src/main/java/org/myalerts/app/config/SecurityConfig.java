@@ -2,9 +2,6 @@ package org.myalerts.app.config;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import lombok.RequiredArgsConstructor;
-import org.myalerts.app.repository.UserRepository;
-import org.myalerts.app.service.CustomUserDetailsService;
-import org.myalerts.app.view.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,6 +10,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.myalerts.app.repository.UserRepository;
+import org.myalerts.app.service.CustomUserDetailsService;
+import org.myalerts.app.view.LoginView;
 
 /**
  * @author Mihai Surdeanu

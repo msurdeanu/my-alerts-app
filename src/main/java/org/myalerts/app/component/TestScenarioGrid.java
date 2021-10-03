@@ -1,5 +1,7 @@
 package org.myalerts.app.component;
 
+import java.util.Optional;
+
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -23,6 +25,7 @@ import org.myalerts.app.marker.RequiresUIThread;
 import org.myalerts.app.model.TestScenario;
 import org.myalerts.app.model.TestScenarioType;
 import org.myalerts.app.model.UserRole;
+import org.myalerts.app.provider.TranslationProvider;
 
 /**
  * @author Mihai Surdeanu
@@ -37,7 +40,9 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     private final TestScenarioEventHandler eventHandler;
 
-    private boolean isLoggedAsAdmin = UserRole.ADMIN.validate();
+    private final TranslationProvider translationProvider;
+
+    private final boolean isLoggedAsAdmin = UserRole.ADMIN.validate();
 
     public void refreshPage() {
         paginatedGrid.refreshPaginator();
@@ -97,9 +102,11 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     }
 
     @RequiresUIThread
-    private Component renderLastRun(TestScenario testScenario) {
-        final var lastRunButton = new Button(getTranslation("test-scenario.main-grid.not-available"));
-        lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(testScenario.getFullHistory()).open());
+    private Component renderLastRun(final TestScenario testScenario) {
+        final var lastRunButton = new Button(Optional.ofNullable(testScenario.getLastRunTime())
+            .map(translationProvider::prettyTimeFormat)
+            .orElseGet(() -> getTranslation("test-scenario.main-grid.not-available")));
+        lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(() -> eventHandler.getLastResults(testScenario)).open());
         return lastRunButton;
     }
 
@@ -132,7 +139,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         final var deleteButton = new Button(VaadinIcon.TRASH.create());
         deleteButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.delete.title"));
         if (isLoggedAsAdmin) {
-            scheduleNowButton.addClickListener(event -> eventHandler.onScheduleNow(testScenario));
+            scheduleNowButton.addClickListener(event -> onScheduleNow(testScenario));
             editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
             if (!testScenario.isEnabled()) {
                 deleteButton.addClickListener(event -> eventHandler.onDelete(testScenario));
@@ -160,6 +167,11 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     private void onCronExpressionCancelled(final TestScenario testScenario) {
         testScenario.setEditable(false);
+        paginatedGrid.getDataProvider().refreshItem(testScenario);
+    }
+
+    private void onScheduleNow(final TestScenario testScenario) {
+        eventHandler.onScheduleNow(testScenario);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
