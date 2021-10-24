@@ -80,3 +80,10 @@
 .app-layout-icon-button {
     margin: -5px 0 -5px 0;
 }
+
+footer > span {
+    width: 100%;
+    text-align: center;
+    font-size: var(--lumo-font-size-xs);
+    color: var(--lumo-contrast-50pct);
+}

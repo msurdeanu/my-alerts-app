@@ -6,7 +6,7 @@ spring:
     # Prints current SQL query executed. Used for debug purposes.
     show-sql: true
     # Database type is SQLite
-    database-platform: org.myalerts.app.dialect.SQLiteDialect
+    database-platform: org.myalerts.dialect.SQLiteDialect
     hibernate:
       # Avoid creating stuff automatically
       ddl-auto: none

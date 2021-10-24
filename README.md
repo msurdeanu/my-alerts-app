@@ -1,9 +1,15 @@
-# Project Base for Vaadin and Spring Boot
+# MyAlerts
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+**MyAlerts** is a simple tool for creating real-time alerts for your microservices.
+You can easily create alerts, schedule them using cronjobs and trigger notifications when they are failing.
 
-The best way to create your own project based on this starter is [start.vaadin.com](https://start.vaadin.com/) - you can get only the necessary parts and choose the package naming you want to use.
+## Technology stack
+
+* Java 11 as programming language
+* GraalVM - use JavaScript as additional language for defining alerts
+* Spring Boot 2.5.x as dependency injection framework
+* Vaadin 21 as UI framework
+* SQLite as relational database for storing data
 
 ## Running the Application
 There are two ways to run the application :  using `mvn spring-boot:run` or by running the `Application` class directly from your IDE.
