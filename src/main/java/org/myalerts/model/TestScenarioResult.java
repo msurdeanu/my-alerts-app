@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Persistable;
 
 /**
  * @author Mihai Surdeanu
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "results")
 @AllArgsConstructor
 @NoArgsConstructor
-public class TestScenarioResult {
+public class TestScenarioResult implements Persistable<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +43,16 @@ public class TestScenarioResult {
 
     @Getter
     private Instant created;
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
 
     public static class TestScenarioResultBuilder {
         public TestScenarioResultBuilder cause(final String message) {

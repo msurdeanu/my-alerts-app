@@ -5,7 +5,6 @@ import java.util.List;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
@@ -21,7 +20,6 @@ import org.myalerts.transformer.MenuItemsToRouterLinksTransformer;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@CssImport(value = "styles/vaadin-grid-styles.css", themeFor = "vaadin-grid")
 public class BaseLayout extends AppLayout {
 
     private static final boolean IS_OPTIMIZED_FOR_MOBILE = true;

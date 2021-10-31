@@ -88,7 +88,14 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     public void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression) {
         testScenarioService.changeCronExpression(testScenario, newCronExpression);
 
-        Notification.show("Cron expression for test scenario '" + testScenario.getName() + "' changed successfully to '" + newCronExpression + "'.");
+        Notification.show("Cron expression changed successfully to '" + newCronExpression + "'.");
+    }
+
+    @Override
+    public void onNameChanged(final TestScenario testScenario, final String newName) {
+        testScenarioService.changeName(testScenario, newName);
+
+        Notification.show("Test scenario name changed successfully to '" + newName + "'.");
     }
 
     @Override

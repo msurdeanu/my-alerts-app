@@ -34,7 +34,7 @@ public class TestScenarioHistoryDialog extends Dialog {
     }
 
     private Grid<TestScenarioResult> createResultGrid(final Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
-        final Grid<TestScenarioResult> testScenarioResultGrid = new Grid<>();
+        final var testScenarioResultGrid = new Grid<TestScenarioResult>();
         testScenarioResultGrid.setSizeFull();
         testScenarioResultGrid.setItems(testScenarioResultsSupplier.get());
         testScenarioResultGrid.addColumn(new ComponentRenderer<>(this::renderRunTime))

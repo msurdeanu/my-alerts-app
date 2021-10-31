@@ -17,7 +17,7 @@ public class LoginView extends Composite<VerticalLayout> implements BeforeEnterO
 
     public static final String ROUTE = "login";
 
-    private LoginForm loginForm = new LoginForm();
+    private final LoginForm loginForm = new LoginForm();
 
     @Override
     protected VerticalLayout initContent() {

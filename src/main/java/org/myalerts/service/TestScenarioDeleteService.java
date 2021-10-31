@@ -21,7 +21,7 @@ public class TestScenarioDeleteService implements EventListener<TestDeleteEvent>
 
     @Override
     public void onEventReceived(final TestDeleteEvent event) {
-        testScenarioRepository.save(event.getTestScenario());
+        testScenarioRepository.deleteById(event.getTestScenario().getId());
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,6 +17,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.RouteConfiguration;
+import com.vaadin.flow.router.RouteParameters;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.klaudeta.PaginatedGrid;
@@ -26,6 +29,7 @@ import org.myalerts.model.TestScenario;
 import org.myalerts.model.TestScenarioType;
 import org.myalerts.model.UserRole;
 import org.myalerts.provider.TranslationProvider;
+import org.myalerts.view.TestScenarioDetailedView;
 
 /**
  * @author Mihai Surdeanu
@@ -43,6 +47,8 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     private final TranslationProvider translationProvider;
 
     private final boolean isLoggedAsAdmin = UserRole.ADMIN.validate();
+
+    private final boolean isLogged = UserRole.LOGGED.validate();
 
     public void refreshPage() {
         paginatedGrid.refreshPaginator();
@@ -62,7 +68,6 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
             .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderName))
             .setHeader(getTranslation("test-scenario.main-grid.name.column"))
-            .setClassNameGenerator(this::getClassNameForName)
             .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderLastRun))
             .setHeader(getTranslation("test-scenario.main-grid.last-run.column"))
@@ -89,16 +94,24 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     @RequiresUIThread
     private Component renderName(final TestScenario testScenario) {
-        return new Label(testScenario.getName());
-    }
-
-    @RequiresUIThread
-    private String getClassNameForName(final TestScenario testScenario) {
-        if (!testScenario.isEnabled()) {
-            return TestScenarioType.DISABLED.getLabel();
+        if (!testScenario.isEditable()) {
+            final var nameAnchor = new Anchor(RouteConfiguration.forApplicationScope()
+                .getUrl(TestScenarioDetailedView.class, new RouteParameters(TestScenarioDetailedView.ID_PARAM, String.valueOf(testScenario.getId()))),
+                StringUtils.abbreviate(testScenario.getName(), 64));
+            nameAnchor.addClassName(getClassName(testScenario));
+            return nameAnchor;
         }
 
-        return testScenario.isFailed() ? TestScenarioType.FAILED.getLabel() : TestScenarioType.PASSED.getLabel();
+        final var textField = new TextField();
+        testScenarioBinder.forField(textField)
+            .withValidator(name -> true, StringUtils.EMPTY)
+            .bind(TestScenario::getName, (Setter<TestScenario, String>) eventHandler::onNameChanged);
+        testScenarioBinder.setBean(testScenario);
+
+        textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
+        textField.addKeyUpListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
+
+        return textField;
     }
 
     @RequiresUIThread
@@ -123,14 +136,14 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         testScenarioBinder.setBean(testScenario);
 
         textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        textField.addBlurListener(event -> onCronExpressionCancelled(testScenario));
+        textField.addKeyUpListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
 
         return textField;
     }
 
     @RequiresUIThread
     private Component renderActions(final TestScenario testScenario) {
-        final var horizontalLayout = new HorizontalLayout();
+        final var layout = new HorizontalLayout();
 
         final var scheduleNowButton = new Button(VaadinIcon.START_COG.create());
         scheduleNowButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.schedule.title"));
@@ -138,8 +151,14 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         editButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.edit.title"));
         final var deleteButton = new Button(VaadinIcon.TRASH.create());
         deleteButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.delete.title"));
-        if (isLoggedAsAdmin) {
+
+        if (isLogged) {
             scheduleNowButton.addClickListener(event -> onScheduleNow(testScenario));
+        } else {
+            scheduleNowButton.setEnabled(false);
+        }
+
+        if (isLoggedAsAdmin) {
             editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
             if (!testScenario.isEnabled()) {
                 deleteButton.addClickListener(event -> eventHandler.onDelete(testScenario));
@@ -147,13 +166,12 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
                 deleteButton.setEnabled(false);
             }
         } else {
-            scheduleNowButton.setEnabled(false);
             editButton.setEnabled(false);
             deleteButton.setEnabled(false);
         }
 
-        horizontalLayout.add(scheduleNowButton, editButton, deleteButton);
-        return horizontalLayout;
+        layout.add(scheduleNowButton, editButton, deleteButton);
+        return layout;
     }
 
     private void onCronExpressionToEdit(final TestScenario testScenario) {
@@ -173,6 +191,14 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     private void onScheduleNow(final TestScenario testScenario) {
         eventHandler.onScheduleNow(testScenario);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
+    }
+
+    private String getClassName(final TestScenario testScenario) {
+        if (!testScenario.isEnabled()) {
+            return TestScenarioType.DISABLED.getLabel();
+        }
+
+        return testScenario.isFailed() ? TestScenarioType.FAILED.getLabel() : TestScenarioType.PASSED.getLabel();
     }
 
 }

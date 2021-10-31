@@ -25,7 +25,8 @@ public enum UserRole {
     private final String label;
 
     public boolean validate() {
-        return UserRole.GUEST.equals(this) || UserRole.LOGGED.equals(this) && isAuthenticated()
+        return UserRole.GUEST.equals(this)
+            || UserRole.LOGGED.equals(this) && isAuthenticated()
             || UserRole.NOT_LOGGED.equals(this) && !isAuthenticated()
             || hasRole(getLabel());
     }

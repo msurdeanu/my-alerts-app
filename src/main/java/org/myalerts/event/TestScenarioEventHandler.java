@@ -17,6 +17,8 @@ public interface TestScenarioEventHandler {
 
     void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression);
 
+    void onNameChanged(final TestScenario testScenario, final String newName);
+
     void onDelete(final TestScenario testScenario);
 
     void onScheduleNow(final TestScenario testScenario);

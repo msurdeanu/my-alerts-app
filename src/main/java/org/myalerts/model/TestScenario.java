@@ -19,6 +19,7 @@ import javax.validation.constraints.Null;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SelectBeforeUpdate;
 
 import org.myalerts.converter.TestScenarioDefinitionToStringConverter;
 import org.myalerts.event.EventBroadcaster;
@@ -34,13 +35,14 @@ import static java.util.Optional.ofNullable;
  * @since 1.0.0
  */
 @Entity
+@SelectBeforeUpdate(value = false)
 @Table(name = "scenarios")
 public class TestScenario implements Runnable {
 
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Getter
     @Setter
@@ -57,20 +59,32 @@ public class TestScenario implements Runnable {
     private TestScenarioDefinition definition;
 
     @Getter
-    @Column(updatable = false, insertable = false)
+    @Column
     private Instant lastRunTime;
 
-    @Transient
     @Getter
-    @Setter
-    private boolean editable = false;
-
-    @Transient
-    @Getter
+    @Column
     private boolean failed = false;
 
-    public void setCron(String cron) {
+    @Getter
+    @Setter
+    @Transient
+    private boolean editable = false;
+
+    public void setName(final String name) {
+        this.name = name;
+
+        EventBroadcaster.broadcast(TestUpdateEvent.builder().testScenario(this).build());
+    }
+
+    public void setCron(final String cron) {
         this.cron = cron;
+
+        EventBroadcaster.broadcast(TestUpdateEvent.builder().testScenario(this).build());
+    }
+
+    public void setDefinition(final String definition) {
+        this.definition.recreate(definition);
 
         EventBroadcaster.broadcast(TestUpdateEvent.builder().testScenario(this).build());
     }

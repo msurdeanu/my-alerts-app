@@ -20,42 +20,51 @@ public final class HttpRequestHelper {
     private final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
         .timeout(Duration.ofSeconds(60));
 
-    public HttpRequestHelper withClientVersion2() {
+    public HttpRequestHelper http2() {
         clientBuilder.version(HttpClient.Version.HTTP_2);
 
         return this;
     }
 
-    public HttpRequestHelper withClientConnectionTimeout(final long seconds) {
+    public HttpRequestHelper connectionTimeout(final long seconds) {
         clientBuilder.connectTimeout(Duration.ofSeconds(seconds));
 
         return this;
     }
 
-    public HttpRequestHelper withRequestUri(final String uri) {
+    public HttpRequestHelper requestUri(final String uri) {
         requestBuilder.uri(URI.create(uri));
 
         return this;
     }
 
-    public HttpRequestHelper withRequestHeader(final String name, final String value) {
+    public HttpRequestHelper requestHeader(final String name, final String value) {
         requestBuilder.header(name, value);
 
         return this;
     }
 
-    public HttpRequestHelper withRequestTimeout(final long seconds) {
+    public HttpRequestHelper requestTimeout(final long seconds) {
         requestBuilder.timeout(Duration.ofSeconds(seconds));
 
         return this;
     }
 
-    public HttpResponse<String> doGetRequest() throws IOException, InterruptedException {
-        return clientBuilder.build().send(requestBuilder.GET().build(), HttpResponse.BodyHandlers.ofString());
+    public HttpResponse<String> sendGet() throws IOException, InterruptedException {
+        return sendGet(HttpResponse.BodyHandlers.ofString());
     }
 
-    public HttpResponse<String> doPostRequest(final String requestBody) throws IOException, InterruptedException {
-        return clientBuilder.build().send(requestBuilder.POST(HttpRequest.BodyPublishers.ofString(requestBody)).build(), HttpResponse.BodyHandlers.ofString());
+    public <T> HttpResponse<T> sendGet(final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
+        return clientBuilder.build().send(requestBuilder.GET().build(), responseBodyHandler);
+    }
+
+    public HttpResponse<String> sendPost(final String requestBody) throws IOException, InterruptedException {
+        return sendPost(requestBody, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public <T> HttpResponse<T> sendPost(final String requestBody, final HttpResponse.BodyHandler<T> responseBodyHandler)
+        throws IOException, InterruptedException {
+        return clientBuilder.build().send(requestBuilder.POST(HttpRequest.BodyPublishers.ofString(requestBody)).build(), responseBodyHandler);
     }
 
 }

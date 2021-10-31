@@ -22,6 +22,9 @@ import org.myalerts.marker.ThreadSafe;
 import org.myalerts.model.TestScenario;
 import org.myalerts.model.TestScenarioFilter;
 
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
+
 /**
  * @author Mihai Surdeanu
  * @since 1.0.0
@@ -58,6 +61,10 @@ public class TestScenarioService {
         return getAll(filter, offset, limit).count();
     }
 
+    public Optional<TestScenario> findBy(final int id) {
+        return ofNullable(ALL_TESTS.get(id));
+    }
+
     public Stream<TestScenario> findBy(final Query<TestScenario, TestScenarioFilter> query) {
         return query.getFilter()
             .map(filter -> getAll(filter, query.getOffset(), query.getLimit()))
@@ -75,11 +82,11 @@ public class TestScenarioService {
     public void createAndSchedule(@NonNull TestScenario testScenario) {
         lock.lock();
         try {
-            Optional.ofNullable(ALL_TESTS.put(testScenario.getId(), testScenario))
+            ofNullable(ALL_TESTS.put(testScenario.getId(), testScenario))
                 .filter(TestScenario::isEnabled)
                 .ifPresent(scheduleTestScenarioService::unschedule);
 
-            Optional.of(testScenario)
+            of(testScenario)
                 .filter(TestScenario::isEnabled)
                 .ifPresent(scheduleTestScenarioService::schedule);
         } finally {
@@ -88,10 +95,10 @@ public class TestScenarioService {
     }
 
     @ThreadSafe
-    public void changeActivation(@NonNull TestScenario testScenario) {
+    public void changeActivation(@NonNull final TestScenario testScenario) {
         lock.lock();
         try {
-            Optional.of(testScenario)
+            of(testScenario)
                 .filter(TestScenario::isEnabled)
                 .ifPresentOrElse(scheduleTestScenarioService::unschedule, () -> scheduleTestScenarioService.schedule(testScenario));
         } finally {
@@ -99,6 +106,16 @@ public class TestScenarioService {
         }
 
         testScenario.toggleOnEnabling();
+    }
+
+    @ThreadSafe
+    public void changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
+        lock.lock();
+        try {
+            testScenario.setDefinition(newDefinition);
+        } finally {
+            lock.unlock();
+        }
     }
 
     @ThreadSafe
@@ -114,6 +131,16 @@ public class TestScenarioService {
             if (testScenario.isEnabled()) {
                 scheduleTestScenarioService.schedule(testScenario);
             }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @ThreadSafe
+    public void changeName(final TestScenario testScenario, final String newName) {
+        lock.lock();
+        try {
+            testScenario.setName(newName);
         } finally {
             lock.unlock();
         }

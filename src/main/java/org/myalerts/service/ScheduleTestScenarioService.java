@@ -45,7 +45,7 @@ public class ScheduleTestScenarioService {
         final var id = testScenario.getId();
         final var cron = testScenario.getCron();
         final ScheduledFuture<?> scheduledFuture = threadPoolTaskScheduler.schedule(testScenario,
-            new CronTrigger(cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
+            new CronTrigger("0 " + cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
 
         lock.lock();
         try {
