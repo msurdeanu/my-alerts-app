@@ -19,7 +19,7 @@ import org.myalerts.view.LoginView;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@Configuration
+@Configuration("securityConfig")
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {

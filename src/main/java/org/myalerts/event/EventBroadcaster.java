@@ -41,7 +41,7 @@ public class EventBroadcaster {
             consumers.add(consumer);
         }
 
-        log.info("A new broadcast consumer is registered. The total number of consumers for event type '{}' is {}", acceptedEvent.getName(), consumers.size());
+        log.info("A new broadcast consumer is registered. The total number of consumers for event type '{}' is {}.", acceptedEvent.getName(), consumers.size());
     }
 
     @ThreadSafe

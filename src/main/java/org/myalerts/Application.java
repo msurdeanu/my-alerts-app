@@ -21,20 +21,20 @@ import org.myalerts.event.EventBroadcaster;
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         SpringApplication.run(Application.class, args);
     }
 
     @EventListener
     @Order(1)
-    public void registerAllListeners(ApplicationReadyEvent event) {
+    public void registerAllListeners(final ApplicationReadyEvent event) {
         event.getApplicationContext()
             .getBeansOfType(org.myalerts.event.EventListener.class)
             .forEach(Application::registerListener);
     }
 
-    private static void registerListener(String key, org.myalerts.event.EventListener<Event> value) {
+    private static void registerListener(final String key, final org.myalerts.event.EventListener<Event> value) {
         EventBroadcaster.register(value::onEventReceived, value.getEventType());
     }
 

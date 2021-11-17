@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +25,12 @@ public class TestScenarioResultService implements EventListener<TestResultEvent>
 
     private final TestScenarioResultRepository testScenarioResultRepository;
 
-    public Collection<TestScenarioResult> getLastResults(final int testScenarioId) {
-        return testScenarioResultRepository.findByScenarioIdOrderByCreatedDesc(testScenarioId, PageRequest.of(0, 10));
+    @Cacheable(cacheNames = "testScenarioResultsPerScenarioId", cacheManager = "testScenarioResultCacheManager", key = "#id")
+    public Collection<TestScenarioResult> getLastResults(final int id) {
+        return testScenarioResultRepository.findByScenarioIdOrderByCreatedDesc(id, PageRequest.of(0, 10));
     }
 
+    @CacheEvict(cacheNames = "testScenarioResultsPerScenarioId", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenario?.id")
     @Override
     public void onEventReceived(final TestResultEvent event) {
         testScenarioResultRepository.save(event.getTestScenarioResult());

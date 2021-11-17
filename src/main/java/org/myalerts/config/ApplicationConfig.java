@@ -19,7 +19,7 @@ import org.myalerts.repository.SettingRepository;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@Configuration
+@Configuration("applicationConfig")
 @EnableScheduling
 public class ApplicationConfig {
 

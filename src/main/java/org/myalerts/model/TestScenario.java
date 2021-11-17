@@ -19,7 +19,6 @@ import javax.validation.constraints.Null;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SelectBeforeUpdate;
 
 import org.myalerts.converter.TestScenarioDefinitionToStringConverter;
 import org.myalerts.event.EventBroadcaster;
@@ -35,7 +34,6 @@ import static java.util.Optional.ofNullable;
  * @since 1.0.0
  */
 @Entity
-@SelectBeforeUpdate(value = false)
 @Table(name = "scenarios")
 public class TestScenario implements Runnable {
 
@@ -83,8 +81,8 @@ public class TestScenario implements Runnable {
         EventBroadcaster.broadcast(TestUpdateEvent.builder().testScenario(this).build());
     }
 
-    public void setDefinition(final String definition) {
-        this.definition.recreate(definition);
+    public void setScript(final String scrip) {
+        this.definition.recreateScript(scrip);
 
         EventBroadcaster.broadcast(TestUpdateEvent.builder().testScenario(this).build());
     }

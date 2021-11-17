@@ -19,7 +19,7 @@ import org.myalerts.provider.SettingProvider;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@Configuration
+@Configuration("cacheConfig")
 @EnableCaching
 public class CacheConfig {
 
@@ -28,7 +28,7 @@ public class CacheConfig {
     public CacheManager menuItemCacheManager(final SettingProvider settingProvider) {
         return new CustomCacheManager(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_MAX_SIZE, 20),
             Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_EXPIRE_AFTER_ACCESS, 0)),
-            Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_EXPIRE_AFTER_WRITE, 3600)));
+            Duration.ofSeconds(settingProvider.getOrDefault(Setting.Key.CACHE_MENU_ITEM_EXPIRE_AFTER_WRITE, 86400)));
     }
 
     @Bean

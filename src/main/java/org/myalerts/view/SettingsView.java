@@ -59,16 +59,18 @@ public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
     }
 
     private Button createSaveButton() {
-        final var saveButton = new Button(getTranslation("settings.button.save"), event -> {
-            try {
-                binder.writeBean(settingProvider);
-            } catch (ValidationException notUsed) {
-                // Nothing to do
-            }
-        });
+        final var saveButton = new Button(getTranslation("settings.button.save"), event -> onClickListener());
         saveButton.setEnabled(false);
 
         return saveButton;
+    }
+
+    private void onClickListener() {
+        try {
+            binder.writeBean(settingProvider);
+        } catch (ValidationException notUsed) {
+            // Nothing to do
+        }
     }
 
 }

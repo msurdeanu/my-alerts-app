@@ -65,7 +65,7 @@ public class Setting {
         @Getter
         private final String key;
 
-        public static Key of(String value) {
+        public static Key of(final String value) {
             return Arrays.stream(Key.values())
                 .filter(item -> item.getKey().equals(value))
                 .findFirst()

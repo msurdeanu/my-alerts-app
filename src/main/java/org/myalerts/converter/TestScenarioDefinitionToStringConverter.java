@@ -17,7 +17,7 @@ public class TestScenarioDefinitionToStringConverter implements AttributeConvert
 
     @Override
     public String convertToDatabaseColumn(final TestScenarioDefinition attribute) {
-        return ofNullable(attribute).map(TestScenarioDefinition::getDefinition).orElse(null);
+        return ofNullable(attribute).map(TestScenarioDefinition::getScript).orElse(null);
     }
 
     @Override

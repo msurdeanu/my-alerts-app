@@ -58,6 +58,14 @@ public final class HttpRequestHelper {
         return clientBuilder.build().send(requestBuilder.GET().build(), responseBodyHandler);
     }
 
+    public HttpResponse<String> sendDelete() throws IOException, InterruptedException {
+        return sendDelete(HttpResponse.BodyHandlers.ofString());
+    }
+
+    public <T> HttpResponse<T> sendDelete(final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
+        return clientBuilder.build().send(requestBuilder.DELETE().build(), responseBodyHandler);
+    }
+
     public HttpResponse<String> sendPost(final String requestBody) throws IOException, InterruptedException {
         return sendPost(requestBody, HttpResponse.BodyHandlers.ofString());
     }

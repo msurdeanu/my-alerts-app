@@ -63,11 +63,11 @@ public class TestScenarioDetailedView extends ResponsiveLayout implements Before
         if (isLoggedAsAdmin) {
             final var saveButton = new Button(getTranslation("test-scenario.detailed.button.save"));
             saveButton.setEnabled(false);
-            final AceEditor editor = new AceEditor();
+            final var editor = new AceEditor();
             editor.addClassName("ace-editor");
             editor.setAutoComplete(true);
             editor.setLiveAutocompletion(true);
-            editor.setValue(testScenario.getDefinition().getDefinition());
+            editor.setValue(testScenario.getDefinition().getScript());
             editor.addAceChangedListener(event -> saveButton.setEnabled(isNewDefinition(testScenario, event.getValue())));
             saveButton.addClickListener(event -> applyChangesToDefinition(testScenario, editor.getValue()));
             layout.add(new H4(getTranslation("test-scenario.detailed.definition.title")), editor, saveButton);
@@ -81,7 +81,7 @@ public class TestScenarioDetailedView extends ResponsiveLayout implements Before
     }
 
     private boolean isNewDefinition(final TestScenario testScenario, final String newDefinition) {
-        return !testScenario.getDefinition().getDefinition().equals(newDefinition);
+        return !testScenario.getDefinition().getScript().equals(newDefinition);
     }
 
 }

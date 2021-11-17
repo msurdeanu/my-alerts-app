@@ -7,8 +7,7 @@
     <artifactId>myalerts-app</artifactId>
 
     <name>My Alerts</name>
-    <description>My Alerts is an open source Alerting Framework based on Java as programming language and Vaadin as UI
-        framework.
+    <description>My Alerts is just an alerting framework based on Java as programming language and Vaadin for UI.
     </description>
     <version>0.9.9-SNAPSHOT</version>
 
@@ -25,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>21.0.3</vaadin.version>
+        <vaadin.version>21.0.6</vaadin.version>
         <grid.pagination.version>2.0.10</grid.pagination.version>
         <toggle.button.version>1.0.1</toggle.button.version>
         <vaadin.security.version>2.1.1</vaadin.security.version>
@@ -109,7 +108,7 @@
         <dependency>
             <groupId>de.f0rce</groupId>
             <artifactId>ace</artifactId>
-            <version>1.3.3</version>
+            <version>1.3.4</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

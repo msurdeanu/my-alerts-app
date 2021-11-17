@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jooq.lambda.Unchecked;
@@ -26,6 +27,7 @@ import static java.util.Optional.of;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
+@Slf4j
 public final class DatabaseSettingProvider implements InvocationHandler {
 
     private static final Mapper1<SettingType, String, Optional<Object>> SETTING_TO_OBJECT_MAPPING = createMapper();
@@ -38,7 +40,8 @@ public final class DatabaseSettingProvider implements InvocationHandler {
 
     private final List<Setting> availableSettings;
 
-    public DatabaseSettingProvider(@NonNull final DefaultSettingProvider defaultSettingProvider, @NonNull final SettingRepository settingRepository) {
+    public DatabaseSettingProvider(@NonNull final DefaultSettingProvider defaultSettingProvider,
+                                   @NonNull final SettingRepository settingRepository) {
         this.defaultSettingProvider = defaultSettingProvider;
         this.settingRepository = settingRepository;
         this.availableSettings = settingRepository.findAllByOrderByPosition().stream()

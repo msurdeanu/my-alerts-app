@@ -1,70 +1,35 @@
 # MyAlerts
 
-**MyAlerts** is a simple tool for creating real-time alerts for your microservices.
-You can easily create alerts, schedule them using cronjobs and trigger notifications when they are failing.
+**MyAlerts** is a simple tool for creating real-time alerts for monitoring your own services.
+You can easily create alerts, schedule them using cron-jobs and trigger notifications when they are failing.
+
+Uses Java as programming language and Vaadin as UI framework.
+
+This tool is perfect for small teams, mainly composed by developers. Any developer with basic Javascript knowledge can create and maintain alerts created with MyAlerts.
+Since alert definition is in pure Javascript, the power of the tool is huge and offers the freedom to do almost everything you want.
 
 ## Technology stack
 
 * Java 11 as programming language
-* GraalVM - use JavaScript as additional language for defining alerts
+* [GraalVM](https://www.graalvm.org/) - use JavaScript as additional language for defining alerts
 * Spring Boot 2.5.x as dependency injection framework
-* Vaadin 21 as UI framework
-* SQLite as relational database for storing data
+* [Vaadin 21](https://vaadin.com/) as UI framework
+* SQLite as relational database for persisting data like test scenarios and their results.
 
-## Running the Application
-There are two ways to run the application :  using `mvn spring-boot:run` or by running the `Application` class directly from your IDE.
+## Features
 
-You can use any IDE of your preference,but we suggest Eclipse or Intellij IDEA.
-Below are the configuration details to start the project using a `spring-boot:run` command. Both Eclipse and Intellij IDEA are covered.
+* Modern and responsive UI.
+* **Authentication** and **authorization**. Multiple roles inside the application (simple users + administrators).
+* Dedicated **page** for **creating, editing or removing alerts**. Code editor for alert definition with autocomplete activated by default.
+* **Alert history** - ability to keep more results for each alert.
+* **Multiple channels** for sending alerts in case of an issue.
+* Integrated **chat**. This feature helps communication inside the team.
+* **Settings page**. Provides ability to change application behavior at runtime without restarting application.
 
-#### Eclipse
-- Right click on a project folder and select `Run As` --> `Maven build..` . After that a configuration window is opened.
-- In the window set the value of the **Goals** field to `spring-boot:run` 
-- You can optionally select `Skip tests` checkbox
-- All the other settings can be left to default
+## Running the application
+There are two ways to run the application: using `mvn spring-boot:run` or by running the `Application` class directly from your IDE.
 
-Once configurations are set clicking `Run` will start the application
-
-#### Intellij IDEA
-- On the right side of the window, select Maven --> Plugins--> `spring-boot` --> `spring-boot:run` goal
-- Optionally, you can disable tests by clicking on a `Skip Tests mode` blue button.
-
-Clicking on the green run button will start the application.
-
-After the application has started, you can view your it at http://localhost:8080/ in your browser.
-
-
-If you want to run the application locally in the production mode, use `spring-boot:run -Pproduction` command instead.
-### Running Integration Tests
-
-Integration tests are implemented using [Vaadin TestBench](https://vaadin.com/testbench). The tests take a few minutes to run and are therefore included in a separate Maven profile. We recommend running tests with a production build to minimize the chance of development time toolchains affecting test stability. To run the tests using Google Chrome, execute
-
-`mvn verify -Pit,production`
-
-and make sure you have a valid TestBench license installed.
-
-Profile `it` adds the following parameters to run integration tests:
-```sh
--Dwebdriver.chrome.driver=path_to_driver
--Dcom.vaadin.testbench.Parameters.runLocally=chrome
-```
-
-If you would like to run a separate test make sure you have added these parameters to VM Options of JUnit run configuration
-
-### Live Reload (optional)
-
-With live reload, you can see the results of your code changes immediately. 
-When you edit your Java code and recompile it, the application changes will be automatically reloaded and the browser is refreshed.
-This is done by leveraging [Spring Boot Developer Tools](https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/using-boot-devtools.html). 
-To be able to see the changes in the browser tab, the page still needs to be reloaded. 
-That can also  be automated via a LiveReload browser extension. 
-One such extension for Google Chrome is [LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei). 
-In Firefox, [LiveReload - Web extension](https://addons.mozilla.org/en-US/firefox/addon/livereload-web-extension/) can be used.
-You can find such similar extensions for other major browsers too.
-These extensions add an icon to your browser next to the address bar.
-To enable the extension, you should click that icon after you opened your application. 
-
-You can find more information at [Live Reload in Spring Boot Applications](https://vaadin.com/docs/flow/workflow/tutorial-spring-boot-live-reload.html) document.
+You can use any IDE of your preference, but I suggest Intellij IDEA.
 
 ## Structure
 
@@ -73,18 +38,14 @@ Vaadin web applications are full-stack and include both client-side and server-s
 | Directory | Description |
 | :--- | :--- |
 | `frontend/` | Client-side source directory |
-| &nbsp;&nbsp;&nbsp;&nbsp;`index.html` | HTML template |
-| &nbsp;&nbsp;&nbsp;&nbsp;`index.ts` | Frontend entrypoint |
-| &nbsp;&nbsp;&nbsp;&nbsp;`main-layout.ts` | Main layout Web Component (optional) |
-| &nbsp;&nbsp;&nbsp;&nbsp;`views/` | UI views Web Components (TypeScript / HTML) |
-| &nbsp;&nbsp;&nbsp;&nbsp;`styles/` | Styles directory (CSS) |
-| `src/main/java/<groupId>/` | Server-side source directory |
+| &nbsp;&nbsp;&nbsp;&nbsp;`themes/` | Themes directory (CSS) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`simple/` | Default theme |
+| `src/main/java/org/myalerts` | Server-side source directory |
+| &nbsp;&nbsp;&nbsp;&nbsp;`component/` | Package with all Vaadin custom components |
+| &nbsp;&nbsp;&nbsp;&nbsp;`config/` | Package with different Spring configuration beans |
+| &nbsp;&nbsp;&nbsp;&nbsp;`converter/` | Package with multiple persistence converters |
+| &nbsp;&nbsp;&nbsp;&nbsp;`dialect/` | Package with stuff related with SQLite database |
+| &nbsp;&nbsp;&nbsp;&nbsp;`provider/` | Java package with a set of providers |
+| &nbsp;&nbsp;&nbsp;&nbsp;`repository/` | Contains a set of JpaRepositories |
+| &nbsp;&nbsp;&nbsp;&nbsp;`service/` | Contains a set of services exposed by the application |
 | &nbsp;&nbsp;&nbsp;&nbsp;`Application.java` | Server entrypoint |
-| &nbsp;&nbsp;&nbsp;&nbsp;`AppShell.java` | application-shell configuration |
-
-## More Information
-
-- [Vaadin Documentation](https://vaadin.com/docs) 
-- [Using Vaadin and Spring](https://vaadin.com/docs/v14/flow/spring/tutorial-spring-basic.html) article
-- [Quick Start Guide](https://vaadin.com/docs/v15/flow/typescript/quick-start-guide.html) for Vaadin applications.
-

@@ -1,6 +1,5 @@
 package org.myalerts.transformer;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,7 +20,7 @@ public class MenuItemsToRouterLinksTransformer implements Transformer<List<MenuI
     @Override
     public List<RouterLink> transform(final List<MenuItem> menuItems) {
         return Optional.ofNullable(menuItems)
-            .orElse(Collections.emptyList())
+            .orElse(List.of())
             .stream()
             .filter(menuItem -> Objects.nonNull(menuItem.getTarget()))
             .filter(menuItem -> menuItem.getRole().validate())

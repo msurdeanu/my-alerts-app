@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import org.myalerts.event.EventListener;
 import org.myalerts.event.TestUpdateEvent;
-import org.myalerts.model.TestScenario;
 import org.myalerts.repository.TestScenarioRepository;
 
 /**
@@ -24,7 +23,7 @@ public class TestScenarioUpdateService implements EventListener<TestUpdateEvent>
     public void onEventReceived(final TestUpdateEvent event) {
         final var testScenario = event.getTestScenario();
         testScenarioRepository.update(testScenario.getId(), testScenario.isEnabled(), testScenario.getName(), testScenario.getCron(),
-            testScenario.getDefinition().getDefinition());
+            testScenario.getDefinition().getScript());
     }
 
     @Override

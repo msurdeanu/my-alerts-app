@@ -112,7 +112,7 @@ public class TestScenarioService {
     public void changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
         lock.lock();
         try {
-            testScenario.setDefinition(newDefinition);
+            testScenario.setScript(newDefinition);
         } finally {
             lock.unlock();
         }
