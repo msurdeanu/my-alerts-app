@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>21.0.6</vaadin.version>
+        <vaadin.version>21.0.7</vaadin.version>
         <grid.pagination.version>2.0.10</grid.pagination.version>
         <toggle.button.version>1.0.1</toggle.button.version>
         <vaadin.security.version>2.1.1</vaadin.security.version>
@@ -90,6 +90,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>8.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>

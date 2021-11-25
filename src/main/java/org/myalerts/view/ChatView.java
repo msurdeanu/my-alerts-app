@@ -17,6 +17,7 @@ import com.vaadin.flow.router.Route;
 
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.provider.ChatMessageProvider;
 import org.myalerts.service.SecurityService;
 
 /**
@@ -29,15 +30,13 @@ public class ChatView extends ResponsiveLayout implements HasDynamicTitle {
 
     public static final String ROUTE = "chat";
 
-    private static final String TOPIC = "chat";
-
     private final UserInfo currentUser;
 
-    public ChatView(final SecurityService securityService) {
+    public ChatView(final SecurityService securityService, final ChatMessageProvider messageProvider) {
         final var username = securityService.getAuthenticatedUser().getUsername();
         currentUser = new UserInfo(username, username);
 
-        add(createHeader(getTranslation("chat.page.subtitle"), createAudience()), createContent(createChat()), createFooter());
+        add(createHeader(getTranslation("chat.page.subtitle"), createAudience()), createContent(createChat(messageProvider)), createFooter());
     }
 
     @Override
@@ -45,8 +44,8 @@ public class ChatView extends ResponsiveLayout implements HasDynamicTitle {
         return getTranslation("site.base.title", getTranslation("menu.main.chat"));
     }
 
-    private Component createChat() {
-        final var messages = new CollaborationMessageList(currentUser, TOPIC);
+    private Component createChat(final ChatMessageProvider messageProvider) {
+        final var messages = new CollaborationMessageList(currentUser, ChatMessageProvider.TOPIC, messageProvider);
         messages.addClassName("chat-messages");
         final var field = new TextField();
         field.addClassName("chat-field");
@@ -83,7 +82,7 @@ public class ChatView extends ResponsiveLayout implements HasDynamicTitle {
     private Component createAudience() {
         final var layout = new VerticalLayout();
 
-        final var presenceManager = new PresenceManager(layout, currentUser, TOPIC);
+        final var presenceManager = new PresenceManager(layout, currentUser, ChatMessageProvider.TOPIC);
         presenceManager.markAsPresent(true);
         presenceManager.setNewUserHandler(newUserInfo -> {
             final var card = createUserCard(newUserInfo);
