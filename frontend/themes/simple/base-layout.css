@@ -70,6 +70,14 @@
     width: 5%;
 }
 
+.editable-field {
+    width: 250px;
+}
+
+.small-suffix {
+    font-size: 10px;
+}
+
 footer > span {
     width: 100%;
     text-align: center;

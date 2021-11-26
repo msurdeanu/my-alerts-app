@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -103,13 +104,15 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         }
 
         final var textField = new TextField();
+        textField.addClassName("editable-field");
         testScenarioBinder.forField(textField)
             .withValidator(name -> true, StringUtils.EMPTY)
             .bind(TestScenario::getName, (Setter<TestScenario, String>) eventHandler::onNameChanged);
-        testScenarioBinder.setBean(testScenario);
+        testScenarioBinder.readBean(testScenario);
+        setSuffixForField(textField);
 
-        textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        textField.addKeyUpListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
+        textField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
+        textField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
 
         return textField;
     }
@@ -130,13 +133,15 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         }
 
         final var textField = new TextField();
+        textField.addClassName("editable-field");
         testScenarioBinder.forField(textField)
             .withValidator(cron -> true, StringUtils.EMPTY)
             .bind(TestScenario::getCron, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
-        testScenarioBinder.setBean(testScenario);
+        testScenarioBinder.readBean(testScenario);
+        setSuffixForField(textField);
 
-        textField.addKeyUpListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        textField.addKeyUpListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
+        textField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
+        textField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
 
         return textField;
     }
@@ -175,11 +180,13 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     }
 
     private void onCronExpressionToEdit(final TestScenario testScenario) {
-        testScenario.setEditable(true);
+        testScenario.toggleOnEditing();
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
     private void onCronExpressionUpdated(final TestScenario testScenario) {
+        testScenario.setEditable(false);
+        testScenarioBinder.writeBeanIfValid(testScenario);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
@@ -199,6 +206,13 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         }
 
         return testScenario.isFailed() ? TestScenarioType.FAILED.getLabel() : TestScenarioType.PASSED.getLabel();
+    }
+
+    private void setSuffixForField(final TextField textField) {
+        final var span = new Span(getTranslation("test-scenario.main-grid.save-with-enter"));
+        span.addClassName("small-suffix");
+
+        ComponentEnricher.setComponentAsSuffix(textField, span);
     }
 
 }

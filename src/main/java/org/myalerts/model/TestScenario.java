@@ -93,6 +93,10 @@ public class TestScenario implements Runnable {
         EventBroadcaster.broadcast(TestUpdateEvent.builder().testScenario(this).build());
     }
 
+    public void toggleOnEditing() {
+        editable = !editable;
+    }
+
     public void markAsDeleted() {
         EventBroadcaster.broadcast(TestDeleteEvent.builder().testScenario(this).build());
     }

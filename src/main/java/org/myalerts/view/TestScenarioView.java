@@ -13,6 +13,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.myalerts.component.TestScenarioGrid;
@@ -85,16 +86,22 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     }
 
     @Override
-    public void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression) {
-        testScenarioService.changeCronExpression(testScenario, newCronExpression);
+    public void onCronExpressionChanged(final TestScenario testScenario, @NonNull final String newCronExpression) {
+        if (newCronExpression.equals(testScenario.getCron())) {
+            return;
+        }
 
+        testScenarioService.changeCronExpression(testScenario, newCronExpression);
         Notification.show("Cron expression changed successfully to '" + newCronExpression + "'.");
     }
 
     @Override
-    public void onNameChanged(final TestScenario testScenario, final String newName) {
-        testScenarioService.changeName(testScenario, newName);
+    public void onNameChanged(final TestScenario testScenario, @NonNull final String newName) {
+        if (newName.equals(testScenario.getName())) {
+            return;
+        }
 
+        testScenarioService.changeName(testScenario, newName);
         Notification.show("Test scenario name changed successfully to '" + newName + "'.");
     }
 

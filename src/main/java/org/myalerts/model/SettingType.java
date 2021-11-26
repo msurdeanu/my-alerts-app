@@ -22,7 +22,7 @@ public enum SettingType {
 
     public static SettingType of(final String value) {
         return Arrays.stream(values())
-            .filter(settingType -> settingType.getValue().equalsIgnoreCase(value))
+            .filter(settingType -> settingType.getValue().equals(value))
             .findFirst()
             .orElse(null);
     }
