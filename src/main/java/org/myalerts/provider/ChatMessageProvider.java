@@ -1,6 +1,5 @@
 package org.myalerts.provider;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Stream;
 
 import com.google.common.collect.EvictingQueue;

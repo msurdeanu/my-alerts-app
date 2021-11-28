@@ -23,7 +23,7 @@ public class AboutView extends ResponsiveLayout implements HasDynamicTitle {
         add(createHeader(getTranslation("about.page.subtitle")), createContent(createBody()), createFooter());
     }
 
-    @SuppressWarnings("checkstyle:OperatorWrap")
+    @SuppressWarnings({"checkstyle:OperatorWrap", "checkstyle:LineLength"})
     private Component createBody() {
 
         //@formatter:off

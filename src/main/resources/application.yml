@@ -1,5 +1,5 @@
 server:
-  port: 8000
+  port: 8080
 
 spring:
   jpa:
@@ -16,7 +16,7 @@ spring:
         format_sql: true
   datasource:
     # Property to specify location of main SQLite database
-    url: jdbc:sqlite:database.db
+    url: jdbc:sqlite:/opt/tomcat/uploads/database.db
     # Database driver
     driver-class-name: org.sqlite.JDBC
   mustache:

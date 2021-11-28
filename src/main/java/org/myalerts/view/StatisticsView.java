@@ -30,7 +30,7 @@ public class StatisticsView extends ResponsiveLayout {
                     continue;
                 }
                 CaffeineCache cache = (CaffeineCache) object;
-                System.out.println("Cache - " + cacheName + " : " + cache.getNativeCache().stats());
+                log.info("Cache - " + cacheName + " : " + cache.getNativeCache().stats());
             }
         }
 

@@ -26,7 +26,7 @@ public class UserRoleToStringConverterTest {
     public void testConvertToEntityAttribute() {
         final var userRoleToStringConverter = new UserRoleToStringConverter();
 
-        assertNull(userRoleToStringConverter.convertToEntityAttribute(null));
+        assertEquals(UserRole.GUEST, userRoleToStringConverter.convertToEntityAttribute(null));
         assertEquals(UserRole.LOGGED, userRoleToStringConverter.convertToEntityAttribute("ROLE_LOGGED"));
         assertEquals(UserRole.GUEST, userRoleToStringConverter.convertToEntityAttribute("Role_Logged"));
     }
