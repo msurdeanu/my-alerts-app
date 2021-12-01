@@ -16,7 +16,7 @@ spring:
         format_sql: true
   datasource:
     # Property to specify location of main SQLite database
-    url: jdbc:sqlite:/opt/tomcat/uploads/database.db
+    url: jdbc:sqlite:database.db
     # Database driver
     driver-class-name: org.sqlite.JDBC
   mustache:

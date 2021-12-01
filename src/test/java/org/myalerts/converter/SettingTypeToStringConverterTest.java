@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-public class SettingTypeToStringConverterTest {
+public final class SettingTypeToStringConverterTest {
 
     @Test
     public void testConvertToDatabaseColumn() {

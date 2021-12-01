@@ -110,7 +110,7 @@ public class TestScenario implements Runnable {
         try {
             result = invokeExecute(ofNullable(definition.getScriptEngine())
                 .orElseThrow(() -> new AlertingException(definition.getCause())), getSecondsBetween(lastRunTime, nextLastRunTime));
-            failed = false;
+            failed = result != null;
         } catch (Throwable t) {
             throwable = t;
             failed = true;
@@ -129,7 +129,7 @@ public class TestScenario implements Runnable {
 
     private Object invokeExecute(final ScriptEngine scriptEngine, final Object... functionArgs) {
         try {
-            return ((Invocable) scriptEngine).invokeFunction("execute", functionArgs);
+            return ((Invocable) scriptEngine).invokeFunction("run", functionArgs);
         } catch (Exception e) {
             throw new AlertingException(e);
         }

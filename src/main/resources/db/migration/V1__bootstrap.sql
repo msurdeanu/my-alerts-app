@@ -28,14 +28,37 @@ CREATE TABLE scenarios (
 );
 
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'First test scenario', '* * * * MON-FRI', 'function execute(num) {}');
+VALUES ('1', 'Passing test scenario', '0 0 * * MON-FRI', "function run(secondsSinceLatestRun) {
+}");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Second test scenario 1', '0 * * * *', "function execute(num) {
+VALUES ('1', 'Failing test scenario', '0 3 * * MON-FRI', "function run(secondsSinceLatestRun) {
+    return 'This scenario fails every time';
+}");
+INSERT INTO scenarios ("enabled", "name", "cron", "definition")
+VALUES ('1', 'Status check test scenario', '0 6 * * MON-FRI', "function run(secondsSinceLatestRun) {
     var HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
-    new HttpRequestHelper()
+    var HttpResponse = new HttpRequestHelper()
         .http2()
         .requestUri('https://aventurata.ro')
         .sendGet();
+    if (HttpResponse.statusCode() !== 200) {
+        return 'Service is not returning 200 as status code.';
+    }
+}");
+INSERT INTO scenarios ("enabled", "name", "cron", "definition")
+VALUES ('1', 'Body check test scenario', '0 9 * * MON-FRI', "function run(secondsSinceLatestRun) {
+    var HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
+    var HttpResponse = new HttpRequestHelper()
+        .http2()
+        .requestUri('https://mihaisurdeanu.ro/wp-json/')
+        .sendGet();
+    if (HttpResponse.statusCode() !== 200) {
+        return 'Service is not returning 200 as status code.';
+    }
+    const JsonResponse = JSON.parse(HttpResponse.body());
+    if (JsonResponse.name !== 'Mihai Surdeanu') {
+        return 'Name is not the one expected.';
+    }
 }");
 
 CREATE TABLE results (
