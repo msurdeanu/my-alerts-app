@@ -41,6 +41,10 @@ public class TranslationProvider implements I18NProvider {
 
     @Override
     public String getTranslation(final String key, final Locale locale, final Object... args) {
+        if (key == null) {
+            return null;
+        }
+
         final String language = settingProvider.getOrDefault(Setting.Key.LANGUAGE, "en");
         final ResourceBundle resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault(language, DEFAULT_RESOURCE_BUNDLE);
         if (resourceBundle.containsKey(key)) {

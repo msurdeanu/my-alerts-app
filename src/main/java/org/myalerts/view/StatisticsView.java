@@ -1,16 +1,15 @@
 package org.myalerts.view;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.caffeine.CaffeineCache;
 
+import org.myalerts.component.StatisticsTreeGrid;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.provider.StatisticsProvider;
 
 @Slf4j
 @AnonymousAllowed
@@ -19,7 +18,8 @@ public class StatisticsView extends ResponsiveLayout {
 
     public static final String ROUTE = "statistics";
 
-    public StatisticsView(final List<CacheManager> cacheManagers) {
+    public StatisticsView(final List<StatisticsProvider> statisticsProviders) {
+        /*
         super();
 
         for (CacheManager cacheManager : cacheManagers) {
@@ -33,9 +33,9 @@ public class StatisticsView extends ResponsiveLayout {
                 log.info("Cache - " + cacheName + " : " + cache.getNativeCache().stats());
             }
         }
+         */
 
-        add(createHeader(getTranslation("statistics.page.subtitle")));
-        add(createFooter());
+        add(createHeader(getTranslation("statistics.page.subtitle")), createContent(new StatisticsTreeGrid(statisticsProviders)), createFooter());
     }
 
 }

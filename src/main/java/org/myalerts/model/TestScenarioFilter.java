@@ -1,7 +1,6 @@
 package org.myalerts.model;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -9,11 +8,22 @@ import org.apache.commons.lang3.StringUtils;
  * @since 1.0.0
  */
 @Getter
-@Setter
 public class TestScenarioFilter {
 
     private TestScenarioType byTypeCriteria = TestScenarioType.ALL;
 
     private String byNameCriteria = StringUtils.EMPTY;
+
+    public TestScenarioFilter setByTypeCriteria(final TestScenarioType byTypeCriteria) {
+        this.byTypeCriteria = byTypeCriteria;
+
+        return this;
+    }
+
+    public TestScenarioFilter setByNameCriteria(final String byNameCriteria) {
+        this.byNameCriteria = byNameCriteria;
+
+        return this;
+    }
 
 }

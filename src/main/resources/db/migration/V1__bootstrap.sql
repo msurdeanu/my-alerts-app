@@ -11,7 +11,7 @@ VALUES ('menu.main.test-scenarios', 'la la-globe', 'org.myalerts.view.TestScenar
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
 VALUES ('menu.main.settings', 'la la-cog', 'org.myalerts.view.SettingsView', 'ROLE_ADMIN', '2');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
-VALUES ('menu.main.chat', 'la la-comment', 'org.myalerts.view.ChatView', 'ROLE_LOGGED', '3');
+VALUES ('menu.main.statistics', 'la la-tachometer-alt', 'org.myalerts.view.StatisticsView', 'ROLE_GUEST', '3');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
 VALUES ('menu.main.about', 'la la-heart', 'org.myalerts.view.AboutView', 'ROLE_GUEST', '4');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
@@ -24,7 +24,7 @@ CREATE TABLE scenarios (
     enabled BOOLEAN NOT NULL DEFAULT (1),
     name TEXT NOT NULL UNIQUE,
     cron TEXT NOT NULL,
-    definition TEXT NOT NULL DEFAULT "function execute(num) {}"
+    definition TEXT NOT NULL DEFAULT "function run(secondsSinceLatestRun) {}"
 );
 
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")

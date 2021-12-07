@@ -1,6 +1,7 @@
 package org.myalerts.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -19,8 +20,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import org.myalerts.marker.ThreadSafe;
+import org.myalerts.model.StatisticsGroup;
+import org.myalerts.model.StatisticsItem;
 import org.myalerts.model.TestScenario;
 import org.myalerts.model.TestScenarioFilter;
+import org.myalerts.model.TestScenarioType;
+import org.myalerts.provider.StatisticsProvider;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
@@ -31,9 +36,11 @@ import static java.util.Optional.ofNullable;
  */
 @Service
 @RequiredArgsConstructor
-public class TestScenarioService {
+public class TestScenarioService implements StatisticsProvider {
 
     private static final Predicate<TestScenario> ALWAYS_TRUE_PREDICATE = testScenario -> true;
+
+    private static final TestScenarioFilter DISABLED_FILTER = new TestScenarioFilter().setByTypeCriteria(TestScenarioType.DISABLED);
 
     private static final Map<Integer, TestScenario> ALL_TESTS = new HashMap<>();
 
@@ -169,6 +176,30 @@ public class TestScenarioService {
 
     public void scheduleNowInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
         scheduleTestScenarioService.scheduleInSyncMode(testScenario);
+    }
+
+    @Override
+    public StatisticsGroup getStatisticsGroup() {
+        return StatisticsGroup.builder()
+            .root(StatisticsItem.builder()
+                .name("statistics.test-scenarios.group")
+                .icon("vaadin:folder-o")
+                .build())
+            .leafs(List.of(
+                StatisticsItem.builder()
+                    .name("statistics.test-scenarios.group.total-scenarios.name")
+                    .icon("vaadin:file-text-o")
+                    .value(getAllSize())
+                    .description("statistics.test-scenarios.group.total-scenarios.description")
+                    .build(),
+                StatisticsItem.builder()
+                    .name("statistics.test-scenarios.group.total-disabled-scenarios.name")
+                    .icon("vaadin:file-picture")
+                    .value(getAllSize(DISABLED_FILTER, 0, Long.MAX_VALUE))
+                    .description("statistics.test-scenarios.group.total-disabled-scenarios.description")
+                    .build()
+            ))
+            .build();
     }
 
     private Predicate<TestScenario> getPredicateByNameCriteria(final String byNameCriteria) {
