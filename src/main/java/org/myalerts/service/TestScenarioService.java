@@ -42,6 +42,8 @@ public class TestScenarioService implements StatisticsProvider {
 
     private static final TestScenarioFilter DISABLED_FILTER = new TestScenarioFilter().setByTypeCriteria(TestScenarioType.DISABLED);
 
+    private static final TestScenarioFilter FAILED_FILTER = new TestScenarioFilter().setByTypeCriteria(TestScenarioType.FAILED);
+
     private static final Map<Integer, TestScenario> ALL_TESTS = new HashMap<>();
 
     private final Lock lock = new ReentrantLock();
@@ -193,8 +195,14 @@ public class TestScenarioService implements StatisticsProvider {
                     .description("statistics.test-scenarios.group.total-scenarios.description")
                     .build(),
                 StatisticsItem.builder()
+                    .name("statistics.test-scenarios.group.total-failed-scenarios.name")
+                    .icon("vaadin:file-text-o")
+                    .value(getAllSize(FAILED_FILTER, 0, Long.MAX_VALUE))
+                    .description("statistics.test-scenarios.group.total-failed-scenarios.description")
+                    .build(),
+                StatisticsItem.builder()
                     .name("statistics.test-scenarios.group.total-disabled-scenarios.name")
-                    .icon("vaadin:file-picture")
+                    .icon("vaadin:file-text-o")
                     .value(getAllSize(DISABLED_FILTER, 0, Long.MAX_VALUE))
                     .description("statistics.test-scenarios.group.total-disabled-scenarios.description")
                     .build()

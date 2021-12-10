@@ -31,22 +31,27 @@ public class StatisticsTreeGrid extends Composite<VerticalLayout> {
 
         layout.setSizeFull();
 
-        final var treegrid = new TreeGrid<StatisticsItem>();
-        treegrid.setItems(statsMap.keySet(), parent -> statsMap.getOrDefault(parent, List.of()));
-        treegrid.addColumn(TemplateRenderer.<StatisticsItem>of("<vaadin-grid-tree-toggle "
+        final var treeGrid = new TreeGrid<StatisticsItem>();
+        treeGrid.setItems(statsMap.keySet(), parent -> statsMap.getOrDefault(parent, List.of()));
+        treeGrid.addColumn(TemplateRenderer.<StatisticsItem>of("<vaadin-grid-tree-toggle "
                     + "leaf='[[item.leaf]]' expanded='{{expanded}}' level='[[level]]'>"
                     + "<vaadin-icon icon='[[item.icon]]'></vaadin-icon>&nbsp;&nbsp;"
                     + "[[item.name]]"
                     + "</vaadin-grid-tree-toggle>")
-                .withProperty("leaf", item -> !treegrid.getDataCommunicator().hasChildren(item))
+                .withProperty("leaf", item -> !treeGrid.getDataCommunicator().hasChildren(item))
                 .withProperty("icon", StatisticsItem::getIcon)
                 .withProperty("name", prop -> getTranslation(prop.getName())))
-            .setHeader(getTranslation("statistics.property.column"));
-        treegrid.addColumn(StatisticsItem::getValue).setHeader(getTranslation("statistics.value.column"));
-        treegrid.addColumn(prop -> getTranslation(prop.getDescription())).setHeader(getTranslation("statistics.description.column"));
-        treegrid.expandRecursively(statsMap.keySet(), 2);
+            .setHeader(getTranslation("statistics.property.column"))
+            .setAutoWidth(true);
+        treeGrid.addColumn(StatisticsItem::getValue)
+            .setHeader(getTranslation("statistics.value.column"))
+            .setAutoWidth(true);
+        treeGrid.addColumn(prop -> getTranslation(prop.getDescription()))
+            .setHeader(getTranslation("statistics.description.column"))
+            .setAutoWidth(true);
+        treeGrid.expandRecursively(statsMap.keySet(), 2);
 
-        layout.add(treegrid);
+        layout.add(treeGrid);
         return layout;
     }
 

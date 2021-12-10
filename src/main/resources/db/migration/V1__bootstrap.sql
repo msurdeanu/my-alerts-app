@@ -80,7 +80,7 @@ CREATE TABLE settings (
 );
 
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('language', 'settings.language.label', 'settings.language.helper', 'text', 'ro', '1', '1');
+VALUES ('language', 'settings.language.label', 'settings.language.helper', 'text', 'en', '1', '1');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('gridPageSize', 'settings.grid.page-size.label', 'settings.grid.page-size.helper', 'int', '15', '1', '2');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")

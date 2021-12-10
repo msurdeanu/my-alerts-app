@@ -25,12 +25,12 @@ public class TestScenarioResultService implements EventListener<TestResultEvent>
 
     private final TestScenarioResultRepository testScenarioResultRepository;
 
-    @Cacheable(cacheNames = "testScenarioResultsPerScenarioId", cacheManager = "testScenarioResultCacheManager", key = "#id")
+    @Cacheable(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#id")
     public Collection<TestScenarioResult> getLastResults(final int id) {
         return testScenarioResultRepository.findByScenarioIdOrderByCreatedDesc(id, PageRequest.of(0, 10));
     }
 
-    @CacheEvict(cacheNames = "testScenarioResultsPerScenarioId", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenario?.id")
+    @CacheEvict(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenario?.id")
     @Override
     public void onEventReceived(final TestResultEvent event) {
         testScenarioResultRepository.save(event.getTestScenarioResult());

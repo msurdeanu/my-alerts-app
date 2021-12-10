@@ -13,7 +13,7 @@ import org.myalerts.model.MenuItem;
  */
 public interface MenuItemRepository extends JpaRepository<MenuItem, String> {
 
-    @Cacheable(cacheNames = "menuItems", cacheManager = "menuItemCacheManager")
+    @Cacheable(cacheNames = "menu-items", cacheManager = "menuItemCacheManager")
     List<MenuItem> findByOrderByPosition();
 
 }
