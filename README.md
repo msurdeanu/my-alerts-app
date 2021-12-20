@@ -13,7 +13,7 @@ Since alert definition is in pure Javascript, the power of the tool is huge and 
 * Java 11 as programming language
 * [GraalVM](https://www.graalvm.org/) - use JavaScript as additional language for defining alerts
 * Spring Boot 2.5.x as dependency injection framework
-* [Vaadin 21](https://vaadin.com/) as UI framework
+* [Vaadin 22](https://vaadin.com/) as UI framework
 * SQLite as relational database for persisting data like test scenarios and their results.
 
 ## Features
@@ -23,8 +23,8 @@ Since alert definition is in pure Javascript, the power of the tool is huge and 
 * Dedicated **page** for **creating, editing or removing alerts**. Code editor for alert definition with autocomplete activated by default.
 * **Alert history** - ability to keep more results for each alert.
 * **Multiple channels** for sending alerts in case of an issue.
-* Integrated **chat**. This feature helps communication inside the team.
 * **Settings page**. Provides ability to change application behavior at runtime without restarting application.
+* **Statistics page**. Simple page with multiple statistics about current running instance.
 
 ## Running the application
 There are two ways to run the application: using `mvn spring-boot:run` or by running the `Application` class directly from your IDE.
