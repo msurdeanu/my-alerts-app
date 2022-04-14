@@ -1,15 +1,13 @@
 package org.myalerts.repository;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import org.myalerts.domain.TestScenario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import org.myalerts.model.TestScenario;
+import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author Mihai Surdeanu
@@ -17,9 +15,7 @@ import org.myalerts.model.TestScenario;
  */
 public interface TestScenarioRepository extends JpaRepository<TestScenario, Integer> {
 
-    @Query(value = "select s.*, t.last_run_time, coalesce(t.failed, false) as failed from scenarios s left join "
-        + "(select scenario_id, cause is not null as failed, max(created) as last_run_time from results group by scenario_id) t on s.id = t.scenario_id",
-        nativeQuery = true)
+    @Query(value = "select * from scenario_results", nativeQuery = true)
     List<TestScenario> findAll();
 
     @Transactional

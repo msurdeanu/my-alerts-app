@@ -2,11 +2,10 @@ package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import org.myalerts.event.EventListener;
-import org.myalerts.event.TestDeleteEvent;
+import org.myalerts.domain.event.EventListener;
+import org.myalerts.domain.event.TestDeleteEvent;
 import org.myalerts.repository.TestScenarioRepository;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Mihai Surdeanu

@@ -213,15 +213,6 @@
             <property name="setterCanReturnItsClass" value="true"/>
             <property name="tokens" value="VARIABLE_DEF, LAMBDA"/>
         </module>
-        <!-- Define an ordering for all imports present in source code -->
-        <module name="ImportOrder">
-            <property name="groups" value="java,javax,*,org.myalerts"/>
-            <property name="ordered" value="true"/>
-            <property name="separated" value="true"/>
-            <property name="separatedStaticGroups" value="true"/>
-            <property name="sortStaticImportsAlphabetically" value="true"/>
-            <property name="option" value="bottom"/>
-        </module>
         <!-- Avoid any unused import! -->
         <module name="UnusedImports"/>
         <module name="MethodParamPad"/>

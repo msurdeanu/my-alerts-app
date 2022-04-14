@@ -1,15 +1,14 @@
 package org.myalerts.component;
 
-import java.util.Optional;
-
-import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,15 +21,16 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouteParameters;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.vaadin.klaudeta.PaginatedGrid;
-
-import org.myalerts.event.TestScenarioEventHandler;
+import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.TestScenarioType;
+import org.myalerts.domain.UserRole;
+import org.myalerts.domain.event.TestScenarioEventHandler;
 import org.myalerts.marker.RequiresUIThread;
-import org.myalerts.model.TestScenario;
-import org.myalerts.model.TestScenarioType;
-import org.myalerts.model.UserRole;
 import org.myalerts.provider.TranslationProvider;
 import org.myalerts.view.TestScenarioDetailedView;
+import org.vaadin.klaudeta.PaginatedGrid;
+
+import java.util.Optional;
 
 /**
  * @author Mihai Surdeanu
@@ -88,7 +88,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     @RequiresUIThread
     private Component renderIsEnabled(final TestScenario testScenario) {
-        final var toggleButton = new ToggleButton(testScenario.isEnabled());
+        final var toggleButton = new Checkbox(testScenario.isEnabled());
         toggleButton.addValueChangeListener(event -> eventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
@@ -150,11 +150,11 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     private Component renderActions(final TestScenario testScenario) {
         final var layout = new HorizontalLayout();
 
-        final var scheduleNowButton = new Button(VaadinIcon.START_COG.create());
+        final var scheduleNowButton = new Button(new Icon(VaadinIcon.START_COG));
         scheduleNowButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.schedule.title"));
-        final var editButton = new Button(VaadinIcon.EDIT.create());
+        final var editButton = new Button(new Icon(VaadinIcon.EDIT));
         editButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.edit.title"));
-        final var deleteButton = new Button(VaadinIcon.TRASH.create());
+        final var deleteButton = new Button(new Icon(VaadinIcon.TRASH));
         deleteButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.delete.title"));
 
         if (isLogged) {

@@ -1,18 +1,17 @@
 package org.myalerts.provider;
 
+import com.vaadin.flow.i18n.I18NProvider;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.myalerts.domain.Setting;
+import org.ocpsoft.prettytime.PrettyTime;
+import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import com.vaadin.flow.i18n.I18NProvider;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.ocpsoft.prettytime.PrettyTime;
-import org.springframework.stereotype.Component;
-
-import org.myalerts.model.Setting;
 
 import static java.util.Locale.ENGLISH;
 import static java.util.ResourceBundle.getBundle;

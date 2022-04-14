@@ -1,15 +1,15 @@
 package org.myalerts.transformer;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.RouterLink;
 import org.apache.commons.lang3.StringUtils;
+import org.myalerts.domain.MenuItem;
 
-import org.myalerts.model.MenuItem;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * @author Mihai Surdeanu
@@ -19,13 +19,13 @@ public class MenuItemsToRouterLinksTransformer implements Transformer<List<MenuI
 
     @Override
     public List<RouterLink> transform(final List<MenuItem> menuItems) {
-        return Optional.ofNullable(menuItems)
-            .orElse(List.of())
-            .stream()
-            .filter(menuItem -> Objects.nonNull(menuItem.getTarget()))
-            .filter(menuItem -> menuItem.getRole().validate())
-            .map(this::createRouterLink)
-            .collect(Collectors.toList());
+        return ofNullable(menuItems)
+                .orElse(List.of())
+                .stream()
+                .filter(menuItem -> Objects.nonNull(menuItem.getTarget()))
+                .filter(menuItem -> menuItem.getRole().validate())
+                .map(this::createRouterLink)
+                .collect(Collectors.toList());
     }
 
     private RouterLink createRouterLink(final MenuItem menuItem) {

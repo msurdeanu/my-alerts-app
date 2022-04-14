@@ -1,9 +1,9 @@
 package org.myalerts.mapper;
 
-import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.jooq.lambda.function.Function1;
+
+import java.util.Map;
 
 /**
  * @author Mihai Surdeanu

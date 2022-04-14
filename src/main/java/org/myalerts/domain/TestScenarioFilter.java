@@ -1,4 +1,4 @@
-package org.myalerts.model;
+package org.myalerts.domain;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;

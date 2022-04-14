@@ -1,11 +1,8 @@
 package org.myalerts.config;
 
-import java.time.Duration;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.myalerts.domain.Setting;
+import org.myalerts.provider.SettingProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -13,8 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import org.myalerts.model.Setting;
-import org.myalerts.provider.SettingProvider;
+import javax.validation.constraints.NotNull;
+import java.time.Duration;
+import java.util.List;
 
 import static java.time.Duration.ofSeconds;
 
@@ -51,7 +49,9 @@ public class CacheConfig {
 
     private static class CustomCacheManager extends CaffeineCacheManager {
 
-        public CustomCacheManager(final long maxSize, @NotNull final Duration expireAfterAccess, @NotNull final Duration expireAfterWrite) {
+        public CustomCacheManager(final long maxSize,
+                                  @NotNull final Duration expireAfterAccess,
+                                  @NotNull final Duration expireAfterWrite) {
             final var caffeine = Caffeine.newBuilder()
                 .maximumSize(maxSize)
                 .recordStats();

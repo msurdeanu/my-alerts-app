@@ -1,7 +1,5 @@
 package org.myalerts.view;
 
-import javax.annotation.security.RolesAllowed;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -9,11 +7,12 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.provider.SettingProvider;
 import org.myalerts.transformer.SettingsToComponentsTransformer;
+
+import javax.annotation.security.RolesAllowed;
 
 /**
  * @author Mihai Surdeanu
@@ -51,8 +50,10 @@ public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
         layout.add(saveButton);
 
         layout.setResponsiveSteps(
-            new FormLayout.ResponsiveStep("250px", 1), new FormLayout.ResponsiveStep("500px", 2),
-            new FormLayout.ResponsiveStep("750px", 3), new FormLayout.ResponsiveStep("1000px", 4)
+                new FormLayout.ResponsiveStep("250px", 1),
+                new FormLayout.ResponsiveStep("500px", 2),
+                new FormLayout.ResponsiveStep("750px", 3),
+                new FormLayout.ResponsiveStep("1000px", 4)
         );
 
         return layout;

@@ -1,8 +1,5 @@
 package org.myalerts.view;
 
-import java.util.Collection;
-import java.util.concurrent.TimeUnit;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.select.Select;
@@ -15,18 +12,20 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
 import org.myalerts.component.TestScenarioGrid;
-import org.myalerts.event.TestScenarioEventHandler;
+import org.myalerts.domain.event.TestScenarioEventHandler;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
-import org.myalerts.model.TestScenario;
-import org.myalerts.model.TestScenarioFilter;
-import org.myalerts.model.TestScenarioResult;
-import org.myalerts.model.TestScenarioType;
+import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.TestScenarioFilter;
+import org.myalerts.domain.TestScenarioResult;
+import org.myalerts.domain.TestScenarioType;
 import org.myalerts.provider.TranslationProvider;
 import org.myalerts.service.TestScenarioResultService;
 import org.myalerts.service.TestScenarioService;
+
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mihai Surdeanu
@@ -55,8 +54,8 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         this.testScenarioResultService = testScenarioResultService;
 
         final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
-            .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
-            .withConfigurableFilter();
+                .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
+                .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
 
         testScenarioGrid = new TestScenarioGrid(this, translationProvider);

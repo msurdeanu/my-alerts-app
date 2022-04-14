@@ -1,8 +1,7 @@
 package org.myalerts.repository;
 
+import org.myalerts.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import org.myalerts.model.User;
 
 /**
  * @author Mihai Surdeanu

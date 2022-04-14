@@ -10,7 +10,7 @@ import com.vaadin.flow.component.icon.Icon;
  */
 public class IconButton extends Button {
 
-    public IconButton(Icon icon) {
+    public IconButton(final Icon icon) {
         super(icon);
         init();
     }

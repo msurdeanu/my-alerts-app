@@ -28,29 +28,29 @@ CREATE TABLE scenarios (
 );
 
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Passing test scenario', '0 0 * * MON-FRI', "function run(secondsSinceLatestRun) {
+VALUES ('1', 'Passing test scenario', '0 0 * * MON-FRI', "function run(context) {
 }");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Failing test scenario', '0 3 * * MON-FRI', "function run(secondsSinceLatestRun) {
-    return 'This scenario fails every time';
+VALUES ('1', 'Failing test scenario', '0 3 * * MON-FRI', "function run(context) {
+    context.markAsFailed('This scenario fails every time with this cause');
 }");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Status check test scenario', '0 6 * * MON-FRI', "function run(secondsSinceLatestRun) {
+VALUES ('1', 'Status check test scenario', '0 6 * * MON-FRI', "function run(context) {
     var HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
     var HttpResponse = new HttpRequestHelper()
         .http2()
         .requestUri('https://aventurata.ro')
         .sendGet();
     if (HttpResponse.statusCode() !== 200) {
-        return 'Service is not returning 200 as status code.';
+        context.markAsFailed('Service is not returning 200 as status code.');
     }
 }");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Body check test scenario', '0 9 * * MON-FRI', "function run(secondsSinceLatestRun) {
-    var HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
+VALUES ('1', 'Body check test scenario', '0 9 * * MON-FRI', "function run(context) {
+    const HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
     var HttpResponse = new HttpRequestHelper()
         .http2()
-        .requestUri('https://mihaisurdeanu.ro/wp-json/')
+        .requestUri('https://aventurata.ro/wp-json/')
         .sendGet();
     if (HttpResponse.statusCode() !== 200) {
         return 'Service is not returning 200 as status code.';
@@ -69,6 +69,22 @@ CREATE TABLE results (
     created DATETIME NOT NULL
 );
 
+CREATE VIEW scenario_results
+AS
+SELECT
+    s.*,
+    t.last_run_time,
+    COALESCE(t.failed, FALSE) AS failed
+FROM scenarios s
+LEFT JOIN (
+    SELECT
+        scenario_id,
+        cause IS NOT NULL AS failed,
+        MAX(created) AS last_run_time
+    FROM results
+    GROUP BY scenario_id
+) t ON s.id = t.scenario_id;
+
 CREATE TABLE settings (
     "key" TEXT PRIMARY KEY NOT NULL,
     title TEXT NOT NULL,
@@ -80,29 +96,35 @@ CREATE TABLE settings (
 );
 
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('version', '', '', 'text_h', '1.0', '0', '0');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('language', 'settings.language.label', 'settings.language.helper', 'text', 'en', '1', '1');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('gridPageSize', 'settings.grid.page-size.label', 'settings.grid.page-size.helper', 'int', '15', '1', '2');
+VALUES ('salt', 'settings.salt.label', 'settings.salt.helper', 'text', lower(hex(randomblob(16))), '1', '2');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('gridPaginatorSize', 'settings.grid.paginator-size.label', 'settings.grid.paginator-size.helper', 'int', '5', '1', '3');
+VALUES ('gridPageSize', 'settings.grid.page-size.label', 'settings.grid.page-size.helper', 'int', '15', '1', '3');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('testScenarioExecTimeout', 'settings.test-scenario.exec-timeout.label', 'settings.test-scenario.exec-timeout.helper', 'int', '60', '1', '4');
+VALUES ('gridPaginatorSize', 'settings.grid.paginator-size.label', 'settings.grid.paginator-size.helper', 'int', '5', '1', '4');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('testScenarioPoolSize', 'settings.test-scenario.pool-size.label', 'settings.test-scenario.pool-size.helper', 'int', '1', '1', '5');
+VALUES ('testScenarioExecTimeout', 'settings.test-scenario.exec-timeout.label', 'settings.test-scenario.exec-timeout.helper', 'int', '60', '1', '5');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('testScenarioThreadNamePrefix', 'settings.test-scenario.thread-name-prefix.label', 'settings.test-scenario.thread-name-prefix.helper', 'text', 'test-scenario-pool-', '0', '6');
+VALUES ('testScenarioPoolSize', 'settings.test-scenario.pool-size.label', 'settings.test-scenario.pool-size.helper', 'int', '1', '1', '6');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheMenuItemMaxSize', 'settings.cache.menu-item.max-size.label', 'settings.cache.menu-item.max-size.helper', 'int', '20', '0', '7');
+VALUES ('testScenarioThreadNamePrefix', 'settings.test-scenario.thread-name-prefix.label', 'settings.test-scenario.thread-name-prefix.helper', 'text', 'test-scenario-pool-', '0', '7');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheMenuItemExpireAfterAccess', 'settings.cache.menu-item.expire-after-access.label', 'settings.cache.menu-item.expire-after-access.helper', 'int', '0', '0', '8');
+VALUES ('cacheMenuItemMaxSize', 'settings.cache.menu-item.max-size.label', 'settings.cache.menu-item.max-size.helper', 'int', '20', '0', '8');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheMenuItemExpireAfterWrite', 'settings.cache.menu-item.expire-after-write.label', 'settings.cache.menu-item.expire-after-write.helper', 'int', '86400', '0', '9');
+VALUES ('cacheMenuItemExpireAfterAccess', 'settings.cache.menu-item.expire-after-access.label', 'settings.cache.menu-item.expire-after-access.helper', 'int', '0', '0', '9');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheTestScenarioResultMaxSize', 'settings.cache.test-scenario-result.max-size.label', 'settings.cache.test-scenario-result.max-size.helper', 'int', '100', '0', '10');
+VALUES ('cacheMenuItemExpireAfterWrite', 'settings.cache.menu-item.expire-after-write.label', 'settings.cache.menu-item.expire-after-write.helper', 'int', '86400', '0', '10');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheTestScenarioResultExpireAfterAccess', 'settings.cache.test-scenario-result.expire-after-access.label', 'settings.cache.test-scenario-result.expire-after-access.helper', 'int', '3600', '0', '11');
+VALUES ('cacheTestScenarioResultMaxSize', 'settings.cache.test-scenario-result.max-size.label', 'settings.cache.test-scenario-result.max-size.helper', 'int', '100', '0', '11');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheTestScenarioResultExpireAfterWrite', 'settings.cache.test-scenario-result.expire-after-write.label', 'settings.cache.test-scenario-result.expire-after-write.helper', 'int', '0', '0', '12');
+VALUES ('cacheTestScenarioResultExpireAfterAccess', 'settings.cache.test-scenario-result.expire-after-access.label', 'settings.cache.test-scenario-result.expire-after-access.helper', 'int', '3600', '0', '12');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('cacheTestScenarioResultExpireAfterWrite', 'settings.cache.test-scenario-result.expire-after-write.label', 'settings.cache.test-scenario-result.expire-after-write.helper', 'int', '0', '0', '13');
+
+CREATE UNIQUE INDEX key_index ON settings ("key");
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,7 +140,6 @@ VALUES ('test', '$2a$10$iZNmfanuP/Pn8OntMEsEKe6nH5JzL650v3zZM4aFNw4D36Wbq8ofG', 
 INSERT INTO users ("username", "password", "email", "role")
 VALUES ('admin', '$2a$10$18ldMrqn.vZIPvPUemB40eR5OTXIjLOAVrdFQdGCF6Bmh1l4ceYH2', 'admin@myalerts.org', 'ROLE_ADMIN');
 
-CREATE UNIQUE INDEX key_index ON settings ("key");
 CREATE UNIQUE INDEX username_index ON users (username);
 
 CREATE TRIGGER onScenarioDelete AFTER DELETE ON scenarios FOR EACH ROW BEGIN

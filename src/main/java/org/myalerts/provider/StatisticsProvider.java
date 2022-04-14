@@ -1,6 +1,6 @@
 package org.myalerts.provider;
 
-import org.myalerts.model.StatisticsGroup;
+import org.myalerts.domain.StatisticsGroup;
 
 /**
  * @author Mihai Surdeanu

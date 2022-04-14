@@ -20,6 +20,12 @@ public final class HttpRequestHelper {
     private final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
         .timeout(Duration.ofSeconds(60));
 
+    public HttpRequestHelper http11() {
+        clientBuilder.version(HttpClient.Version.HTTP_1_1);
+
+        return this;
+    }
+
     public HttpRequestHelper http2() {
         clientBuilder.version(HttpClient.Version.HTTP_2);
 
@@ -54,25 +60,37 @@ public final class HttpRequestHelper {
         return sendGet(HttpResponse.BodyHandlers.ofString());
     }
 
-    public <T> HttpResponse<T> sendGet(final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
+    private <T> HttpResponse<T> sendGet(final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
         return clientBuilder.build().send(requestBuilder.GET().build(), responseBodyHandler);
+    }
+
+    public HttpResponse<Void> sendGetAndDiscard() throws IOException, InterruptedException {
+        return sendGet(HttpResponse.BodyHandlers.discarding());
     }
 
     public HttpResponse<String> sendDelete() throws IOException, InterruptedException {
         return sendDelete(HttpResponse.BodyHandlers.ofString());
     }
 
-    public <T> HttpResponse<T> sendDelete(final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
+    private <T> HttpResponse<T> sendDelete(final HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
         return clientBuilder.build().send(requestBuilder.DELETE().build(), responseBodyHandler);
+    }
+
+    public HttpResponse<Void> sendDeleteAndDiscard() throws IOException, InterruptedException {
+        return sendDelete(HttpResponse.BodyHandlers.discarding());
     }
 
     public HttpResponse<String> sendPost(final String requestBody) throws IOException, InterruptedException {
         return sendPost(requestBody, HttpResponse.BodyHandlers.ofString());
     }
 
-    public <T> HttpResponse<T> sendPost(final String requestBody, final HttpResponse.BodyHandler<T> responseBodyHandler)
+    private <T> HttpResponse<T> sendPost(final String requestBody, final HttpResponse.BodyHandler<T> responseBodyHandler)
         throws IOException, InterruptedException {
         return clientBuilder.build().send(requestBuilder.POST(HttpRequest.BodyPublishers.ofString(requestBody)).build(), responseBodyHandler);
+    }
+
+    public HttpResponse<Void> sendPostAndDiscard(final String requestBody) throws IOException, InterruptedException {
+        return sendPost(requestBody, HttpResponse.BodyHandlers.discarding());
     }
 
 }

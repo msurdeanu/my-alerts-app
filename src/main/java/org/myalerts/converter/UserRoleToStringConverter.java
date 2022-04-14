@@ -1,9 +1,9 @@
 package org.myalerts.converter;
 
+import org.myalerts.domain.UserRole;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import org.myalerts.model.UserRole;
 
 import static java.util.Optional.ofNullable;
 

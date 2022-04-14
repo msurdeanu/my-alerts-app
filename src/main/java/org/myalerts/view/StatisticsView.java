@@ -1,16 +1,15 @@
 package org.myalerts.view;
 
-import java.util.List;
-
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
-
 import org.myalerts.component.StatisticsTreeGrid;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.provider.StatisticsProvider;
+
+import java.util.List;
 
 @Slf4j
 @AnonymousAllowed

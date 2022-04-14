@@ -1,9 +1,18 @@
 package org.myalerts.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.myalerts.marker.ThreadSafe;
+import org.myalerts.domain.Setting;
+import org.myalerts.domain.TestScenario;
+import org.myalerts.provider.SettingProvider;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.stereotype.Service;
+
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledFuture;
@@ -12,16 +21,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.stereotype.Service;
-
-import org.myalerts.marker.ThreadSafe;
-import org.myalerts.model.Setting;
-import org.myalerts.model.TestScenario;
-import org.myalerts.provider.SettingProvider;
+import static java.util.Optional.ofNullable;
 
 /**
  * @author Mihai Surdeanu
@@ -64,7 +64,7 @@ public class ScheduleTestScenarioService {
 
         lock.lock();
         try {
-            Optional.ofNullable(SCENARIOS_SCHEDULED_MAP.get(id))
+            ofNullable(SCENARIOS_SCHEDULED_MAP.get(id))
                 .map(scheduledFuture -> scheduledFuture.cancel(true))
                 .filter(isCancelled -> isCancelled)
                 .ifPresent(isCancelled -> {
@@ -78,12 +78,12 @@ public class ScheduleTestScenarioService {
     }
 
     @ThreadSafe
-    public void scheduleInAsyncMode(TestScenario testScenario) {
+    public void scheduleInAsyncMode(final TestScenario testScenario) {
         threadPoolTaskScheduler.schedule(testScenario, Instant.now());
     }
 
     @ThreadSafe
-    public void scheduleInSyncMode(TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
+    public void scheduleInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
         threadPoolTaskScheduler.schedule(testScenario, Instant.now())
             .get(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
     }

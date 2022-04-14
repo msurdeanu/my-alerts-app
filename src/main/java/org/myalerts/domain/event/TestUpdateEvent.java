@@ -1,9 +1,9 @@
-package org.myalerts.event;
+package org.myalerts.domain.event;
 
 import lombok.Builder;
 import lombok.Getter;
 
-import org.myalerts.model.TestScenario;
+import org.myalerts.domain.TestScenario;
 
 /**
  * @author Mihai Surdeanu
@@ -11,7 +11,7 @@ import org.myalerts.model.TestScenario;
  */
 @Builder
 @Getter
-public class TestDeleteEvent implements Event {
+public class TestUpdateEvent implements Event {
 
     private final TestScenario testScenario;
 

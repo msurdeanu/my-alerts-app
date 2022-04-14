@@ -1,4 +1,4 @@
-package org.myalerts.model;
+package org.myalerts.domain;
 
 import java.util.Arrays;
 
@@ -13,9 +13,12 @@ import lombok.RequiredArgsConstructor;
 public enum SettingType {
 
     TEXT("text"),
+    TEXT_H("text_h"),
     PASSWORD("pass"),
     INTEGER("int"),
-    BOOLEAN("bool");
+    INTEGER_H("int_h"),
+    BOOLEAN("bool"),
+    BOOLEAN_H("bool_h");
 
     @Getter
     private final String value;

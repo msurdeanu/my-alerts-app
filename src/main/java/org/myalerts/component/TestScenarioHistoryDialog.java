@@ -1,9 +1,5 @@
 package org.myalerts.component;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -11,9 +7,12 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-
+import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.marker.RequiresUIThread;
-import org.myalerts.model.TestScenarioResult;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * @author Mihai Surdeanu

@@ -1,10 +1,10 @@
 package org.myalerts.converter;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
-
 import com.vaadin.flow.component.Component;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 import static java.util.Optional.ofNullable;
 

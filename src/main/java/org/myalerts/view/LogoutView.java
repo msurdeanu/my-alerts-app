@@ -1,13 +1,13 @@
 package org.myalerts.view;
 
-import javax.annotation.security.PermitAll;
-
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import javax.annotation.security.PermitAll;
 
 /**
  * @author Mihai Surdeanu

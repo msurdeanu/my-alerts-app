@@ -1,11 +1,10 @@
 package org.myalerts.repository;
 
-import java.util.List;
-
+import org.myalerts.domain.MenuItem;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import org.myalerts.model.MenuItem;
+import java.util.List;
 
 /**
  * @author Mihai Surdeanu

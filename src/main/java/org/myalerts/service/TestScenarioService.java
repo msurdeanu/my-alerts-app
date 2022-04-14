@@ -1,5 +1,19 @@
 package org.myalerts.service;
 
+import com.vaadin.flow.data.provider.Query;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.myalerts.ApplicationContext;
+import org.myalerts.marker.ThreadSafe;
+import org.myalerts.domain.StatisticsGroup;
+import org.myalerts.domain.StatisticsItem;
+import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.TestScenarioFilter;
+import org.myalerts.domain.TestScenarioType;
+import org.myalerts.provider.StatisticsProvider;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,20 +26,6 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
-
-import com.vaadin.flow.data.provider.Query;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
-import org.myalerts.marker.ThreadSafe;
-import org.myalerts.model.StatisticsGroup;
-import org.myalerts.model.StatisticsItem;
-import org.myalerts.model.TestScenario;
-import org.myalerts.model.TestScenarioFilter;
-import org.myalerts.model.TestScenarioType;
-import org.myalerts.provider.StatisticsProvider;
 
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
@@ -47,6 +47,8 @@ public class TestScenarioService implements StatisticsProvider {
     private static final Map<Integer, TestScenario> ALL_TESTS = new HashMap<>();
 
     private final Lock lock = new ReentrantLock();
+
+    private final ApplicationContext applicationContext;
 
     private final ScheduleTestScenarioService scheduleTestScenarioService;
 
@@ -91,6 +93,8 @@ public class TestScenarioService implements StatisticsProvider {
     public void createAndSchedule(@NonNull TestScenario testScenario) {
         lock.lock();
         try {
+            testScenario.setApplicationContext(applicationContext);
+
             ofNullable(ALL_TESTS.put(testScenario.getId(), testScenario))
                 .filter(TestScenario::isEnabled)
                 .ifPresent(scheduleTestScenarioService::unschedule);

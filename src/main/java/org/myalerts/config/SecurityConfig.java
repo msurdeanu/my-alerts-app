@@ -2,6 +2,9 @@ package org.myalerts.config;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import lombok.RequiredArgsConstructor;
+import org.myalerts.repository.UserRepository;
+import org.myalerts.service.CustomUserDetailsService;
+import org.myalerts.view.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,10 +13,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import org.myalerts.repository.UserRepository;
-import org.myalerts.service.CustomUserDetailsService;
-import org.myalerts.view.LoginView;
 
 /**
  * @author Mihai Surdeanu
@@ -27,7 +26,7 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
     private final UserRepository userRepository;
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
+    protected void configure(final HttpSecurity httpSecurity) throws Exception {
         super.configure(httpSecurity);
 
         setLoginView(httpSecurity, LoginView.class);

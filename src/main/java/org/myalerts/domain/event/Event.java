@@ -1,4 +1,4 @@
-package org.myalerts.event;
+package org.myalerts.domain.event;
 
 /**
  * Represents a marker interface for an event.

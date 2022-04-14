@@ -1,19 +1,18 @@
 package org.myalerts.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.benmanes.caffeine.cache.stats.CacheStats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.myalerts.domain.StatisticsGroup;
+import org.myalerts.domain.StatisticsItem;
+import org.myalerts.provider.StatisticsProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.stereotype.Service;
 
-import org.myalerts.model.StatisticsGroup;
-import org.myalerts.model.StatisticsItem;
-import org.myalerts.provider.StatisticsProvider;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Mihai Surdeanu

@@ -1,4 +1,4 @@
-package org.myalerts.model;
+package org.myalerts.domain;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;

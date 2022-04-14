@@ -1,9 +1,9 @@
 package org.myalerts.converter;
 
+import org.myalerts.domain.SettingType;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import org.myalerts.model.SettingType;
 
 import static java.util.Optional.ofNullable;
 

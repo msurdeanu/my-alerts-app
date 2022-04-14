@@ -1,10 +1,10 @@
 package org.myalerts.dialect;
 
-import java.sql.Types;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
+
+import java.sql.Types;
 
 /**
  * @author Mihai Surdeanu

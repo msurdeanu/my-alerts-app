@@ -1,8 +1,8 @@
 package org.myalerts.provider;
 
-import java.util.List;
+import org.myalerts.domain.Setting;
 
-import org.myalerts.model.Setting;
+import java.util.List;
 
 /**
  * @author Mihai Surdeanu

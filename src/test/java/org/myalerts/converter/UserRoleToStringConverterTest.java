@@ -2,7 +2,7 @@ package org.myalerts.converter;
 
 import org.junit.jupiter.api.Test;
 
-import org.myalerts.model.UserRole;
+import org.myalerts.domain.UserRole;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

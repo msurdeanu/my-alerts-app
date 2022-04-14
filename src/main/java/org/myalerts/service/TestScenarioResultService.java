@@ -1,18 +1,17 @@
 package org.myalerts.service;
 
-import java.util.Collection;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.myalerts.domain.event.EventListener;
+import org.myalerts.domain.event.TestResultEvent;
+import org.myalerts.domain.TestScenarioResult;
+import org.myalerts.repository.TestScenarioResultRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import org.myalerts.event.EventListener;
-import org.myalerts.event.TestResultEvent;
-import org.myalerts.model.TestScenarioResult;
-import org.myalerts.repository.TestScenarioResultRepository;
+import java.util.Collection;
 
 /**
  * @author Mihai Surdeanu

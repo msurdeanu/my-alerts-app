@@ -1,10 +1,10 @@
-package org.myalerts.event;
+package org.myalerts.domain.event;
 
 import lombok.Builder;
 import lombok.Getter;
 
-import org.myalerts.model.TestScenario;
-import org.myalerts.model.TestScenarioResult;
+import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.TestScenarioResult;
 
 /**
  * @author Mihai Surdeanu

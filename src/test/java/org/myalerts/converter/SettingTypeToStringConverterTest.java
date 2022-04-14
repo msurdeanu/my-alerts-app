@@ -2,7 +2,7 @@ package org.myalerts.converter;
 
 import org.junit.jupiter.api.Test;
 
-import org.myalerts.model.SettingType;
+import org.myalerts.domain.SettingType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

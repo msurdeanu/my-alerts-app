@@ -1,17 +1,15 @@
 package org.myalerts.service;
 
+import com.vaadin.flow.server.VaadinService;
+import lombok.RequiredArgsConstructor;
+import org.myalerts.domain.Setting;
+import org.myalerts.provider.SettingProvider;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.Cookie;
-
-import com.vaadin.flow.server.VaadinService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import org.myalerts.model.Setting;
-import org.myalerts.provider.SettingProvider;
 
 /**
  * @author Mihai Surdeanu

@@ -1,4 +1,4 @@
-package org.myalerts.model;
+package org.myalerts.domain;
 
 import java.util.function.Predicate;
 

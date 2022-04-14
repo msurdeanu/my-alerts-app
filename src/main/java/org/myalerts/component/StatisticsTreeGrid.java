@@ -1,17 +1,16 @@
 package org.myalerts.component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
-
-import org.myalerts.model.StatisticsGroup;
-import org.myalerts.model.StatisticsItem;
+import org.myalerts.domain.StatisticsGroup;
+import org.myalerts.domain.StatisticsItem;
 import org.myalerts.provider.StatisticsProvider;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Mihai Surdeanu

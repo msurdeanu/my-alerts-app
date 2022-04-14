@@ -13,12 +13,11 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import de.f0rce.ace.AceEditor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.marker.RequiresUIThread;
-import org.myalerts.model.TestScenario;
-import org.myalerts.model.UserRole;
+import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.UserRole;
 import org.myalerts.service.TestScenarioService;
 
 import static org.myalerts.view.TestScenarioDetailedView.ID_PARAM;
@@ -42,7 +41,7 @@ public class TestScenarioDetailedView extends ResponsiveLayout implements Before
     @Override
     public void beforeEnter(final BeforeEnterEvent beforeEnterEvent) {
         testScenarioService.findBy(beforeEnterEvent.getRouteParameters().getInteger(ID_PARAM).orElse(0))
-            .ifPresent(this::createLayout);
+                .ifPresent(this::createLayout);
     }
 
     private void createLayout(final TestScenario testScenario) {

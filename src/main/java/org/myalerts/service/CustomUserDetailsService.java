@@ -1,16 +1,13 @@
 package org.myalerts.service;
 
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
+import org.myalerts.domain.CustomUserDetails;
+import org.myalerts.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import org.myalerts.model.CustomUserDetails;
-import org.myalerts.model.User;
-import org.myalerts.repository.UserRepository;
+import java.util.Optional;
 
 /**
  * @author Mihai Surdeanu
@@ -26,14 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         return Optional.ofNullable(userRepository.getUserByUsername(username))
             .map(CustomUserDetails::new)
             .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
-    }
-
-    public boolean registerUser(final User user) {
-        user.setEnabled(true);
-        user.setRole("ROLE_USER");
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userRepository.save(user);
-        return true;
     }
 
 }

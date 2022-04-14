@@ -1,9 +1,9 @@
 package org.myalerts.converter;
 
+import org.myalerts.domain.TestScenarioDefinition;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import org.myalerts.model.TestScenarioDefinition;
 
 import static java.util.Optional.ofNullable;
 

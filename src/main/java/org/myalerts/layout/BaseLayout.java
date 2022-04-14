@@ -1,7 +1,5 @@
 package org.myalerts.layout;
 
-import java.util.List;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -12,9 +10,10 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.router.RouterLink;
-
 import org.myalerts.repository.MenuItemRepository;
 import org.myalerts.transformer.MenuItemsToRouterLinksTransformer;
+
+import java.util.List;
 
 /**
  * @author Mihai Surdeanu
@@ -57,7 +56,7 @@ public class BaseLayout extends AppLayout {
     private Footer createFooter() {
         final var layout = new Footer();
         layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
-        layout.add(new Span("v1.0"));
+        layout.add(new Span("v1.0")); // TODO: Use version from settings table
         return layout;
     }
 
