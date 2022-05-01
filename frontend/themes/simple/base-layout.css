@@ -40,7 +40,8 @@
 }
 
 .ace-editor {
-    min-height: 430px;
+    min-height: 150px;
+    max-height: 180px;
 }
 
 .passed {

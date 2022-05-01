@@ -4,7 +4,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
@@ -19,6 +21,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouteParameters;
+import de.f0rce.ace.AceEditor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.myalerts.domain.TestScenario;
@@ -43,7 +46,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     private final Binder<TestScenario> testScenarioBinder = new Binder<>(TestScenario.class);
 
-    private final TestScenarioEventHandler eventHandler;
+    private final TestScenarioEventHandler testScenarioEventHandler;
 
     private final TranslationProvider translationProvider;
 
@@ -79,8 +82,13 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderActions))
             .setHeader(getTranslation("test-scenario.main-grid.actions.column"))
             .setAutoWidth(true);
+        paginatedGrid.setItemDetailsRenderer(new ComponentRenderer<>(
+            () -> new TestScenarioDetails(testScenarioEventHandler),
+            TestScenarioDetails::setDetails)
+        );
         paginatedGrid.setPageSize(10);
         paginatedGrid.setPaginatorSize(5);
+        paginatedGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_WRAP_CELL_CONTENT);
         layout.add(paginatedGrid);
 
         return layout;
@@ -89,7 +97,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     @RequiresUIThread
     private Component renderIsEnabled(final TestScenario testScenario) {
         final var toggleButton = new Checkbox(testScenario.isEnabled());
-        toggleButton.addValueChangeListener(event -> eventHandler.onActivationChanged(testScenario));
+        toggleButton.addValueChangeListener(event -> testScenarioEventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
 
@@ -107,7 +115,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         textField.addClassName("editable-field");
         testScenarioBinder.forField(textField)
             .withValidator(name -> true, StringUtils.EMPTY)
-            .bind(TestScenario::getName, (Setter<TestScenario, String>) eventHandler::onNameChanged);
+            .bind(TestScenario::getName, (Setter<TestScenario, String>) testScenarioEventHandler::onNameChanged);
         testScenarioBinder.readBean(testScenario);
         setSuffixForField(textField);
 
@@ -122,7 +130,8 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         final var lastRunButton = new Button(Optional.ofNullable(testScenario.getLastRunTime())
             .map(translationProvider::prettyTimeFormat)
             .orElseGet(() -> getTranslation("test-scenario.main-grid.not-available")));
-        lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(() -> eventHandler.getLastResults(testScenario)).open());
+        lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(() -> testScenarioEventHandler.getLastResults(testScenario)).open());
+        lastRunButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         return lastRunButton;
     }
 
@@ -136,7 +145,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         textField.addClassName("editable-field");
         testScenarioBinder.forField(textField)
             .withValidator(cron -> true, StringUtils.EMPTY)
-            .bind(TestScenario::getCron, (Setter<TestScenario, String>) eventHandler::onCronExpressionChanged);
+            .bind(TestScenario::getCron, (Setter<TestScenario, String>) testScenarioEventHandler::onCronExpressionChanged);
         testScenarioBinder.readBean(testScenario);
         setSuffixForField(textField);
 
@@ -151,11 +160,16 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         final var layout = new HorizontalLayout();
 
         final var scheduleNowButton = new Button(new Icon(VaadinIcon.START_COG));
+        scheduleNowButton.addThemeVariants(ButtonVariant.LUMO_ICON);
         scheduleNowButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.schedule.title"));
+        scheduleNowButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         final var editButton = new Button(new Icon(VaadinIcon.EDIT));
         editButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.edit.title"));
-        final var deleteButton = new Button(new Icon(VaadinIcon.TRASH));
+        editButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        final var deleteButton = new Button();
+        deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
         deleteButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.delete.title"));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
         if (isLogged) {
             scheduleNowButton.addClickListener(event -> onScheduleNow(testScenario));
@@ -166,7 +180,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         if (isLoggedAsAdmin) {
             editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
             if (!testScenario.isEnabled()) {
-                deleteButton.addClickListener(event -> eventHandler.onDelete(testScenario));
+                deleteButton.addClickListener(event -> testScenarioEventHandler.onDelete(testScenario));
             } else {
                 deleteButton.setEnabled(false);
             }
@@ -196,7 +210,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     }
 
     private void onScheduleNow(final TestScenario testScenario) {
-        eventHandler.onScheduleNow(testScenario);
+        testScenarioEventHandler.onScheduleNow(testScenario);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
@@ -213,6 +227,43 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         span.addClassName("small-suffix");
 
         ComponentEnricher.setComponentAsSuffix(textField, span);
+    }
+
+    private static class TestScenarioDetails extends VerticalLayout {
+
+        private final AceEditor editor = new AceEditor();
+
+        private final Button saveButton = new Button(getTranslation("test-scenario.detailed.button.save"));
+
+        private final TestScenarioEventHandler testScenarioEventHandler;
+
+        public TestScenarioDetails(final TestScenarioEventHandler testScenarioEventHandler) {
+            this.testScenarioEventHandler = testScenarioEventHandler;
+
+            setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+
+            editor.addClassName("ace-editor");
+            editor.setAutoComplete(true);
+            editor.setLiveAutocompletion(true);
+            add(editor);
+
+            saveButton.setEnabled(false);
+            saveButton.setWidthFull();
+            saveButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+            add(saveButton);
+        }
+
+        public void setDetails(final TestScenario testScenario) {
+            editor.setValue(testScenario.getDefinition().getScript());
+            editor.addAceChangedListener(event -> saveButton.setEnabled(isNewDefinition(testScenario, event.getValue())));
+
+            saveButton.addClickListener(event -> testScenarioEventHandler.onDefinitionChanged(testScenario, editor.getValue()));
+        }
+
+        private boolean isNewDefinition(final TestScenario testScenario, final String newDefinition) {
+            return !testScenario.getDefinition().getScript().equals(newDefinition);
+        }
+
     }
 
 }

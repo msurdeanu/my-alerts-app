@@ -1,6 +1,7 @@
 package org.myalerts.component;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-public class StatisticsTreeGrid extends Composite<VerticalLayout> {
+public final class StatisticsTreeGrid extends Composite<VerticalLayout> {
 
     private final Map<StatisticsItem, List<StatisticsItem>> statsMap;
 
@@ -49,6 +50,7 @@ public class StatisticsTreeGrid extends Composite<VerticalLayout> {
             .setHeader(getTranslation("statistics.description.column"))
             .setAutoWidth(true);
         treeGrid.expandRecursively(statsMap.keySet(), 2);
+        treeGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_WRAP_CELL_CONTENT);
 
         layout.add(treeGrid);
         return layout;

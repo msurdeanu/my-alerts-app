@@ -8,7 +8,7 @@ import com.vaadin.flow.component.icon.Icon;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-public class IconButton extends Button {
+public final class IconButton extends Button {
 
     public IconButton(final Icon icon) {
         super(icon);
