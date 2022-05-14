@@ -5,12 +5,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.myalerts.ApplicationContext;
-import org.myalerts.marker.ThreadSafe;
 import org.myalerts.domain.StatisticsGroup;
 import org.myalerts.domain.StatisticsItem;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioType;
+import org.myalerts.marker.ThreadSafe;
 import org.myalerts.provider.StatisticsProvider;
 import org.springframework.stereotype.Service;
 
@@ -68,8 +68,8 @@ public class TestScenarioService implements StatisticsProvider {
         return getAll().count();
     }
 
-    public long getAllSize(final TestScenarioFilter filter, final long offset, final long limit) {
-        return getAll(filter, offset, limit).count();
+    public long getAllSize(final TestScenarioFilter filter) {
+        return getAll(filter, 0, Long.MAX_VALUE).count();
     }
 
     public Optional<TestScenario> findBy(final int id) {
@@ -82,9 +82,9 @@ public class TestScenarioService implements StatisticsProvider {
             .orElseGet(this::getAll);
     }
 
-    public int countBy(Query<TestScenario, TestScenarioFilter> query) {
+    public int countBy(final Query<TestScenario, TestScenarioFilter> query) {
         return query.getFilter()
-            .map(filter -> getAllSize(filter, query.getOffset(), query.getLimit()))
+            .map(this::getAllSize)
             .orElseGet(this::getAllSize)
             .intValue();
     }
@@ -201,13 +201,13 @@ public class TestScenarioService implements StatisticsProvider {
                 StatisticsItem.builder()
                     .name("statistics.test-scenarios.group.total-failed-scenarios.name")
                     .icon("vaadin:file-text-o")
-                    .value(getAllSize(FAILED_FILTER, 0, Long.MAX_VALUE))
+                    .value(getAllSize(FAILED_FILTER))
                     .description("statistics.test-scenarios.group.total-failed-scenarios.description")
                     .build(),
                 StatisticsItem.builder()
                     .name("statistics.test-scenarios.group.total-disabled-scenarios.name")
                     .icon("vaadin:file-text-o")
-                    .value(getAllSize(DISABLED_FILTER, 0, Long.MAX_VALUE))
+                    .value(getAllSize(DISABLED_FILTER))
                     .description("statistics.test-scenarios.group.total-disabled-scenarios.description")
                     .build()
             ))

@@ -6,15 +6,15 @@ You can easily create alerts, schedule them using cron-jobs and trigger notifica
 Uses Java as programming language and Vaadin as UI framework.
 
 This tool is perfect for small teams, mainly composed by developers. Any developer with basic Javascript knowledge can create and maintain alerts created with MyAlerts.
-Since alert definition is in pure Javascript, the power of the tool is huge and offers the freedom to do almost everything you want.
+Since alert definition is in pure Groovy, the power of the tool is huge and offers the freedom to do almost everything you want.
 
 ## Technology stack
 
-* Java 11 as programming language. GraalVM distribution is required to run this application.
-* [GraalVM](https://www.graalvm.org/) - use JavaScript as additional language for defining alerts
+* Java 11 as programming language.
+* Use [Groovy](https://groovy-lang.org/) as additional language for defining alerts
 * Spring Boot 2.6.x as dependency injection framework
 * [Vaadin 23](https://vaadin.com/) as UI framework
-* SQLite as relational database for persisting data like test scenarios and their results.
+* [SQLite](https://www.sqlite.org/) as relational database for persisting data like test scenarios and their results.
 
 ## Features
 

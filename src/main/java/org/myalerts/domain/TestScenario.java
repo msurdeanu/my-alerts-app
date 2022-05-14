@@ -1,5 +1,6 @@
 package org.myalerts.domain;
 
+import groovy.lang.Script;
 import lombok.Getter;
 import lombok.Setter;
 import org.myalerts.ApplicationContext;
@@ -16,8 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.Duration;
@@ -120,7 +119,7 @@ public class TestScenario implements Runnable {
 
         final var startTime = System.currentTimeMillis();
         try {
-            invokeExecute(ofNullable(definition.getScriptEngine())
+            invokeRunMethod(ofNullable(definition.getParsedScript())
                 .orElseThrow(() -> new AlertingException(definition.getCause())), executionContext);
         } catch (Throwable throwable) {
             executionContext.markAsFailed(throwable);
@@ -139,10 +138,10 @@ public class TestScenario implements Runnable {
         }
     }
 
-    private void invokeExecute(final ScriptEngine scriptEngine,
-                               final Object... functionArgs) {
+    private void invokeRunMethod(final Script parsedScript,
+                                 final Object... functionArgs) {
         try {
-            ((Invocable) scriptEngine).invokeFunction("run", functionArgs);
+            parsedScript.invokeMethod("run", functionArgs);
         } catch (Exception e) {
             throw new AlertingException(e);
         }

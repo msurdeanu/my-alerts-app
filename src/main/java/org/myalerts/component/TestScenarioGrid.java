@@ -22,6 +22,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouteParameters;
 import de.f0rce.ace.AceEditor;
+import de.f0rce.ace.enums.AceMode;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.myalerts.domain.TestScenario;
@@ -243,6 +244,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
             setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 
             editor.addClassName("ace-editor");
+            editor.setMode(AceMode.groovy);
             editor.setAutoComplete(true);
             editor.setLiveAutocompletion(true);
             add(editor);

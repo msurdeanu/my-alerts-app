@@ -3,9 +3,7 @@ package org.myalerts.converter;
 import org.junit.jupiter.api.Test;
 import org.myalerts.domain.TestScenarioDefinition;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Mihai Surdeanu
@@ -13,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 public final class TestScenarioDefinitionToStringConverterTest {
 
-    private static final String SIMPLE_SCRIPT = "function run(secondsSinceLatestRun) {}";
+    private static final String SIMPLE_SCRIPT = "def run(context) {}";
 
     @Test
     public void testConvertToDatabaseColumn() {
@@ -32,7 +30,7 @@ public final class TestScenarioDefinitionToStringConverterTest {
         assertNotNull(testScenarioDefinition);
         assertEquals(SIMPLE_SCRIPT, testScenarioDefinition.getScript());
         assertNull(testScenarioDefinition.getCause());
-        assertNotNull(testScenarioDefinition.getScriptEngine());
+        assertNotNull(testScenarioDefinition.getParsedScript());
     }
 
 }

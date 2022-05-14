@@ -28,37 +28,32 @@ CREATE TABLE scenarios (
 );
 
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Passing test scenario', '0 0 * * MON-FRI', "function run(context) {
+VALUES ('1', 'Passing test scenario', '0 0 * * MON-FRI', "def run(context) {
 }");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Failing test scenario', '0 3 * * MON-FRI', "function run(context) {
+VALUES ('1', 'Failing test scenario', '0 3 * * MON-FRI', "def run(context) {
     context.markAsFailed('This scenario fails every time with this cause');
 }");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Status check test scenario', '0 6 * * MON-FRI', "function run(context) {
-    var HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
-    var HttpResponse = new HttpRequestHelper()
+VALUES ('1', 'Status check test scenario', '0 6 * * MON-FRI', "import org.myalerts.helper.HttpRequestHelper;
+def run(context) {
+    def httpResponse = new HttpRequestHelper()
         .http2()
         .requestUri('https://aventurata.ro')
         .sendGet();
-    if (HttpResponse.statusCode() !== 200) {
-        context.markAsFailed('Service is not returning 200 as status code.');
-    }
+    assert 200 == httpResponse.statusCode() : 'Unexpected status code received';
 }");
 INSERT INTO scenarios ("enabled", "name", "cron", "definition")
-VALUES ('1', 'Body check test scenario', '0 9 * * MON-FRI', "function run(context) {
-    const HttpRequestHelper = Java.type('org.myalerts.helper.HttpRequestHelper');
-    var HttpResponse = new HttpRequestHelper()
+VALUES ('1', 'Body check test scenario', '0 9 * * MON-FRI', "import groovy.json.JsonSlurper;
+import org.myalerts.helper.HttpRequestHelper;
+def run(context) {
+    def httpResponse = new HttpRequestHelper()
         .http2()
         .requestUri('https://aventurata.ro/wp-json/')
         .sendGet();
-    if (HttpResponse.statusCode() !== 200) {
-        return 'Service is not returning 200 as status code.';
-    }
-    const JsonResponse = JSON.parse(HttpResponse.body());
-    if (JsonResponse.name !== 'Mihai Surdeanu') {
-        return 'Name is not the one expected.';
-    }
+    assert 200 == httpResponse.statusCode() : 'Unexpected status code received';
+    def jsonResponse = new JsonSlurper().parseText(httpResponse.body());
+    assert 'Mihai Surdeanu' == jsonResponse.name : 'Unexpected name received';
 }");
 
 CREATE TABLE results (

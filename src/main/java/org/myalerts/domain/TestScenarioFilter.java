@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
  * @since 1.0.0
  */
 @Getter
-public class TestScenarioFilter {
+public final class TestScenarioFilter {
 
     private TestScenarioType byTypeCriteria = TestScenarioType.ALL;
 

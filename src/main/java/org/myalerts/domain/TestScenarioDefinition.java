@@ -1,14 +1,8 @@
 package org.myalerts.domain;
 
-import java.util.function.Predicate;
-
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 import lombok.Getter;
-
-import org.myalerts.helper.HttpRequestHelper;
 
 /**
  * @author Mihai Surdeanu
@@ -17,11 +11,11 @@ import org.myalerts.helper.HttpRequestHelper;
 @Getter
 public class TestScenarioDefinition {
 
-    private static final Predicate<String> CLASS_IN_HELPER_PACKAGE = className -> className.startsWith(HttpRequestHelper.class.getPackageName());
+    private static final GroovyShell GROOVY_SHELL = new GroovyShell();
 
     private String script;
 
-    private ScriptEngine scriptEngine;
+    private Script parsedScript;
 
     private String cause;
 
@@ -37,14 +31,10 @@ public class TestScenarioDefinition {
 
     private void recreateScriptEngine() {
         try {
-            scriptEngine = new ScriptEngineManager().getEngineByName("graal.js");
-            final var bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
-            bindings.put("polyglot.js.allowHostAccess", true);
-            bindings.put("polyglot.js.allowHostClassLookup", CLASS_IN_HELPER_PACKAGE);
-            scriptEngine.eval(script);
+            parsedScript = GROOVY_SHELL.parse(script);
         } catch (Exception e) {
             cause = e.getMessage();
-            scriptEngine = null;
+            parsedScript = null;
         }
     }
 
