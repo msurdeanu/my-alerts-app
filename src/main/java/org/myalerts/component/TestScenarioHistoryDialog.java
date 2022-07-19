@@ -8,6 +8,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.marker.RequiresUIThread;
+import org.myalerts.provider.TranslationProvider;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -45,7 +46,7 @@ public final class TestScenarioHistoryDialog extends ResponsiveDialog {
 
     @RequiresUIThread
     private Component renderRunTime(final TestScenarioResult testScenarioResult) {
-        return new Label(testScenarioResult.getCreated().toString());
+        return new Label(getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
     }
 
     @RequiresUIThread

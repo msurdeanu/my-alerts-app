@@ -12,8 +12,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
-import static java.lang.System.setProperty;
-
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 @SpringBootApplication
 @RequiredArgsConstructor
 @Theme(value = "simple")
@@ -24,7 +26,6 @@ public class Application extends SpringBootServletInitializer implements AppShel
     private final ApplicationContext applicationContext;
 
     public static void main(final String[] args) {
-        setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         SpringApplication.run(Application.class, args);
     }
 

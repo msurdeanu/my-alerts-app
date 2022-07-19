@@ -13,7 +13,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static java.lang.String.format;
 import static java.util.Locale.ENGLISH;
+import static java.util.Optional.ofNullable;
 import static java.util.ResourceBundle.getBundle;
 
 /**
@@ -25,13 +27,15 @@ import static java.util.ResourceBundle.getBundle;
 @RequiredArgsConstructor
 public class TranslationProvider implements I18NProvider {
 
-    private static final PrettyTime PRETTY_TIME = new PrettyTime();
+    public static final String PRETTY_TIME_FORMAT = "pretty.time.format";
 
     private static final ResourceBundle DEFAULT_RESOURCE_BUNDLE = getBundle("translation", ENGLISH);
 
     private static final Map<String, ResourceBundle> LANGUAGE_RESOURCE_MAP = Map.of("en", DEFAULT_RESOURCE_BUNDLE);
 
     private final SettingProvider settingProvider;
+
+    private PrettyTime cachedPrettyTime;
 
     @Override
     public List<Locale> getProvidedLocales() {
@@ -44,18 +48,25 @@ public class TranslationProvider implements I18NProvider {
             return null;
         }
 
-        final String language = settingProvider.getOrDefault(Setting.Key.LANGUAGE, "en");
-        final ResourceBundle resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault(language, DEFAULT_RESOURCE_BUNDLE);
+        if (PRETTY_TIME_FORMAT.equals(key) && args.length == 1 && args[0] instanceof Instant) {
+            return prettyTimeFormat((Instant) args[0], locale);
+        }
+
+        final var language = settingProvider.getOrDefault(Setting.Key.LANGUAGE, "en");
+        final var resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault(language, DEFAULT_RESOURCE_BUNDLE);
         if (resourceBundle.containsKey(key)) {
-            return String.format(resourceBundle.getString(key), args);
+            return format(resourceBundle.getString(key), args);
         }
 
         log.warn("Missing translation for key '{}' and language '{}'.", key, language);
         return key;
     }
 
-    public String prettyTimeFormat(final Instant time) {
-        return PRETTY_TIME.format(time);
+    private String prettyTimeFormat(final Instant time, final Locale locale) {
+        cachedPrettyTime = ofNullable(cachedPrettyTime)
+            .filter(prettyTime -> prettyTime.getLocale().equals(locale))
+            .orElseGet(() -> new PrettyTime(locale));
+        return cachedPrettyTime.format(time);
     }
 
 }

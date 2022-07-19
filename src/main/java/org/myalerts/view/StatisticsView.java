@@ -11,6 +11,10 @@ import org.myalerts.provider.StatisticsProvider;
 
 import java.util.List;
 
+/**
+ * @author Mihai Surdeanu
+ * @since 1.0.0
+ */
 @Slf4j
 @AnonymousAllowed
 @Route(value = StatisticsView.ROUTE, layout = BaseLayout.class)

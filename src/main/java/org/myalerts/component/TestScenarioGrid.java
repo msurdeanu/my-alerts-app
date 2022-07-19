@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -19,8 +18,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.RouteConfiguration;
-import com.vaadin.flow.router.RouteParameters;
 import de.f0rce.ace.AceEditor;
 import de.f0rce.ace.enums.AceMode;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +28,10 @@ import org.myalerts.domain.UserRole;
 import org.myalerts.domain.event.TestScenarioEventHandler;
 import org.myalerts.marker.RequiresUIThread;
 import org.myalerts.provider.TranslationProvider;
-import org.myalerts.view.TestScenarioDetailedView;
 import org.vaadin.klaudeta.PaginatedGrid;
 
-import java.util.Optional;
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 /**
  * @author Mihai Surdeanu
@@ -105,11 +102,9 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     @RequiresUIThread
     private Component renderName(final TestScenario testScenario) {
         if (!testScenario.isEditable()) {
-            final var nameAnchor = new Anchor(RouteConfiguration.forApplicationScope()
-                .getUrl(TestScenarioDetailedView.class, new RouteParameters(TestScenarioDetailedView.ID_PARAM, String.valueOf(testScenario.getId()))),
-                StringUtils.abbreviate(testScenario.getName(), 64));
-            nameAnchor.addClassName(getClassName(testScenario));
-            return nameAnchor;
+            final var name = new Label(abbreviate(testScenario.getName(), 64));
+            name.addClassName(getClassName(testScenario));
+            return name;
         }
 
         final var textField = new TextField();
@@ -128,8 +123,8 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     @RequiresUIThread
     private Component renderLastRun(final TestScenario testScenario) {
-        final var lastRunButton = new Button(Optional.ofNullable(testScenario.getLastRunTime())
-            .map(translationProvider::prettyTimeFormat)
+        final var lastRunButton = new Button(ofNullable(testScenario.getLastRunTime())
+            .map(lastRun -> getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, lastRun))
             .orElseGet(() -> getTranslation("test-scenario.main-grid.not-available")));
         lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(() -> testScenarioEventHandler.getLastResults(testScenario)).open());
         lastRunButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
