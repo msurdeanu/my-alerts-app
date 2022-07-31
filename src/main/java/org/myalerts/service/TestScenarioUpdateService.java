@@ -20,9 +20,7 @@ public class TestScenarioUpdateService implements EventListener<TestUpdateEvent>
 
     @Override
     public void onEventReceived(final TestUpdateEvent event) {
-        final var testScenario = event.getTestScenario();
-        testScenarioRepository.update(testScenario.getId(), testScenario.isEnabled(), testScenario.getName(), testScenario.getCron(),
-            testScenario.getDefinition().getScript());
+        testScenarioRepository.save(event.getTestScenario());
     }
 
     @Override

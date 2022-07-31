@@ -64,21 +64,22 @@ CREATE TABLE results (
     created DATETIME NOT NULL
 );
 
-CREATE VIEW scenario_results
-AS
-SELECT
-    s.*,
-    t.last_run_time,
-    COALESCE(t.failed, FALSE) AS failed
-FROM scenarios s
-LEFT JOIN (
-    SELECT
-        scenario_id,
-        cause IS NOT NULL AS failed,
-        MAX(created) AS last_run_time
-    FROM results
-    GROUP BY scenario_id
-) t ON s.id = t.scenario_id;
+CREATE TABLE tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+);
+
+INSERT INTO tags ("name")
+VALUES ('tag1');
+
+CREATE TABLE scenarios_tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    scenario_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL
+);
+
+INSERT INTO scenarios_tags ("scenario_id", "tag_id")
+VALUES (1, 1);
 
 CREATE TABLE settings (
     "key" TEXT PRIMARY KEY NOT NULL,

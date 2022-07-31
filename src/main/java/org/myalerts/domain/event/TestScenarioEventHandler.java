@@ -19,6 +19,8 @@ public interface TestScenarioEventHandler {
 
     void onNameChanged(final TestScenario testScenario, final String newName);
 
+    void onTagsChanged(final TestScenario testScenario, final String newTagsSeparatedByComma);
+
     void onDefinitionChanged(final TestScenario testScenario, final String newDefinition);
 
     void onDelete(final TestScenario testScenario);

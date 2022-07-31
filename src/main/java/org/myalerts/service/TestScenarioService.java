@@ -167,8 +167,8 @@ public class TestScenarioService implements StatisticsProvider {
                 scheduleTestScenarioService.unschedule(testScenario);
             }
 
-            testScenario.markAsDeleted();
             ALL_TESTS.remove(testScenario.getId());
+            testScenario.markAsDeleted();
         } finally {
             lock.unlock();
         }

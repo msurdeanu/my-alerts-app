@@ -101,24 +101,45 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     @RequiresUIThread
     private Component renderName(final TestScenario testScenario) {
+        final var layout = new HorizontalLayout();
         if (!testScenario.isEditable()) {
+            testScenario.getTags().stream().map(tag -> {
+                final var span = new Span(tag.getName());
+                span.getElement().getThemeList().add("badge");
+                return span;
+            }).forEach(layout::add);
+
             final var name = new Label(abbreviate(testScenario.getName(), 64));
             name.addClassName(getClassName(testScenario));
-            return name;
+            layout.add(name);
+            return layout;
         }
 
-        final var textField = new TextField();
-        textField.addClassName("editable-field");
-        testScenarioBinder.forField(textField)
+        final var tagsTextField = new TextField();
+        layout.add(tagsTextField);
+        tagsTextField.addClassName("editable-field");
+        testScenarioBinder.forField(tagsTextField)
+            .withValidator(name -> true, StringUtils.EMPTY)
+            .bind(TestScenario::getTagsSeparatedByComma, (Setter<TestScenario, String>) testScenarioEventHandler::onTagsChanged);
+        testScenarioBinder.readBean(testScenario);
+        setSuffixForField(tagsTextField);
+
+        tagsTextField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
+        tagsTextField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
+
+        final var nameTextField = new TextField();
+        layout.add(nameTextField);
+        nameTextField.addClassName("editable-field");
+        testScenarioBinder.forField(nameTextField)
             .withValidator(name -> true, StringUtils.EMPTY)
             .bind(TestScenario::getName, (Setter<TestScenario, String>) testScenarioEventHandler::onNameChanged);
         testScenarioBinder.readBean(testScenario);
-        setSuffixForField(textField);
+        setSuffixForField(nameTextField);
 
-        textField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        textField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
+        nameTextField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
+        nameTextField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
 
-        return textField;
+        return layout;
     }
 
     @RequiresUIThread

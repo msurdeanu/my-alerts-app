@@ -105,6 +105,11 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     }
 
     @Override
+    public void onTagsChanged(TestScenario testScenario, String newTagsSeparatedByComma) {
+        // TODO
+    }
+
+    @Override
     public void onDefinitionChanged(final TestScenario testScenario, final String newDefinition) {
         testScenarioService.changeDefinition(testScenario, newDefinition);
         Notification.show("Test scenario definition changed successfully.");
