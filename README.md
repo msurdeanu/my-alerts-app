@@ -14,6 +14,7 @@ Since alert definition is in pure Groovy, the power of the tool is huge and offe
 * Use [Groovy](https://groovy-lang.org/) as additional language for defining alerts
 * Spring Boot 2.6.x as dependency injection framework
 * [Vaadin 23](https://vaadin.com/) as UI framework
+* [PF4J 3.7](https://pf4j.org/) as plugin framework
 * [SQLite](https://www.sqlite.org/) as relational database for persisting data like test scenarios and their results.
 
 ## Features
