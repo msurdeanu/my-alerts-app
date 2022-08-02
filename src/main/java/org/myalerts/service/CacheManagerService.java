@@ -4,15 +4,17 @@ import com.github.benmanes.caffeine.cache.stats.CacheStats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.myalerts.domain.StatisticsGroup;
-import org.myalerts.domain.StatisticsItem;
-import org.myalerts.provider.StatisticsProvider;
+import org.myalerts.api.domain.StatisticsGroup;
+import org.myalerts.api.domain.StatisticsItem;
+import org.myalerts.api.provider.StatisticsProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 /**
  * @author Mihai Surdeanu
@@ -47,7 +49,7 @@ public class CacheManagerService implements StatisticsProvider {
     }
 
     private String cacheStatsToString(final CacheStats cacheStats) {
-        return String.format("(%.4f, %.4f, %d)", cacheStats.hitRate(), cacheStats.missRate(), cacheStats.totalLoadTime());
+        return format("(%.4f, %.4f, %d)", cacheStats.hitRate(), cacheStats.missRate(), cacheStats.totalLoadTime());
     }
 
 }

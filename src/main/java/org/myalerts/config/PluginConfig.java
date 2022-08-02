@@ -1,7 +1,6 @@
 package org.myalerts.config;
 
-import org.pf4j.DefaultPluginManager;
-import org.pf4j.PluginManager;
+import org.pf4j.spring.SpringPluginManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,11 +12,8 @@ import org.springframework.context.annotation.Configuration;
 public class PluginConfig {
 
     @Bean
-    public PluginManager pluginManager() {
-        final var pluginManager = new DefaultPluginManager();
-        pluginManager.loadPlugins();
-        pluginManager.startPlugins();
-        return pluginManager;
+    public SpringPluginManager pluginManager() {
+        return new SpringPluginManager();
     }
 
 }

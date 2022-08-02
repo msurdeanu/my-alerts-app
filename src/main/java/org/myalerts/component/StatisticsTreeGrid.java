@@ -5,10 +5,11 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
-import org.myalerts.domain.StatisticsGroup;
-import org.myalerts.domain.StatisticsItem;
-import org.myalerts.provider.StatisticsProvider;
+import org.myalerts.api.domain.StatisticsGroup;
+import org.myalerts.api.domain.StatisticsItem;
+import org.myalerts.api.provider.StatisticsProvider;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,7 +60,7 @@ public final class StatisticsTreeGrid extends Composite<VerticalLayout> {
     private Map<StatisticsItem, List<StatisticsItem>> buildAllStatistics(final List<StatisticsProvider> statisticsProviders) {
         return statisticsProviders.stream()
             .map(StatisticsProvider::getStatisticsGroup)
-            .collect(Collectors.toMap(StatisticsGroup::getRoot, StatisticsGroup::getLeafs, (it1, it2) -> it1));
+            .collect(Collectors.toMap(StatisticsGroup::getRoot, StatisticsGroup::getLeafs, (it1, it2) -> it1, LinkedHashMap::new));
     }
 
 }

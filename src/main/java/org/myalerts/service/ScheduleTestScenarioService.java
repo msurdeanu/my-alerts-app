@@ -2,7 +2,6 @@ package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.marker.ThreadSafe;
 import org.myalerts.domain.Setting;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.provider.SettingProvider;
@@ -40,7 +39,6 @@ public class ScheduleTestScenarioService {
 
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-    @ThreadSafe
     public void schedule(final TestScenario testScenario) {
         final var id = testScenario.getId();
         final var cron = testScenario.getCron();
@@ -58,7 +56,6 @@ public class ScheduleTestScenarioService {
         log.info("New test scenario '{}' added to scheduling pool. Running frequency is '{}'", id, cron);
     }
 
-    @ThreadSafe
     public void unschedule(final TestScenario testScenario) {
         final var id = testScenario.getId();
 
@@ -77,12 +74,10 @@ public class ScheduleTestScenarioService {
         }
     }
 
-    @ThreadSafe
     public void scheduleInAsyncMode(final TestScenario testScenario) {
         threadPoolTaskScheduler.schedule(testScenario, Instant.now());
     }
 
-    @ThreadSafe
     public void scheduleInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
         threadPoolTaskScheduler.schedule(testScenario, Instant.now())
             .get(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);

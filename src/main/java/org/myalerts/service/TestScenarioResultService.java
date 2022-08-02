@@ -2,9 +2,9 @@ package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.domain.event.EventListener;
-import org.myalerts.domain.event.TestResultEvent;
+import org.myalerts.api.event.EventListener;
 import org.myalerts.domain.TestScenarioResult;
+import org.myalerts.domain.event.TestResultEvent;
 import org.myalerts.repository.TestScenarioResultRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

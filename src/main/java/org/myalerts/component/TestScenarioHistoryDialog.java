@@ -7,8 +7,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.myalerts.domain.TestScenarioResult;
-import org.myalerts.marker.RequiresUIThread;
-import org.myalerts.provider.TranslationProvider;
+import org.myalerts.provider.CustomI18NProvider;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -44,24 +43,20 @@ public final class TestScenarioHistoryDialog extends ResponsiveDialog {
         return grid;
     }
 
-    @RequiresUIThread
     private Component renderRunTime(final TestScenarioResult testScenarioResult) {
-        return new Label(getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
+        return new Label(getTranslation(CustomI18NProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
     }
 
-    @RequiresUIThread
     private Component renderDuration(final TestScenarioResult testScenarioResult) {
         return new Label(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDuration()));
     }
 
-    @RequiresUIThread
     private Component renderResult(final TestScenarioResult testScenarioResult) {
         return ofNullable(testScenarioResult.getCause())
             .map(this::mapToTextArea)
             .orElseGet(() -> new Label(getTranslation("test-scenario.history.no-failure-detected")));
     }
 
-    @RequiresUIThread
     private Component mapToTextArea(final String value) {
         final var resultTextArea = new TextArea();
         resultTextArea.setReadOnly(true);

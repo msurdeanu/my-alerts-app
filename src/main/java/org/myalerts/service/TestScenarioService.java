@@ -5,13 +5,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.myalerts.ApplicationContext;
-import org.myalerts.domain.StatisticsGroup;
-import org.myalerts.domain.StatisticsItem;
+import org.myalerts.api.domain.StatisticsGroup;
+import org.myalerts.api.domain.StatisticsItem;
+import org.myalerts.api.provider.StatisticsProvider;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioType;
-import org.myalerts.marker.ThreadSafe;
-import org.myalerts.provider.StatisticsProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -89,7 +88,6 @@ public class TestScenarioService implements StatisticsProvider {
             .intValue();
     }
 
-    @ThreadSafe
     public void createAndSchedule(@NonNull TestScenario testScenario) {
         lock.lock();
         try {
@@ -107,7 +105,6 @@ public class TestScenarioService implements StatisticsProvider {
         }
     }
 
-    @ThreadSafe
     public void changeActivation(@NonNull final TestScenario testScenario) {
         lock.lock();
         try {
@@ -121,7 +118,6 @@ public class TestScenarioService implements StatisticsProvider {
         testScenario.toggleOnEnabling();
     }
 
-    @ThreadSafe
     public void changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
         lock.lock();
         try {
@@ -131,7 +127,6 @@ public class TestScenarioService implements StatisticsProvider {
         }
     }
 
-    @ThreadSafe
     public void changeCronExpression(final TestScenario testScenario, final String newCronExpression) {
         lock.lock();
         try {
@@ -149,7 +144,6 @@ public class TestScenarioService implements StatisticsProvider {
         }
     }
 
-    @ThreadSafe
     public void changeName(final TestScenario testScenario, final String newName) {
         lock.lock();
         try {
@@ -159,7 +153,6 @@ public class TestScenarioService implements StatisticsProvider {
         }
     }
 
-    @ThreadSafe
     public void delete(final TestScenario testScenario) {
         lock.lock();
         try {

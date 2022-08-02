@@ -2,8 +2,7 @@ package org.myalerts;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.domain.event.Event;
-import org.myalerts.marker.ThreadSafe;
+import org.myalerts.api.event.Event;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ public class EventBroadcaster {
 
     private final ThreadPoolExecutor threadPoolExecutor;
 
-    @ThreadSafe
     public synchronized void register(final Consumer<Event> consumer,
                                       final Class<? extends Event> acceptedEvent) {
         ofNullable(consumersMap.get(acceptedEvent)).ifPresentOrElse(
@@ -41,7 +39,6 @@ public class EventBroadcaster {
         }
     }
 
-    @ThreadSafe
     public synchronized void broadcast(final Event event) {
         ofNullable(consumersMap.get(event.getClass()))
             .orElse(List.of())

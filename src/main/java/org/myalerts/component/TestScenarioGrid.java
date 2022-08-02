@@ -26,8 +26,7 @@ import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.domain.UserRole;
 import org.myalerts.domain.event.TestScenarioEventHandler;
-import org.myalerts.marker.RequiresUIThread;
-import org.myalerts.provider.TranslationProvider;
+import org.myalerts.provider.CustomI18NProvider;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import static java.util.Optional.ofNullable;
@@ -45,8 +44,6 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
     private final Binder<TestScenario> testScenarioBinder = new Binder<>(TestScenario.class);
 
     private final TestScenarioEventHandler testScenarioEventHandler;
-
-    private final TranslationProvider translationProvider;
 
     private final boolean isLoggedAsAdmin = UserRole.ADMIN.validate();
 
@@ -92,14 +89,12 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    @RequiresUIThread
     private Component renderIsEnabled(final TestScenario testScenario) {
         final var toggleButton = new Checkbox(testScenario.isEnabled());
         toggleButton.addValueChangeListener(event -> testScenarioEventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
 
-    @RequiresUIThread
     private Component renderName(final TestScenario testScenario) {
         final var layout = new HorizontalLayout();
         if (!testScenario.isEditable()) {
@@ -142,17 +137,15 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    @RequiresUIThread
     private Component renderLastRun(final TestScenario testScenario) {
         final var lastRunButton = new Button(ofNullable(testScenario.getLastRunTime())
-            .map(lastRun -> getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, lastRun))
+            .map(lastRun -> getTranslation(CustomI18NProvider.PRETTY_TIME_FORMAT, lastRun))
             .orElseGet(() -> getTranslation("test-scenario.main-grid.not-available")));
         lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(() -> testScenarioEventHandler.getLastResults(testScenario)).open());
         lastRunButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         return lastRunButton;
     }
 
-    @RequiresUIThread
     private Component renderCronExpression(final TestScenario testScenario) {
         if (!testScenario.isEditable()) {
             return new Label(testScenario.getCron());
@@ -172,7 +165,6 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         return textField;
     }
 
-    @RequiresUIThread
     private Component renderActions(final TestScenario testScenario) {
         final var layout = new HorizontalLayout();
 

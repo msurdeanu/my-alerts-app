@@ -3,14 +3,18 @@ package org.myalerts.provider;
 import com.vaadin.flow.i18n.I18NProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.domain.Setting;
+import org.myalerts.api.provider.TranslationsProvider;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static java.lang.String.format;
@@ -24,8 +28,9 @@ import static java.util.ResourceBundle.getBundle;
  */
 @Slf4j
 @Component
+@DependsOn("pluginManager")
 @RequiredArgsConstructor
-public class TranslationProvider implements I18NProvider {
+public class CustomI18NProvider implements I18NProvider {
 
     public static final String PRETTY_TIME_FORMAT = "pretty.time.format";
 
@@ -33,7 +38,7 @@ public class TranslationProvider implements I18NProvider {
 
     private static final Map<String, ResourceBundle> LANGUAGE_RESOURCE_MAP = Map.of("en", DEFAULT_RESOURCE_BUNDLE);
 
-    private final SettingProvider settingProvider;
+    private final ApplicationContext applicationContext;
 
     private PrettyTime cachedPrettyTime;
 
@@ -52,14 +57,29 @@ public class TranslationProvider implements I18NProvider {
             return prettyTimeFormat((Instant) args[0], locale);
         }
 
-        final var language = settingProvider.getOrDefault(Setting.Key.LANGUAGE, "en");
-        final var resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault(language, DEFAULT_RESOURCE_BUNDLE);
+        // Try to find key in local resource bundle
+        final var resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault("en", DEFAULT_RESOURCE_BUNDLE);
         if (resourceBundle.containsKey(key)) {
             return format(resourceBundle.getString(key), args);
         }
 
-        log.warn("Missing translation for key '{}' and language '{}'.", key, language);
-        return key;
+        // Try to find key in plugin providers, otherwise return key as it is
+        return findTranslationInProviders("en", key)
+            .map(translation -> format(translation, args))
+            .orElseGet(() -> {
+                log.warn("Missing translation for key '{}' and language '{}'.", key, "en");
+                return key;
+            });
+    }
+
+    private Optional<String> findTranslationInProviders(final String language, final String key) {
+        return applicationContext.getBeansOfType(TranslationsProvider.class)
+            .values()
+            .stream()
+            .map(provider -> provider.getTranslations(language))
+            .map(translations -> translations.get(key))
+            .filter(Objects::nonNull)
+            .findFirst();
     }
 
     private String prettyTimeFormat(final Instant time, final Locale locale) {

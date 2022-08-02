@@ -3,6 +3,7 @@ package org.myalerts.domain.event;
 import lombok.Builder;
 import lombok.Getter;
 
+import org.myalerts.api.event.Event;
 import org.myalerts.domain.TestScenario;
 
 /**

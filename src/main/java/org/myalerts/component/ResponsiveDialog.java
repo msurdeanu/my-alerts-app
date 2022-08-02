@@ -2,7 +2,6 @@ package org.myalerts.component;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
-import org.myalerts.marker.RequiresUIThread;
 
 /**
  * @author Mihai Surdeanu
@@ -22,13 +21,11 @@ public abstract class ResponsiveDialog extends Dialog {
         makeDialogResponsive();
     }
 
-    @RequiresUIThread
     private void makeDialogResizableAndDraggable() {
         setDraggable(true);
         setResizable(true);
     }
 
-    @RequiresUIThread
     private void makeDialogResponsive() {
         UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> {
             setWidth(Math.max(MAX_WIDTH, details.getScreenWidth() / 2) + PIXELS);

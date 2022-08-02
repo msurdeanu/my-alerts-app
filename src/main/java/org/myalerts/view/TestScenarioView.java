@@ -13,14 +13,13 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.component.TestScenarioGrid;
-import org.myalerts.domain.event.TestScenarioEventHandler;
-import org.myalerts.layout.BaseLayout;
-import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.domain.TestScenarioType;
-import org.myalerts.provider.TranslationProvider;
+import org.myalerts.domain.event.TestScenarioEventHandler;
+import org.myalerts.layout.BaseLayout;
+import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.service.TestScenarioResultService;
 import org.myalerts.service.TestScenarioService;
 
@@ -47,18 +46,17 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     private final TestScenarioResultService testScenarioResultService;
 
     public TestScenarioView(final TestScenarioService testScenarioService,
-                            final TestScenarioResultService testScenarioResultService,
-                            final TranslationProvider translationProvider) {
+                            final TestScenarioResultService testScenarioResultService) {
         super();
         this.testScenarioService = testScenarioService;
         this.testScenarioResultService = testScenarioResultService;
 
         final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
-                .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
-                .withConfigurableFilter();
+            .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
+            .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
 
-        testScenarioGrid = new TestScenarioGrid(this, translationProvider);
+        testScenarioGrid = new TestScenarioGrid(this);
         testScenarioGrid.setDataProvider(configurableFilterDataProvider);
 
         add(createHeader(getTranslation("test-scenario.page.subtitle"), createFilterByName(), createFilterByType()));
