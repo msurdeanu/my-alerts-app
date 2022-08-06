@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.myalerts.ApplicationContext;
 import org.myalerts.EventBroadcaster;
-import org.myalerts.api.domain.TestScenarioRun;
 
 /**
  * @author Mihai Surdeanu

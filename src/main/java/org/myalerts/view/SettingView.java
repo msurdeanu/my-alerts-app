@@ -19,8 +19,8 @@ import javax.annotation.security.RolesAllowed;
  * @since 1.0.0
  */
 @RolesAllowed("ROLE_ADMIN")
-@Route(value = SettingsView.ROUTE, layout = BaseLayout.class)
-public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
+@Route(value = SettingView.ROUTE, layout = BaseLayout.class)
+public class SettingView extends ResponsiveLayout implements HasDynamicTitle {
 
     public static final String ROUTE = "settings";
 
@@ -28,7 +28,7 @@ public class SettingsView extends ResponsiveLayout implements HasDynamicTitle {
 
     private final SettingProvider settingProvider;
 
-    public SettingsView(final SettingProvider settingProvider) {
+    public SettingView(final SettingProvider settingProvider) {
         this.settingProvider = settingProvider;
 
         add(createHeader(getTranslation("settings.page.subtitle")), createContent(createFormLayout()), createFooter());

@@ -26,7 +26,7 @@ import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.domain.UserRole;
 import org.myalerts.domain.TestScenarioEventHandler;
-import org.myalerts.provider.CustomI18NProvider;
+import org.myalerts.provider.TranslationProvider;
 import org.vaadin.klaudeta.PaginatedGrid;
 
 import static java.util.Optional.ofNullable;
@@ -139,7 +139,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
     private Component renderLastRun(final TestScenario testScenario) {
         final var lastRunButton = new Button(ofNullable(testScenario.getLastRunTime())
-            .map(lastRun -> getTranslation(CustomI18NProvider.PRETTY_TIME_FORMAT, lastRun))
+            .map(lastRun -> getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, lastRun))
             .orElseGet(() -> getTranslation("test-scenario.main-grid.not-available")));
         lastRunButton.addClickListener(event -> new TestScenarioHistoryDialog(() -> testScenarioEventHandler.getLastResults(testScenario)).open());
         lastRunButton.addThemeVariants(ButtonVariant.LUMO_SMALL);

@@ -5,9 +5,9 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
-import org.myalerts.api.domain.StatisticsGroup;
-import org.myalerts.api.domain.StatisticsItem;
-import org.myalerts.api.provider.StatisticsProvider;
+import org.myalerts.domain.StatisticsGroup;
+import org.myalerts.domain.StatisticsItem;
+import org.myalerts.provider.StatisticsProvider;
 
 import java.util.LinkedHashMap;
 import java.util.List;

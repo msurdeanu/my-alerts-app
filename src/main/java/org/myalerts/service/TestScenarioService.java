@@ -5,12 +5,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.myalerts.ApplicationContext;
-import org.myalerts.api.domain.StatisticsGroup;
-import org.myalerts.api.domain.StatisticsItem;
-import org.myalerts.api.provider.StatisticsProvider;
+import org.myalerts.domain.StatisticsGroup;
+import org.myalerts.domain.StatisticsItem;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioType;
+import org.myalerts.provider.StatisticsProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,8 +22,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
 
 import static java.util.Optional.of;
@@ -208,17 +206,9 @@ public class TestScenarioService implements StatisticsProvider {
     }
 
     private Predicate<TestScenario> getPredicateByNameCriteria(final String byNameCriteria) {
-        if (StringUtils.isNotEmpty(byNameCriteria)) {
-            try {
-                return testScenario -> Pattern.compile(byNameCriteria, Pattern.CASE_INSENSITIVE).matcher(testScenario.getName()).find();
-            } catch (PatternSyntaxException notUsed) {
-                // In case of a syntax exception, no filtering on regex will be applied.
-                // In this case, the tool will do a filtering based on a simple string contains.
-                return testScenario -> testScenario.getName().contains(byNameCriteria);
-            }
-        }
-
-        return ALWAYS_TRUE_PREDICATE;
+        return StringUtils.isNotEmpty(byNameCriteria)
+            ? testScenario -> StringUtils.equalsIgnoreCase(testScenario.getName(), byNameCriteria)
+            : ALWAYS_TRUE_PREDICATE;
     }
 
 }

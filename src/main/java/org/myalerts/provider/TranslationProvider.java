@@ -3,8 +3,9 @@ package org.myalerts.provider;
 import com.vaadin.flow.i18n.I18NProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.api.provider.TranslationsProvider;
+import org.myalerts.domain.SupportedLanguage;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.pf4j.Extension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static java.lang.String.format;
@@ -30,13 +30,9 @@ import static java.util.ResourceBundle.getBundle;
 @Component
 @DependsOn("pluginManager")
 @RequiredArgsConstructor
-public class CustomI18NProvider implements I18NProvider {
+public class TranslationProvider implements I18NProvider {
 
     public static final String PRETTY_TIME_FORMAT = "pretty.time.format";
-
-    private static final ResourceBundle DEFAULT_RESOURCE_BUNDLE = getBundle("translation", ENGLISH);
-
-    private static final Map<String, ResourceBundle> LANGUAGE_RESOURCE_MAP = Map.of("en", DEFAULT_RESOURCE_BUNDLE);
 
     private final ApplicationContext applicationContext;
 
@@ -49,6 +45,7 @@ public class CustomI18NProvider implements I18NProvider {
 
     @Override
     public String getTranslation(final String key, final Locale locale, final Object... args) {
+        // TODO: Use caching mechanism to speed-up translation lookup
         if (key == null) {
             return null;
         }
@@ -57,29 +54,16 @@ public class CustomI18NProvider implements I18NProvider {
             return prettyTimeFormat((Instant) args[0], locale);
         }
 
-        // Try to find key in local resource bundle
-        final var resourceBundle = LANGUAGE_RESOURCE_MAP.getOrDefault("en", DEFAULT_RESOURCE_BUNDLE);
-        if (resourceBundle.containsKey(key)) {
-            return format(resourceBundle.getString(key), args);
-        }
-
-        // Try to find key in plugin providers, otherwise return key as it is
-        return findTranslationInProviders("en", key)
-            .map(translation -> format(translation, args))
-            .orElseGet(() -> {
-                log.warn("Missing translation for key '{}' and language '{}'.", key, "en");
-                return key;
-            });
-    }
-
-    private Optional<String> findTranslationInProviders(final String language, final String key) {
-        return applicationContext.getBeansOfType(TranslationsProvider.class)
-            .values()
-            .stream()
-            .map(provider -> provider.getTranslations(language))
-            .map(translations -> translations.get(key))
+        return applicationContext.getBeansOfType(TranslationsProvider.class).values().stream()
+            .map(TranslationsProvider::getResourceBundles)
             .filter(Objects::nonNull)
-            .findFirst();
+            .map(resourcesBundles -> resourcesBundles.get(SupportedLanguage.ENGLISH))
+            .filter(Objects::nonNull)
+            .filter(resourcesBundle -> resourcesBundle.containsKey(key))
+            .map(resourcesBundle -> resourcesBundle.getString(key))
+            .map(value -> format(value, args))
+            .findFirst()
+            .orElse(key);
     }
 
     private String prettyTimeFormat(final Instant time, final Locale locale) {
@@ -87,6 +71,16 @@ public class CustomI18NProvider implements I18NProvider {
             .filter(prettyTime -> prettyTime.getLocale().equals(locale))
             .orElseGet(() -> new PrettyTime(locale));
         return cachedPrettyTime.format(time);
+    }
+
+    @Extension(ordinal = -1)
+    public static class DefaultTranslationsProvider implements TranslationsProvider {
+
+        @Override
+        public Map<SupportedLanguage, ResourceBundle> getResourceBundles() {
+            return Map.of(SupportedLanguage.ENGLISH, getBundle("translation", ENGLISH));
+        }
+
     }
 
 }

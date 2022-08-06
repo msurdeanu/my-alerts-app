@@ -2,7 +2,7 @@ package org.myalerts;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.api.domain.event.Event;
+import org.myalerts.domain.event.Event;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

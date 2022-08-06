@@ -1,12 +1,13 @@
 package org.myalerts.domain;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * @author Mihai Surdeanu
@@ -36,7 +37,7 @@ public enum UserRole {
     }
 
     private boolean hasRole(final String role) {
-        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+        return ofNullable(SecurityContextHolder.getContext().getAuthentication())
             .map(auth -> auth.getAuthorities().stream().anyMatch(granted -> granted.getAuthority().equals(role)))
             .orElse(false);
     }

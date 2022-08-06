@@ -9,9 +9,9 @@ import com.vaadin.flow.data.binder.Binder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.myalerts.api.mapper.Mapper1;
 import org.myalerts.domain.Setting;
 import org.myalerts.domain.SettingType;
+import org.myalerts.mapper.Mapper1;
 import org.myalerts.provider.SettingProvider;
 
 import java.util.EnumMap;

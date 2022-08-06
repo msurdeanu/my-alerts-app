@@ -6,10 +6,9 @@ import lombok.Setter;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.SortNatural;
 import org.myalerts.ApplicationContext;
-import org.myalerts.api.domain.TestScenarioRun;
-import org.myalerts.api.domain.event.TestScenarioRunEvent;
 import org.myalerts.converter.TestScenarioDefinitionToStringConverter;
 import org.myalerts.domain.event.TestDeleteEvent;
+import org.myalerts.domain.event.TestScenarioRunEvent;
 import org.myalerts.domain.event.TestUpdateEvent;
 import org.myalerts.exception.AlertingException;
 

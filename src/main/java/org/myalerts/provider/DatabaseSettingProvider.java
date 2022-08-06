@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jooq.lambda.Unchecked;
-import org.myalerts.api.mapper.Mapper1;
 import org.myalerts.domain.Setting;
 import org.myalerts.domain.SettingType;
+import org.myalerts.mapper.Mapper1;
 import org.myalerts.repository.SettingRepository;
 
 import java.lang.reflect.InvocationHandler;

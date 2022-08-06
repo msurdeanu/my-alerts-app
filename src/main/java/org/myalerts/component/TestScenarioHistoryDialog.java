@@ -7,7 +7,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.myalerts.domain.TestScenarioResult;
-import org.myalerts.provider.CustomI18NProvider;
+import org.myalerts.provider.TranslationProvider;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -44,7 +44,7 @@ public final class TestScenarioHistoryDialog extends ResponsiveDialog {
     }
 
     private Component renderRunTime(final TestScenarioResult testScenarioResult) {
-        return new Label(getTranslation(CustomI18NProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
+        return new Label(getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
     }
 
     private Component renderDuration(final TestScenarioResult testScenarioResult) {
