@@ -1,9 +1,9 @@
 package org.myalerts.domain;
 
-import java.util.Arrays;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static java.util.Arrays.stream;
 
 /**
  * @author Mihai Surdeanu
@@ -24,7 +24,7 @@ public enum SettingType {
     private final String value;
 
     public static SettingType of(final String value) {
-        return Arrays.stream(values())
+        return stream(values())
             .filter(settingType -> settingType.getValue().equals(value))
             .findFirst()
             .orElse(null);

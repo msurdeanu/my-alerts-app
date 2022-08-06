@@ -25,7 +25,7 @@
 
         <vaadin.version>23.1.4</vaadin.version>
         <grid-pagination.version>2.0.10</grid-pagination.version>
-        <ace.version>3.3.2</ace.version>
+        <ace.version>3.3.3</ace.version>
         <lombok.version>1.18.22</lombok.version>
         <jool.version>0.9.14</jool.version>
         <prettytime.version>5.0.2.Final</prettytime.version>

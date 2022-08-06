@@ -1,7 +1,11 @@
 package org.myalerts.domain;
 
-import java.time.Instant;
-import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.myalerts.api.domain.TestScenarioRun;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,12 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Persistable;
+import java.time.Instant;
+import java.util.Optional;
 
 /**
  * @author Mihai Surdeanu
@@ -52,6 +52,15 @@ public class TestScenarioResult implements Persistable<Integer> {
     @Override
     public boolean isNew() {
         return true;
+    }
+
+    public static TestScenarioResult from(final TestScenarioRun testScenarioRun) {
+        return TestScenarioResult.builder()
+            .scenarioId(testScenarioRun.getScenarioId())
+            .cause(testScenarioRun.getCause())
+            .created(testScenarioRun.getCreated())
+            .duration(testScenarioRun.getDuration())
+            .build();
     }
 
     public static class TestScenarioResultBuilder {

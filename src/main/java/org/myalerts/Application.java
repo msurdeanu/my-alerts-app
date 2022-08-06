@@ -4,7 +4,7 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
 import lombok.RequiredArgsConstructor;
-import org.myalerts.api.event.Event;
+import org.myalerts.api.domain.event.Event;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -33,11 +33,11 @@ public class Application extends SpringBootServletInitializer implements AppShel
     @Order(1)
     public void registerAllListeners(final ApplicationReadyEvent event) {
         event.getApplicationContext()
-            .getBeansOfType(org.myalerts.api.event.EventListener.class)
+            .getBeansOfType(org.myalerts.api.domain.event.EventListener.class)
             .forEach(this::registerListener);
     }
 
-    private void registerListener(final String key, final org.myalerts.api.event.EventListener<Event> value) {
+    private void registerListener(final String key, final org.myalerts.api.domain.event.EventListener<Event> value) {
         applicationContext.getEventBroadcaster().register(value::onEventReceived, value.getEventType());
     }
 

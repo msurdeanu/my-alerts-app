@@ -5,8 +5,10 @@ You can easily create alerts, schedule them using cron-jobs and trigger notifica
 
 Uses Java as programming language and Vaadin as UI framework.
 
-This tool is perfect for small teams, mainly composed by developers. Any developer with basic Javascript knowledge can create and maintain alerts created with MyAlerts.
+This tool is perfect for small teams, mainly composed by developers. Any developer with basic Groovy knowledge can create and maintain alerts created with MyAlerts.
 Since alert definition is in pure Groovy, the power of the tool is huge and offers the freedom to do almost everything you want.
+
+[Groovy](https://groovy-lang.org/) is a programming language quite similar with Java.
 
 ## Technology stack
 
@@ -14,7 +16,7 @@ Since alert definition is in pure Groovy, the power of the tool is huge and offe
 * Use [Groovy](https://groovy-lang.org/) as additional language for defining alerts
 * Spring Boot 2.6.x as dependency injection framework
 * [Vaadin 23](https://vaadin.com/) as UI framework
-* [PF4J 3.7](https://pf4j.org/) as plugin framework
+* [PF4J 3.*](https://pf4j.org/) as plugin framework
 * [SQLite](https://www.sqlite.org/) as relational database for persisting data like test scenarios and their results.
 
 ## Features
@@ -26,6 +28,7 @@ Since alert definition is in pure Groovy, the power of the tool is huge and offe
 * Ability to **encrypt / decrypt sensitive stuff** in alerts using symmetric algorithms: AES.
 * **Multiple channels** for sending alerts in case of an issue.
 * **Settings page**. Provides ability to change application behavior at runtime without restarting application.
+* **Plugins page**. Nice webpage from where you can enable / disable different plugins.
 * **Statistics page**. Simple page with multiple statistics about current running instance.
 
 ## Running the application

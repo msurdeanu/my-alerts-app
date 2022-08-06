@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.myalerts.ApplicationContext;
 import org.myalerts.EventBroadcaster;
+import org.myalerts.api.domain.TestScenarioRun;
 
 /**
  * @author Mihai Surdeanu
@@ -17,7 +18,7 @@ public final class ExecutionContext {
     @Getter
     private final long millisSinceLatestRun;
 
-    private final TestScenarioResult.TestScenarioResultBuilder testScenarioResultBuilder;
+    private final TestScenarioRun.TestScenarioRunBuilder testScenarioRunBuilder;
 
     @Getter
     private boolean markedAsFailed;
@@ -28,12 +29,12 @@ public final class ExecutionContext {
 
     public void markAsFailed(final String message) {
         markedAsFailed = true;
-        testScenarioResultBuilder.cause(message);
+        testScenarioRunBuilder.cause(message);
     }
 
     public void markAsFailed(final Throwable throwable) {
         markedAsFailed = true;
-        testScenarioResultBuilder.cause(throwable);
+        testScenarioRunBuilder.cause(throwable);
     }
 
 }

@@ -1,4 +1,4 @@
-package org.myalerts.domain.event;
+package org.myalerts.domain;
 
 import java.util.Collection;
 

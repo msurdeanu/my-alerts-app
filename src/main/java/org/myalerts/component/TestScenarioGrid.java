@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.domain.UserRole;
-import org.myalerts.domain.event.TestScenarioEventHandler;
+import org.myalerts.domain.TestScenarioEventHandler;
 import org.myalerts.provider.CustomI18NProvider;
 import org.vaadin.klaudeta.PaginatedGrid;
 

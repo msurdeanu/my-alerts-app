@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jooq.lambda.Unchecked;
-import org.myalerts.mapper.Mapper1;
+import org.myalerts.api.mapper.Mapper1;
 import org.myalerts.domain.Setting;
 import org.myalerts.domain.SettingType;
 import org.myalerts.repository.SettingRepository;
@@ -44,13 +44,13 @@ public final class DatabaseSettingProvider implements InvocationHandler {
         this.defaultSettingProvider = defaultSettingProvider;
         this.settingRepository = settingRepository;
         this.availableSettings = settingRepository.findAllByOrderByPosition().stream()
-                .map(setting -> Pair.of(setting, transformTo(setting.getType(), setting.getValue())))
-                .filter(pair -> pair.getRight().isPresent())
-                .map(pair -> {
-                    pair.getLeft().setComputedValue(pair.getRight().get());
-                    return pair.getLeft();
-                })
-                .collect(Collectors.toList());
+            .map(setting -> Pair.of(setting, transformTo(setting.getType(), setting.getValue())))
+            .filter(pair -> pair.getRight().isPresent())
+            .map(pair -> {
+                pair.getLeft().setComputedValue(pair.getRight().get());
+                return pair.getLeft();
+            })
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -68,15 +68,15 @@ public final class DatabaseSettingProvider implements InvocationHandler {
 
     private static Mapper1<SettingType, String, Optional<Object>> createMapper() {
         return Mapper1.<SettingType, String, Optional<Object>>builder(new EnumMap<>(SettingType.class))
-                .map(SettingType.TEXT, Optional::of)
-                .map(SettingType.TEXT_H, Optional::of)
-                .map(SettingType.PASSWORD, Optional::of)
-                .map(SettingType.INTEGER, value -> of(Integer.parseInt(value)))
-                .map(SettingType.INTEGER_H, value -> of(Integer.parseInt(value)))
-                .map(SettingType.BOOLEAN, value -> of(Boolean.parseBoolean(value)))
-                .map(SettingType.BOOLEAN_H, value -> of(Boolean.parseBoolean(value)))
-                .unmapped(value -> empty())
-                .build();
+            .map(SettingType.TEXT, Optional::of)
+            .map(SettingType.TEXT_H, Optional::of)
+            .map(SettingType.PASSWORD, Optional::of)
+            .map(SettingType.INTEGER, value -> of(Integer.parseInt(value)))
+            .map(SettingType.INTEGER_H, value -> of(Integer.parseInt(value)))
+            .map(SettingType.BOOLEAN, value -> of(Boolean.parseBoolean(value)))
+            .map(SettingType.BOOLEAN_H, value -> of(Boolean.parseBoolean(value)))
+            .unmapped(value -> empty())
+            .build();
     }
 
     private Optional<Object> transformTo(final SettingType type, final String value) {
@@ -101,10 +101,10 @@ public final class DatabaseSettingProvider implements InvocationHandler {
         }
 
         return availableSettings.stream()
-                .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
-                .findFirst()
-                .map(Setting::getComputedValue)
-                .orElseGet(() -> Unchecked.supplier(() -> method.invoke(defaultSettingProvider, args)).get());
+            .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
+            .findFirst()
+            .map(Setting::getComputedValue)
+            .orElseGet(() -> Unchecked.supplier(() -> method.invoke(defaultSettingProvider, args)).get());
     }
 
     private Object setSetting(final Object[] args) {
@@ -115,10 +115,10 @@ public final class DatabaseSettingProvider implements InvocationHandler {
         lock.lock();
         try {
             availableSettings.stream()
-                    .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
-                    .filter(setting -> !setting.getComputedValue().equals(args[1]))
-                    .findFirst()
-                    .ifPresent(setting -> setSettingValue(setting, args[1]));
+                .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
+                .filter(setting -> !setting.getComputedValue().equals(args[1]))
+                .findFirst()
+                .ifPresent(setting -> setSettingValue(setting, args[1]));
         } finally {
             lock.unlock();
         }

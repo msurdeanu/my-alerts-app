@@ -6,9 +6,10 @@ import lombok.Setter;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.SortNatural;
 import org.myalerts.ApplicationContext;
+import org.myalerts.api.domain.TestScenarioRun;
+import org.myalerts.api.domain.event.TestScenarioRunEvent;
 import org.myalerts.converter.TestScenarioDefinitionToStringConverter;
 import org.myalerts.domain.event.TestDeleteEvent;
-import org.myalerts.domain.event.TestResultEvent;
 import org.myalerts.domain.event.TestUpdateEvent;
 import org.myalerts.exception.AlertingException;
 
@@ -162,11 +163,11 @@ public class TestScenario implements Runnable {
     @Override
     public void run() {
         final var nextLastRunTime = Instant.now();
-        final var testScenarioResultBuilder = TestScenarioResult.builder()
+        final var testScenarioRunBuilder = TestScenarioRun.builder()
             .scenarioId(id);
         final var executionContext = ExecutionContext.builder()
             .applicationContext(applicationContext)
-            .testScenarioResultBuilder(testScenarioResultBuilder)
+            .testScenarioRunBuilder(testScenarioRunBuilder)
             .millisSinceLatestRun(getMillisBetween(getLastRunTime(), nextLastRunTime))
             .build();
 
@@ -181,9 +182,8 @@ public class TestScenario implements Runnable {
             lastRunTime = nextLastRunTime;
 
             ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-                .broadcast(TestResultEvent.builder()
-                    .testScenario(this)
-                    .testScenarioResult(testScenarioResultBuilder
+                .broadcast(TestScenarioRunEvent.builder()
+                    .testScenarioRun(testScenarioRunBuilder
                         .duration(System.currentTimeMillis() - startTime)
                         .created(Instant.from(lastRunTime))
                         .build())

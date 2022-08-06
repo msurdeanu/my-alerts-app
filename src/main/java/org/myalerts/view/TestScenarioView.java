@@ -17,7 +17,7 @@ import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.domain.TestScenarioType;
-import org.myalerts.domain.event.TestScenarioEventHandler;
+import org.myalerts.domain.TestScenarioEventHandler;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.service.TestScenarioResultService;

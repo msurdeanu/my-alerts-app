@@ -9,7 +9,7 @@ import com.vaadin.flow.data.binder.Binder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.myalerts.mapper.Mapper1;
+import org.myalerts.api.mapper.Mapper1;
 import org.myalerts.domain.Setting;
 import org.myalerts.domain.SettingType;
 import org.myalerts.provider.SettingProvider;
@@ -43,16 +43,16 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
 
     private Mapper1<SettingType, Setting, Optional<Component>> createMapper() {
         return Mapper1.<SettingType, Setting, Optional<Component>>builder(new EnumMap<>(SettingType.class))
-                .map(SettingType.TEXT, setting -> Optional.of(createTextField(setting)))
-                .map(SettingType.TEXT_H, setting -> Optional.empty())
-                .map(SettingType.PASSWORD, setting -> Optional.of(createPasswordField(setting)))
-                .map(SettingType.INTEGER, setting -> Optional.of(createIntegerField(setting)))
-                .map(SettingType.INTEGER_H, setting -> Optional.empty())
-                .map(SettingType.BOOLEAN, setting -> Optional.of(createToggleButton(setting)))
-                .map(SettingType.BOOLEAN_H, setting -> Optional.empty())
-                .unmapped(setting -> {
-                    throw new NoSuchElementException("Unsupported type given as input for setting key: " + setting.getKey());
-                }).build();
+            .map(SettingType.TEXT, setting -> Optional.of(createTextField(setting)))
+            .map(SettingType.TEXT_H, setting -> Optional.empty())
+            .map(SettingType.PASSWORD, setting -> Optional.of(createPasswordField(setting)))
+            .map(SettingType.INTEGER, setting -> Optional.of(createIntegerField(setting)))
+            .map(SettingType.INTEGER_H, setting -> Optional.empty())
+            .map(SettingType.BOOLEAN, setting -> Optional.of(createToggleButton(setting)))
+            .map(SettingType.BOOLEAN_H, setting -> Optional.empty())
+            .unmapped(setting -> {
+                throw new NoSuchElementException("Unsupported type given as input for setting key: " + setting.getKey());
+            }).build();
     }
 
     private Component createTextField(final Setting setting) {
@@ -64,8 +64,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(textField).bind(
-                settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
-                (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return textField;
@@ -80,8 +80,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(passwordField).bind(
-                settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
-                (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return passwordField;
@@ -96,8 +96,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(integerField).bind(
-                settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), 0),
-                (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), 0),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return integerField;
@@ -111,8 +111,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(toggleButton).bind(
-                settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), Boolean.FALSE),
-                (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), Boolean.FALSE),
+            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
         );
 
         return toggleButton;

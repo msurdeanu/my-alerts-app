@@ -2,9 +2,9 @@ package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.api.event.EventListener;
+import org.myalerts.api.domain.event.EventListener;
+import org.myalerts.api.domain.event.TestScenarioRunEvent;
 import org.myalerts.domain.TestScenarioResult;
-import org.myalerts.domain.event.TestResultEvent;
 import org.myalerts.repository.TestScenarioResultRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,7 +20,7 @@ import java.util.Collection;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TestScenarioResultService implements EventListener<TestResultEvent> {
+public class TestScenarioResultService implements EventListener<TestScenarioRunEvent> {
 
     private final TestScenarioResultRepository testScenarioResultRepository;
 
@@ -29,15 +29,15 @@ public class TestScenarioResultService implements EventListener<TestResultEvent>
         return testScenarioResultRepository.findByScenarioIdOrderByCreatedDesc(id, PageRequest.of(0, 10));
     }
 
-    @CacheEvict(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenario?.id")
+    @CacheEvict(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenarioRun?.scenarioId")
     @Override
-    public void onEventReceived(final TestResultEvent event) {
-        testScenarioResultRepository.save(event.getTestScenarioResult());
+    public void onEventReceived(final TestScenarioRunEvent event) {
+        testScenarioResultRepository.save(TestScenarioResult.from(event.getTestScenarioRun()));
     }
 
     @Override
-    public Class<TestResultEvent> getEventType() {
-        return TestResultEvent.class;
+    public Class<TestScenarioRunEvent> getEventType() {
+        return TestScenarioRunEvent.class;
     }
 
 }
