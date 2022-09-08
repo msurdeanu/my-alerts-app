@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.7.3</version>
     </parent>
 
     <properties>
@@ -23,13 +23,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>23.1.4</vaadin.version>
+        <vaadin.version>23.2.0</vaadin.version>
         <grid-pagination.version>2.0.10</grid-pagination.version>
-        <ace.version>3.3.3</ace.version>
-        <lombok.version>1.18.22</lombok.version>
+        <ace.version>3.4.2</ace.version>
+        <lombok.version>1.18.24</lombok.version>
         <jool.version>0.9.14</jool.version>
         <prettytime.version>5.0.2.Final</prettytime.version>
-        <flyway-core.version>8.0.5</flyway-core.version>
+        <flyway-core.version>9.2.3</flyway-core.version>
         <groovy.version>3.0.10</groovy.version>
         <junit.version>5.8.1</junit.version>
     </properties>
@@ -151,37 +151,7 @@
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-datetime</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-json</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-jsr223</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-macro</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-nio</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-sql</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-xml</artifactId>
             <version>${groovy.version}</version>
         </dependency>
         <dependency>

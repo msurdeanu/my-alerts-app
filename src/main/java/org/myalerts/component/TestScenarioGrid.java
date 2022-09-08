@@ -242,7 +242,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
         private final AceEditor editor = new AceEditor();
 
-        private final Button saveButton = new Button(getTranslation("test-scenario.detailed.button.save"));
+        private final Button saveButton = new Button(getTranslation("test-scenario.main-grid.button.save"));
 
         private final TestScenarioEventHandler testScenarioEventHandler;
 
