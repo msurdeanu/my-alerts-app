@@ -1,6 +1,6 @@
 package org.myalerts.config;
 
-import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
+import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import lombok.RequiredArgsConstructor;
 import org.myalerts.repository.UserRepository;
 import org.myalerts.service.CustomUserDetailsService;
@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration("securityConfig")
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
+public class SecurityConfig extends VaadinWebSecurity {
 
     private final UserRepository userRepository;
 

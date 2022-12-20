@@ -2,6 +2,7 @@ package org.myalerts.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.domain.Setting;
+import org.myalerts.domain.SettingKeyEnum;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,35 +22,35 @@ public class DefaultSettingProvider implements SettingProvider {
     }
 
     @Override
-    public Integer getOrDefault(Setting.Key key, Integer defaultValue) {
+    public Integer getOrDefault(SettingKeyEnum key, Integer defaultValue) {
         log.warn(DEFAULT_VALUE_IS_PROVIDED, key.getKey());
         return defaultValue;
     }
 
     @Override
-    public Boolean getOrDefault(Setting.Key key, Boolean defaultValue) {
+    public Boolean getOrDefault(SettingKeyEnum key, Boolean defaultValue) {
         log.warn(DEFAULT_VALUE_IS_PROVIDED, key.getKey());
         return defaultValue;
     }
 
     @Override
-    public String getOrDefault(Setting.Key key, String defaultValue) {
+    public String getOrDefault(SettingKeyEnum key, String defaultValue) {
         log.warn(DEFAULT_VALUE_IS_PROVIDED, key.getKey());
         return defaultValue;
     }
 
     @Override
-    public void set(Setting.Key key, Integer toValue) {
+    public void set(SettingKeyEnum key, Integer toValue) {
         // Nothing to do
     }
 
     @Override
-    public void set(Setting.Key key, Boolean toValue) {
+    public void set(SettingKeyEnum key, Boolean toValue) {
         // Nothing to do
     }
 
     @Override
-    public void set(Setting.Key key, String toValue) {
+    public void set(SettingKeyEnum key, String toValue) {
         // Nothing to do
     }
 

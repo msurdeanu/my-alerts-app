@@ -27,6 +27,12 @@ public class EventBroadcaster {
 
     private final ThreadPoolExecutor threadPoolExecutor;
 
+    public synchronized void broadcast(final Event event) {
+        ofNullable(consumersMap.get(event.getClass()))
+            .orElse(List.of())
+            .forEach(consumer -> threadPoolExecutor.execute(() -> consumer.accept(event)));
+    }
+
     public synchronized void register(final Consumer<Event> consumer,
                                       final Class<? extends Event> acceptedEvent) {
         ofNullable(consumersMap.get(acceptedEvent)).ifPresentOrElse(
@@ -37,12 +43,6 @@ public class EventBroadcaster {
         if (log.isDebugEnabled()) {
             log.debug("A new broadcast consumer is registered for event type {}.", acceptedEvent.getName());
         }
-    }
-
-    public synchronized void broadcast(final Event event) {
-        ofNullable(consumersMap.get(event.getClass()))
-            .orElse(List.of())
-            .forEach(consumer -> threadPoolExecutor.execute(() -> consumer.accept(event)));
     }
 
 }

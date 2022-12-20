@@ -2,7 +2,7 @@ package org.myalerts.service;
 
 import com.vaadin.flow.server.VaadinService;
 import lombok.RequiredArgsConstructor;
-import org.myalerts.domain.Setting;
+import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class CookieStoreService {
     }
 
     public void set(final String name, final boolean value) {
-        set(name, Boolean.toString(value), settingProvider.getOrDefault(Setting.Key.COOKIE_EXPIRY_IN_SECONDS, (int) TimeUnit.MINUTES.toSeconds(15)));
+        set(name, Boolean.toString(value), settingProvider.getOrDefault(SettingKeyEnum.COOKIE_EXPIRY_IN_SECONDS, (int) TimeUnit.MINUTES.toSeconds(15)));
     }
 
     public void set(final String name, final String value, final int expiryInSeconds) {

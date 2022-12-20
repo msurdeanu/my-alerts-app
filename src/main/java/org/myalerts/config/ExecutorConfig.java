@@ -1,6 +1,6 @@
 package org.myalerts.config;
 
-import org.myalerts.domain.Setting;
+import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,16 +29,16 @@ public class ExecutorConfig {
     @Bean
     public ThreadPoolTaskScheduler threadPoolTaskScheduler(final SettingProvider settingProvider) {
         final var threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_POOL_SIZE, 2));
-        threadPoolTaskScheduler.setThreadNamePrefix(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_THREAD_NAME_PREFIX, "test-scenario-pool-"));
+        threadPoolTaskScheduler.setPoolSize(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_POOL_SIZE, 2));
+        threadPoolTaskScheduler.setThreadNamePrefix(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_THREAD_NAME_PREFIX, "test-scenario-pool-"));
         threadPoolTaskScheduler.initialize();
         return threadPoolTaskScheduler;
     }
 
     @Bean
     public ThreadPoolExecutor threadPoolExecutor(final SettingProvider settingProvider) {
-        return new ThreadPoolExecutor(settingProvider.getOrDefault(Setting.Key.EVENT_CORE_POOL_SIZE, 1),
-            settingProvider.getOrDefault(Setting.Key.EVENT_MAX_POOL_SIZE, 2),
+        return new ThreadPoolExecutor(settingProvider.getOrDefault(SettingKeyEnum.EVENT_CORE_POOL_SIZE, 1),
+            settingProvider.getOrDefault(SettingKeyEnum.EVENT_MAX_POOL_SIZE, 2),
             30L, TimeUnit.SECONDS,
             new ArrayBlockingQueue<>(5000), new ThreadPoolExecutor.CallerRunsPolicy());
     }

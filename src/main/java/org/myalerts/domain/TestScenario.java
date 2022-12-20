@@ -10,7 +10,7 @@ import org.myalerts.converter.TestScenarioDefinitionToStringConverter;
 import org.myalerts.domain.event.TestDeleteEvent;
 import org.myalerts.domain.event.TestScenarioRunEvent;
 import org.myalerts.domain.event.TestUpdateEvent;
-import org.myalerts.exception.AlertingException;
+import org.myalerts.exception.AlertingRuntimeException;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
@@ -27,14 +27,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.Temporal;
-import java.util.Arrays;
+import java.util.Objects;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.time.Duration.between;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -95,14 +97,31 @@ public class TestScenario implements Runnable {
     @Transient
     private ApplicationContext applicationContext;
 
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        final var testScenario = (TestScenario) other;
+        return Objects.equals(id, testScenario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     public Instant getLastRunTime() {
         lastRunTime = ofNullable(lastRunTime)
             .orElseGet(() -> ofNullable(latestResult).map(TestScenarioResult::getCreated).orElse(null));
         return lastRunTime;
     }
 
-    public String getTagsSeparatedByComma() {
-        return tags.stream().map(Tag::getName).collect(Collectors.joining(","));
+    public Set<String> getTagsAsString() {
+        return tags.stream().map(Tag::getName).collect(Collectors.toSet());
     }
 
     public boolean isFailed() {
@@ -111,36 +130,61 @@ public class TestScenario implements Runnable {
         return Boolean.TRUE.equals(failed);
     }
 
-    public void setName(final String name) {
+    public boolean setName(final String name) {
+        if (name.equals(this.name)) {
+            return false;
+        }
         this.name = name;
-
         ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
             .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+        return true;
     }
 
-    public void setTags(final String newTagsSeparatedByComma) {
-        // TODO: remove tag if needed
-        Arrays.stream(newTagsSeparatedByComma.split(","))
-            .map(String::trim)
-            .filter(item -> tags.stream().noneMatch(tag -> tag.getName().equals(item)))
-            .forEach(item -> tags.add(new Tag(item)));
-
+    public boolean addTags(final Set<Tag> tags) {
+        tags.forEach(tag -> {
+            this.tags.add(tag);
+            tag.getTestScenarios().add(this);
+        });
         ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
             .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+        return true;
     }
 
-    public void setCron(final String cron) {
+    public boolean removeTagIf(final Predicate<? super Tag> filter) {
+        var removed = false;
+        var eachTag = tags.iterator();
+        while (eachTag.hasNext()) {
+            final var eligibleForRemoval = eachTag.next();
+            if (filter.test(eligibleForRemoval)) {
+                eachTag.remove();
+                eligibleForRemoval.getTestScenarios().remove(this);
+                removed = true;
+            }
+        }
+        if (removed) {
+            ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
+                .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+        }
+        return removed;
+    }
+
+    public boolean setCron(final String cron) {
+        if (cron.equals(this.cron)) {
+            return false;
+        }
         this.cron = cron;
-
         ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
             .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+        return true;
     }
 
-    public void setScript(final String scrip) {
-        this.definition.recreateScript(scrip);
-
-        ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-            .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+    public boolean setScript(final String script) {
+        final var isScriptRecreated = this.definition.recreateScript(script);
+        if (isScriptRecreated) {
+            ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
+                .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+        }
+        return isScriptRecreated;
     }
 
     public void toggleOnEnabling() {
@@ -173,7 +217,7 @@ public class TestScenario implements Runnable {
         final var startTime = System.currentTimeMillis();
         try {
             invokeRunMethod(ofNullable(definition.getParsedScript())
-                .orElseThrow(() -> new AlertingException(definition.getCause())), executionContext);
+                .orElseThrow(() -> new AlertingRuntimeException(definition.getCause())), executionContext);
         } catch (Throwable throwable) {
             executionContext.markAsFailed(throwable);
         } finally {
@@ -195,13 +239,13 @@ public class TestScenario implements Runnable {
         try {
             parsedScript.invokeMethod("run", functionArgs);
         } catch (Exception e) {
-            throw new AlertingException(e);
+            throw new AlertingRuntimeException(e);
         }
     }
 
     private long getMillisBetween(@Null final Temporal startInclusive,
                                   @NotNull final Temporal endExclusive) {
-        return Duration.between(ofNullable(startInclusive).orElseGet(() -> Instant.ofEpochSecond(0)), endExclusive).toMillis();
+        return between(ofNullable(startInclusive).orElseGet(() -> Instant.ofEpochSecond(0)), endExclusive).toMillis();
     }
 
 }

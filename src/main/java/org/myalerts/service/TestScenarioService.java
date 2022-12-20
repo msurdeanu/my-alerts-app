@@ -11,17 +11,20 @@ import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.provider.StatisticsProvider;
+import org.myalerts.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Optional.of;
@@ -49,6 +52,14 @@ public class TestScenarioService implements StatisticsProvider {
 
     private final ScheduleTestScenarioService scheduleTestScenarioService;
 
+    private final TagRepository tagRepository;
+
+    public final Set<String> getAllTags() {
+        return ALL_TESTS.values().stream()
+            .flatMap(testScenario -> testScenario.getTagsAsString().stream())
+            .collect(Collectors.toSet());
+    }
+
     public Stream<TestScenario> getAll() {
         return getAll(new TestScenarioFilter(), 0, Long.MAX_VALUE);
     }
@@ -56,6 +67,7 @@ public class TestScenarioService implements StatisticsProvider {
     public Stream<TestScenario> getAll(final TestScenarioFilter filter, final long offset, final long limit) {
         return ALL_TESTS.values().stream()
             .filter(filter.getByTypeCriteria().getFilter())
+            .filter(getPredicateByTagCriteria(filter.getByTagCriteria()))
             .filter(getPredicateByNameCriteria(filter.getByNameCriteria()))
             .skip(offset)
             .limit(limit);
@@ -86,7 +98,7 @@ public class TestScenarioService implements StatisticsProvider {
             .intValue();
     }
 
-    public void createAndSchedule(@NonNull TestScenario testScenario) {
+    public void createAndSchedule(@NonNull final TestScenario testScenario) {
         lock.lock();
         try {
             testScenario.setApplicationContext(applicationContext);
@@ -116,36 +128,57 @@ public class TestScenarioService implements StatisticsProvider {
         testScenario.toggleOnEnabling();
     }
 
-    public void changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
+    public boolean changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
         lock.lock();
         try {
-            testScenario.setScript(newDefinition);
+            return testScenario.setScript(newDefinition);
         } finally {
             lock.unlock();
         }
     }
 
-    public void changeCronExpression(final TestScenario testScenario, final String newCronExpression) {
+    public boolean changeCronExpression(final TestScenario testScenario, final String newCronExpression) {
         lock.lock();
         try {
             if (testScenario.isEnabled()) {
                 scheduleTestScenarioService.unschedule(testScenario);
             }
-
-            testScenario.setCron(newCronExpression);
-
+            final var isCronReset = testScenario.setCron(newCronExpression);
             if (testScenario.isEnabled()) {
                 scheduleTestScenarioService.schedule(testScenario);
             }
+            return isCronReset;
         } finally {
             lock.unlock();
         }
     }
 
-    public void changeName(final TestScenario testScenario, final String newName) {
+    public boolean changeName(final TestScenario testScenario, final String newName) {
         lock.lock();
         try {
-            testScenario.setName(newName);
+            return testScenario.setName(newName);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public boolean changeTags(final TestScenario testScenario, final Set<String> newTags) {
+        final var newTagsTrimmed = newTags.stream().map(String::trim).collect(Collectors.toSet());
+
+        lock.lock();
+        try {
+            final var testScenarioTagsAsString = testScenario.getTagsAsString();
+            if (newTagsTrimmed.size() == testScenarioTagsAsString.size()
+                && newTagsTrimmed.containsAll(testScenarioTagsAsString)) {
+                return false;
+            }
+
+            final var isRemoved = testScenario.removeTagIf(tag -> !newTagsTrimmed.contains(tag.getName()));
+            final var isAdded = testScenario.addTags(newTagsTrimmed.stream()
+                .filter(item -> !testScenarioTagsAsString.contains(item))
+                .map(tagRepository::getOrCreate)
+                .collect(Collectors.toSet()));
+            return isRemoved || isAdded;
         } finally {
             lock.unlock();
         }
@@ -207,7 +240,13 @@ public class TestScenarioService implements StatisticsProvider {
 
     private Predicate<TestScenario> getPredicateByNameCriteria(final String byNameCriteria) {
         return StringUtils.isNotEmpty(byNameCriteria)
-            ? testScenario -> StringUtils.equalsIgnoreCase(testScenario.getName(), byNameCriteria)
+            ? testScenario -> StringUtils.containsIgnoreCase(testScenario.getName(), byNameCriteria)
+            : ALWAYS_TRUE_PREDICATE;
+    }
+
+    private Predicate<TestScenario> getPredicateByTagCriteria(final Set<String> byTagCriteria) {
+        return !byTagCriteria.isEmpty()
+            ? testScenario -> testScenario.getTags().containsAll(byTagCriteria)
             : ALWAYS_TRUE_PREDICATE;
     }
 

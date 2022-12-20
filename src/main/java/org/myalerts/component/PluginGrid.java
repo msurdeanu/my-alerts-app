@@ -20,9 +20,9 @@ import org.vaadin.klaudeta.PaginatedGrid;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class PluginGrid extends Composite<VerticalLayout> {
+public final class PluginGrid extends Composite<VerticalLayout> {
 
-    private final PaginatedGrid<PluginWrapper> paginatedGrid = new PaginatedGrid<>();
+    private final PaginatedGrid<PluginWrapper, ?> paginatedGrid = new PaginatedGrid<>();
 
     public void refreshPage() {
         paginatedGrid.refreshPaginator();
@@ -69,9 +69,8 @@ public class PluginGrid extends Composite<VerticalLayout> {
 
     private Component renderVersion(final PluginWrapper plugin) {
         final var pluginDescriptor = plugin.getDescriptor();
-        final var html = new Html(getTranslation("plugin.main-grid.version",
+        return new Html(getTranslation("plugin.main-grid.version",
             pluginDescriptor.getVersion(), pluginDescriptor.getRequires()));
-        return html;
     }
 
     private Component renderStatus(final PluginWrapper plugin) {

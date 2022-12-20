@@ -1,6 +1,7 @@
 package org.myalerts.provider;
 
 import org.myalerts.domain.Setting;
+import org.myalerts.domain.SettingKeyEnum;
 
 import java.util.List;
 
@@ -12,16 +13,16 @@ public interface SettingProvider {
 
     List<Setting> getAll();
 
-    Integer getOrDefault(Setting.Key key, Integer defaultValue);
+    Integer getOrDefault(SettingKeyEnum key, Integer defaultValue);
 
-    Boolean getOrDefault(Setting.Key key, Boolean defaultValue);
+    Boolean getOrDefault(SettingKeyEnum key, Boolean defaultValue);
 
-    String getOrDefault(Setting.Key key, String defaultValue);
+    String getOrDefault(SettingKeyEnum key, String defaultValue);
 
-    void set(Setting.Key key, Integer toValue);
+    void set(SettingKeyEnum key, Integer toValue);
 
-    void set(Setting.Key key, Boolean toValue);
+    void set(SettingKeyEnum key, Boolean toValue);
 
-    void set(Setting.Key key, String toValue);
+    void set(SettingKeyEnum key, String toValue);
 
 }

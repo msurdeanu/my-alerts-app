@@ -29,7 +29,6 @@ public final class StatisticsTreeGrid extends Composite<VerticalLayout> {
     @Override
     protected VerticalLayout initContent() {
         final var layout = super.initContent();
-
         layout.setSizeFull();
 
         final var treeGrid = new TreeGrid<StatisticsItem>();

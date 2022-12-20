@@ -20,6 +20,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.myalerts.domain.SettingKeyEnum.of;
+
 /**
  * @author Mihai Surdeanu
  * @since 1.0.0
@@ -64,8 +66,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(textField).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(of(setting.getKey()), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(of(setting.getKey()), newValue)
         );
 
         return textField;
@@ -80,8 +82,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(passwordField).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), StringUtils.EMPTY),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(of(setting.getKey()), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(of(setting.getKey()), newValue)
         );
 
         return passwordField;
@@ -96,8 +98,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(integerField).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), 0),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(of(setting.getKey()), 0),
+            (settingProvider, newValue) -> settingProvider.set(of(setting.getKey()), newValue)
         );
 
         return integerField;
@@ -111,8 +113,8 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         }
 
         binder.forField(toggleButton).bind(
-            settingProvider -> settingProvider.getOrDefault(Setting.Key.of(setting.getKey()), Boolean.FALSE),
-            (settingProvider, newValue) -> settingProvider.set(Setting.Key.of(setting.getKey()), newValue)
+            settingProvider -> settingProvider.getOrDefault(of(setting.getKey()), Boolean.FALSE),
+            (settingProvider, newValue) -> settingProvider.set(of(setting.getKey()), newValue)
         );
 
         return toggleButton;

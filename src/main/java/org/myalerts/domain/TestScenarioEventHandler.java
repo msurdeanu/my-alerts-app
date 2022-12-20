@@ -1,9 +1,7 @@
 package org.myalerts.domain;
 
 import java.util.Collection;
-
-import org.myalerts.domain.TestScenario;
-import org.myalerts.domain.TestScenarioResult;
+import java.util.Set;
 
 /**
  * @author Mihai Surdeanu
@@ -17,14 +15,14 @@ public interface TestScenarioEventHandler {
 
     void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression);
 
-    void onNameChanged(final TestScenario testScenario, final String newName);
-
-    void onTagsChanged(final TestScenario testScenario, final String newTagsSeparatedByComma);
-
     void onDefinitionChanged(final TestScenario testScenario, final String newDefinition);
 
     void onDelete(final TestScenario testScenario);
 
+    void onNameChanged(final TestScenario testScenario, final String newName);
+
     void onScheduleNow(final TestScenario testScenario);
+
+    void onTagsChanged(final TestScenario testScenario, final Set<String> newTags);
 
 }

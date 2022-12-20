@@ -72,7 +72,9 @@ CREATE TABLE tags (
 );
 
 INSERT INTO tags ("name")
-VALUES ('tag1');
+VALUES ('simple');
+
+CREATE UNIQUE INDEX tags_name_index ON tags (name);
 
 CREATE TABLE scenarios_tags (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -122,7 +124,7 @@ VALUES ('cacheTestScenarioResultExpireAfterAccess', 'settings.cache.test-scenari
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTestScenarioResultExpireAfterWrite', 'settings.cache.test-scenario-result.expire-after-write.label', 'settings.cache.test-scenario-result.expire-after-write.helper', 'int', '0', '0', '13');
 
-CREATE UNIQUE INDEX key_index ON settings ("key");
+CREATE UNIQUE INDEX settings_key_index ON settings ("key");
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -138,7 +140,7 @@ VALUES ('test', '$2a$10$iZNmfanuP/Pn8OntMEsEKe6nH5JzL650v3zZM4aFNw4D36Wbq8ofG', 
 INSERT INTO users ("username", "password", "email", "role")
 VALUES ('admin', '$2a$10$18ldMrqn.vZIPvPUemB40eR5OTXIjLOAVrdFQdGCF6Bmh1l4ceYH2', 'admin@myalerts.org', 'ROLE_ADMIN');
 
-CREATE UNIQUE INDEX username_index ON users (username);
+CREATE UNIQUE INDEX users_username_index ON users (username);
 
 CREATE TRIGGER onScenarioDelete AFTER DELETE ON scenarios FOR EACH ROW BEGIN
     DELETE FROM results WHERE scenario_id = id;

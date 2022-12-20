@@ -2,7 +2,7 @@ package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.domain.Setting;
+import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -80,7 +80,7 @@ public class ScheduleTestScenarioService {
 
     public void scheduleInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
         threadPoolTaskScheduler.schedule(testScenario, Instant.now())
-            .get(settingProvider.getOrDefault(Setting.Key.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
+            .get(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
     }
 
 }

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.domain.SupportedLanguage;
 import org.ocpsoft.prettytime.PrettyTime;
-import org.pf4j.Extension;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -13,14 +12,11 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import static java.lang.String.format;
 import static java.util.Locale.ENGLISH;
 import static java.util.Optional.ofNullable;
-import static java.util.ResourceBundle.getBundle;
 
 /**
  * @author Mihai Surdeanu
@@ -71,16 +67,6 @@ public class TranslationProvider implements I18NProvider {
             .filter(prettyTime -> prettyTime.getLocale().equals(locale))
             .orElseGet(() -> new PrettyTime(locale));
         return cachedPrettyTime.format(time);
-    }
-
-    @Extension(ordinal = -1)
-    public static class DefaultTranslationsProvider implements TranslationsProvider {
-
-        @Override
-        public Map<SupportedLanguage, ResourceBundle> getResourceBundles() {
-            return Map.of(SupportedLanguage.ENGLISH, getBundle("translation", ENGLISH));
-        }
-
     }
 
 }

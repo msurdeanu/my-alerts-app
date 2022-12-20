@@ -6,6 +6,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
@@ -14,21 +15,19 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import de.f0rce.ace.AceEditor;
-import de.f0rce.ace.enums.AceMode;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.TestScenarioEventHandler;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.domain.UserRole;
-import org.myalerts.domain.TestScenarioEventHandler;
 import org.myalerts.provider.TranslationProvider;
 import org.vaadin.klaudeta.PaginatedGrid;
 
+import java.util.Set;
+
+import static com.vaadin.flow.component.Shortcuts.addShortcutListener;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
@@ -37,13 +36,13 @@ import static org.apache.commons.lang3.StringUtils.abbreviate;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class TestScenarioGrid extends Composite<VerticalLayout> {
+public final class TestScenarioGrid extends Composite<VerticalLayout> {
 
-    private final PaginatedGrid<TestScenario> paginatedGrid = new PaginatedGrid<>();
-
-    private final Binder<TestScenario> testScenarioBinder = new Binder<>(TestScenario.class);
+    private final PaginatedGrid<TestScenario, ?> paginatedGrid = new PaginatedGrid<>();
 
     private final TestScenarioEventHandler testScenarioEventHandler;
+
+    private final Set<String> allTags;
 
     private final boolean isLoggedAsAdmin = UserRole.ADMIN.validate();
 
@@ -110,30 +109,30 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
             return layout;
         }
 
-        final var tagsTextField = new TextField();
-        layout.add(tagsTextField);
-        tagsTextField.addClassName("editable-field");
-        testScenarioBinder.forField(tagsTextField)
-            .withValidator(name -> true, StringUtils.EMPTY)
-            .bind(TestScenario::getTagsSeparatedByComma, (Setter<TestScenario, String>) testScenarioEventHandler::onTagsChanged);
-        testScenarioBinder.readBean(testScenario);
-        setSuffixForField(tagsTextField);
-
-        tagsTextField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        tagsTextField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
+        final var tagsComboBox = new MultiSelectComboBox<String>();
+        tagsComboBox.addClassName("editable-field");
+        tagsComboBox.setItems(allTags);
+        tagsComboBox.setValue(testScenario.getTagsAsString());
+        tagsComboBox.setAllowCustomValue(true);
+        tagsComboBox.addCustomValueSetListener(event -> {
+            final var customValue = event.getDetail();
+            allTags.add(customValue);
+            tagsComboBox.setItems(allTags);
+        });
+        layout.add(tagsComboBox);
 
         final var nameTextField = new TextField();
-        layout.add(nameTextField);
         nameTextField.addClassName("editable-field");
-        testScenarioBinder.forField(nameTextField)
-            .withValidator(name -> true, StringUtils.EMPTY)
-            .bind(TestScenario::getName, (Setter<TestScenario, String>) testScenarioEventHandler::onNameChanged);
-        testScenarioBinder.readBean(testScenario);
-        setSuffixForField(nameTextField);
+        nameTextField.setSuffixComponent(VaadinIcon.ENTER.create());
+        nameTextField.setValue(testScenario.getName());
+        layout.add(nameTextField);
 
-        nameTextField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        nameTextField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
-
+        addShortcutListener(layout, () -> {
+            testScenarioEventHandler.onTagsChanged(testScenario, tagsComboBox.getValue());
+            testScenarioEventHandler.onNameChanged(testScenario, nameTextField.getValue());
+            onTestScenarioUpdated(testScenario);
+        }, Key.ENTER);
+        addShortcutListener(layout, () -> onTestScenarioCancelled(testScenario), Key.ESCAPE);
         return layout;
     }
 
@@ -153,15 +152,14 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
 
         final var textField = new TextField();
         textField.addClassName("editable-field");
-        testScenarioBinder.forField(textField)
-            .withValidator(cron -> true, StringUtils.EMPTY)
-            .bind(TestScenario::getCron, (Setter<TestScenario, String>) testScenarioEventHandler::onCronExpressionChanged);
-        testScenarioBinder.readBean(testScenario);
-        setSuffixForField(textField);
+        textField.setSuffixComponent(VaadinIcon.ENTER.create());
+        textField.setValue(testScenario.getCron());
 
-        textField.addKeyDownListener(Key.ENTER, event -> onCronExpressionUpdated(testScenario));
-        textField.addKeyDownListener(Key.ESCAPE, event -> onCronExpressionCancelled(testScenario));
-
+        addShortcutListener(textField, () -> {
+            testScenarioEventHandler.onCronExpressionChanged(testScenario, textField.getValue());
+            onTestScenarioUpdated(testScenario);
+        }, Key.ENTER);
+        addShortcutListener(textField, () -> onTestScenarioCancelled(testScenario), Key.ESCAPE);
         return textField;
     }
 
@@ -187,7 +185,7 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         }
 
         if (isLoggedAsAdmin) {
-            editButton.addClickListener(event -> onCronExpressionToEdit(testScenario));
+            editButton.addClickListener(event -> onTestScenarioToEdit(testScenario));
             if (!testScenario.isEnabled()) {
                 deleteButton.addClickListener(event -> testScenarioEventHandler.onDelete(testScenario));
             } else {
@@ -202,18 +200,17 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    private void onCronExpressionToEdit(final TestScenario testScenario) {
+    private void onTestScenarioToEdit(final TestScenario testScenario) {
         testScenario.toggleOnEditing();
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onCronExpressionUpdated(final TestScenario testScenario) {
+    private void onTestScenarioUpdated(final TestScenario testScenario) {
         testScenario.setEditable(false);
-        testScenarioBinder.writeBeanIfValid(testScenario);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onCronExpressionCancelled(final TestScenario testScenario) {
+    private void onTestScenarioCancelled(final TestScenario testScenario) {
         testScenario.setEditable(false);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
@@ -231,49 +228,5 @@ public class TestScenarioGrid extends Composite<VerticalLayout> {
         return testScenario.isFailed() ? TestScenarioType.FAILED.getLabel() : TestScenarioType.PASSED.getLabel();
     }
 
-    private void setSuffixForField(final TextField textField) {
-        final var span = new Span(getTranslation("test-scenario.main-grid.save-with-enter"));
-        span.addClassName("small-suffix");
-
-        ComponentEnricher.setComponentAsSuffix(textField, span);
-    }
-
-    private static class TestScenarioDetails extends VerticalLayout {
-
-        private final AceEditor editor = new AceEditor();
-
-        private final Button saveButton = new Button(getTranslation("test-scenario.main-grid.button.save"));
-
-        private final TestScenarioEventHandler testScenarioEventHandler;
-
-        public TestScenarioDetails(final TestScenarioEventHandler testScenarioEventHandler) {
-            this.testScenarioEventHandler = testScenarioEventHandler;
-
-            setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-
-            editor.addClassName("ace-editor");
-            editor.setMode(AceMode.groovy);
-            editor.setAutoComplete(true);
-            editor.setLiveAutocompletion(true);
-            add(editor);
-
-            saveButton.setEnabled(false);
-            saveButton.setWidthFull();
-            saveButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
-            add(saveButton);
-        }
-
-        public void setDetails(final TestScenario testScenario) {
-            editor.setValue(testScenario.getDefinition().getScript());
-            editor.addAceChangedListener(event -> saveButton.setEnabled(isNewDefinition(testScenario, event.getValue())));
-
-            saveButton.addClickListener(event -> testScenarioEventHandler.onDefinitionChanged(testScenario, editor.getValue()));
-        }
-
-        private boolean isNewDefinition(final TestScenario testScenario, final String newDefinition) {
-            return !testScenario.getDefinition().getScript().equals(newDefinition);
-        }
-
-    }
 
 }

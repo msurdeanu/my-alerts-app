@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jooq.lambda.Unchecked;
 import org.myalerts.domain.Setting;
+import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.domain.SettingType;
 import org.myalerts.mapper.Mapper1;
 import org.myalerts.repository.SettingRepository;
@@ -96,26 +97,26 @@ public final class DatabaseSettingProvider implements InvocationHandler {
     }
 
     private Object getSetting(final Method method, final Object[] args) throws Throwable {
-        if (args.length < 1 || !(args[0] instanceof Setting.Key)) {
+        if (args.length < 1 || !(args[0] instanceof SettingKeyEnum)) {
             return method.invoke(defaultSettingProvider, args);
         }
 
         return availableSettings.stream()
-            .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
+            .filter(setting -> setting.getKey().equals(((SettingKeyEnum) args[0]).getKey()))
             .findFirst()
             .map(Setting::getComputedValue)
             .orElseGet(() -> Unchecked.supplier(() -> method.invoke(defaultSettingProvider, args)).get());
     }
 
     private Object setSetting(final Object[] args) {
-        if (args.length != 2 || !(args[0] instanceof Setting.Key)) {
+        if (args.length != 2 || !(args[0] instanceof SettingKeyEnum)) {
             return null;
         }
 
         lock.lock();
         try {
             availableSettings.stream()
-                .filter(setting -> setting.getKey().equals(((Setting.Key) args[0]).getKey()))
+                .filter(setting -> setting.getKey().equals(((SettingKeyEnum) args[0]).getKey()))
                 .filter(setting -> !setting.getComputedValue().equals(args[1]))
                 .findFirst()
                 .ifPresent(setting -> setSettingValue(setting, args[1]));

@@ -23,10 +23,15 @@ public class TestScenarioDefinition {
         recreateScript(script);
     }
 
-    public void recreateScript(final String script) {
-        this.script = script;
+    public boolean recreateScript(final String script) {
+        if (script.equals(this.script)) {
+            return false;
+        }
 
+        this.script = script;
         recreateScriptEngine();
+
+        return true;
     }
 
     private void recreateScriptEngine() {
