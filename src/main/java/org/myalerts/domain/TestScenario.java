@@ -1,16 +1,10 @@
 package org.myalerts.domain;
 
-import groovy.lang.Script;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.SortNatural;
-import org.myalerts.ApplicationContext;
 import org.myalerts.converter.TestScenarioDefinitionToStringConverter;
-import org.myalerts.domain.event.TestDeleteEvent;
-import org.myalerts.domain.event.TestScenarioRunEvent;
-import org.myalerts.domain.event.TestUpdateEvent;
-import org.myalerts.exception.AlertingRuntimeException;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
@@ -25,10 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.time.Instant;
-import java.time.temporal.Temporal;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
@@ -36,7 +27,6 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.time.Duration.between;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -45,7 +35,7 @@ import static java.util.Optional.ofNullable;
  */
 @Entity
 @Table(name = "scenarios")
-public class TestScenario implements Runnable {
+public class TestScenario {
 
     @Id
     @Getter
@@ -82,9 +72,11 @@ public class TestScenario implements Runnable {
     @SortNatural
     private SortedSet<Tag> tags = new TreeSet<>();
 
+    @Setter
     @Transient
     private Instant lastRunTime;
 
+    @Setter
     @Transient
     private Boolean failed;
 
@@ -92,10 +84,6 @@ public class TestScenario implements Runnable {
     @Setter
     @Transient
     private boolean editable = false;
-
-    @Setter
-    @Transient
-    private ApplicationContext applicationContext;
 
     @Override
     public boolean equals(final Object other) {
@@ -130,23 +118,11 @@ public class TestScenario implements Runnable {
         return Boolean.TRUE.equals(failed);
     }
 
-    public boolean setName(final String name) {
-        if (name.equals(this.name)) {
-            return false;
-        }
-        this.name = name;
-        ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-            .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
-        return true;
-    }
-
     public boolean addTags(final Set<Tag> tags) {
         tags.forEach(tag -> {
             this.tags.add(tag);
             tag.getTestScenarios().add(this);
         });
-        ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-            .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
         return true;
     }
 
@@ -161,10 +137,6 @@ public class TestScenario implements Runnable {
                 removed = true;
             }
         }
-        if (removed) {
-            ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-                .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
-        }
         return removed;
     }
 
@@ -172,80 +144,30 @@ public class TestScenario implements Runnable {
         if (cron.equals(this.cron)) {
             return false;
         }
+
         this.cron = cron;
-        ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-            .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
+        return true;
+    }
+
+    public boolean setName(final String name) {
+        if (name.equals(this.name)) {
+            return false;
+        }
+
+        this.name = name;
         return true;
     }
 
     public boolean setScript(final String script) {
-        final var isScriptRecreated = this.definition.recreateScript(script);
-        if (isScriptRecreated) {
-            ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-                .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
-        }
-        return isScriptRecreated;
+        return definition.recreateScript(script);
     }
 
     public void toggleOnEnabling() {
         enabled = !enabled;
-
-        ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-            .broadcast(TestUpdateEvent.builder().testScenario(this).build()));
     }
 
     public void toggleOnEditing() {
         editable = !editable;
-    }
-
-    public void markAsDeleted() {
-        ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-            .broadcast(TestDeleteEvent.builder().testScenario(this).build()));
-    }
-
-    @Override
-    public void run() {
-        final var nextLastRunTime = Instant.now();
-        final var testScenarioRunBuilder = TestScenarioRun.builder()
-            .scenarioId(id);
-        final var executionContext = ExecutionContext.builder()
-            .applicationContext(applicationContext)
-            .testScenarioRunBuilder(testScenarioRunBuilder)
-            .millisSinceLatestRun(getMillisBetween(getLastRunTime(), nextLastRunTime))
-            .build();
-
-        final var startTime = System.currentTimeMillis();
-        try {
-            invokeRunMethod(ofNullable(definition.getParsedScript())
-                .orElseThrow(() -> new AlertingRuntimeException(definition.getCause())), executionContext);
-        } catch (Throwable throwable) {
-            executionContext.markAsFailed(throwable);
-        } finally {
-            failed = executionContext.isMarkedAsFailed();
-            lastRunTime = nextLastRunTime;
-
-            ofNullable(applicationContext).ifPresent(context -> context.getEventBroadcaster()
-                .broadcast(TestScenarioRunEvent.builder()
-                    .testScenarioRun(testScenarioRunBuilder
-                        .duration(System.currentTimeMillis() - startTime)
-                        .created(Instant.from(lastRunTime))
-                        .build())
-                    .build()));
-        }
-    }
-
-    private void invokeRunMethod(final Script parsedScript,
-                                 final Object... functionArgs) {
-        try {
-            parsedScript.invokeMethod("run", functionArgs);
-        } catch (Exception e) {
-            throw new AlertingRuntimeException(e);
-        }
-    }
-
-    private long getMillisBetween(@Null final Temporal startInclusive,
-                                  @NotNull final Temporal endExclusive) {
-        return between(ofNullable(startInclusive).orElseGet(() -> Instant.ofEpochSecond(0)), endExclusive).toMillis();
     }
 
 }

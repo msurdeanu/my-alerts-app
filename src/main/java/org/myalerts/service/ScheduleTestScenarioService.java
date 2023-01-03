@@ -3,7 +3,7 @@ package org.myalerts.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.domain.SettingKeyEnum;
-import org.myalerts.domain.TestScenario;
+import org.myalerts.domain.TestScenarioRunnable;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -39,25 +39,34 @@ public class ScheduleTestScenarioService {
 
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-    public void schedule(final TestScenario testScenario) {
+    public void schedule(final TestScenarioRunnable testScenarioRunnable) {
+        if (testScenarioRunnable == null) {
+            return;
+        }
+
+        final var testScenario = testScenarioRunnable.getTestScenario();
         final var id = testScenario.getId();
         final var cron = testScenario.getCron();
-        final ScheduledFuture<?> scheduledFuture = threadPoolTaskScheduler.schedule(testScenario,
+        final ScheduledFuture<?> scheduledFuture = threadPoolTaskScheduler.schedule(testScenarioRunnable,
             new CronTrigger("0 " + cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
 
         lock.lock();
         try {
-            unschedule(testScenario);
+            unschedule(testScenarioRunnable);
             SCENARIOS_SCHEDULED_MAP.put(id, scheduledFuture);
         } finally {
             lock.unlock();
         }
 
-        log.info("New test scenario '{}' added to scheduling pool. Running frequency is '{}'", id, cron);
+        log.info("New test scenario '{}' added to scheduling pool. Running frequency is '{}'.", id, cron);
     }
 
-    public void unschedule(final TestScenario testScenario) {
-        final var id = testScenario.getId();
+    public void unschedule(final TestScenarioRunnable testScenarioRunnable) {
+        if (testScenarioRunnable == null) {
+            return;
+        }
+
+        final var id = testScenarioRunnable.getTestScenario().getId();
 
         lock.lock();
         try {
@@ -74,12 +83,20 @@ public class ScheduleTestScenarioService {
         }
     }
 
-    public void scheduleInAsyncMode(final TestScenario testScenario) {
-        threadPoolTaskScheduler.schedule(testScenario, Instant.now());
+    public void scheduleInAsyncMode(final TestScenarioRunnable testScenarioRunnable) {
+        if (testScenarioRunnable == null) {
+            return;
+        }
+
+        threadPoolTaskScheduler.schedule(testScenarioRunnable, Instant.now());
     }
 
-    public void scheduleInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
-        threadPoolTaskScheduler.schedule(testScenario, Instant.now())
+    public void scheduleInSyncMode(final TestScenarioRunnable testScenarioRunnable) throws InterruptedException, ExecutionException, TimeoutException {
+        if (testScenarioRunnable == null) {
+            return;
+        }
+
+        threadPoolTaskScheduler.schedule(testScenarioRunnable, Instant.now())
             .get(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
     }
 

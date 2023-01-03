@@ -14,7 +14,6 @@ import static java.util.Optional.ofNullable;
 @Converter
 public class TestScenarioDefinitionToStringConverter implements AttributeConverter<TestScenarioDefinition, String> {
 
-
     @Override
     public String convertToDatabaseColumn(final TestScenarioDefinition attribute) {
         return ofNullable(attribute).map(TestScenarioDefinition::getScript).orElse(null);

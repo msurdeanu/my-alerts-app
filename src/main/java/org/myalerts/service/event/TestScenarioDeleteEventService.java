@@ -1,9 +1,9 @@
-package org.myalerts.service;
+package org.myalerts.service.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.domain.event.EventListener;
-import org.myalerts.domain.event.TestDeleteEvent;
+import org.myalerts.domain.event.TestScenarioDeleteEvent;
 import org.myalerts.repository.TestScenarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +14,18 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TestScenarioDeleteService implements EventListener<TestDeleteEvent> {
+public class TestScenarioDeleteEventService implements EventListener<TestScenarioDeleteEvent> {
 
     private final TestScenarioRepository testScenarioRepository;
 
     @Override
-    public void onEventReceived(final TestDeleteEvent event) {
+    public void onEventReceived(final TestScenarioDeleteEvent event) {
         testScenarioRepository.delete(event.getTestScenario());
     }
 
     @Override
-    public Class<TestDeleteEvent> getEventType() {
-        return TestDeleteEvent.class;
+    public Class<TestScenarioDeleteEvent> getEventType() {
+        return TestScenarioDeleteEvent.class;
     }
 
 }

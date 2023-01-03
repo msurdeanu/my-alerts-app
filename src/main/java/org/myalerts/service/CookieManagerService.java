@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @RequiredArgsConstructor
-public class CookieStoreService {
+public class CookieManagerService {
 
     public static final String THEME_DARK_COOKIE = "themeDark";
 

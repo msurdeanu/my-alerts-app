@@ -1,4 +1,4 @@
-package org.myalerts.service;
+package org.myalerts.service.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.Collection;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TestScenarioResultService implements EventListener<TestScenarioRunEvent> {
+public class TestScenarioRunEventService implements EventListener<TestScenarioRunEvent> {
 
     private final TestScenarioResultRepository testScenarioResultRepository;
 
@@ -33,6 +33,8 @@ public class TestScenarioResultService implements EventListener<TestScenarioRunE
     @Override
     public void onEventReceived(final TestScenarioRunEvent event) {
         testScenarioResultRepository.save(TestScenarioResult.from(event.getTestScenarioRun()));
+
+
     }
 
     @Override

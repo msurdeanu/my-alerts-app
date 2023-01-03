@@ -4,12 +4,15 @@ import com.vaadin.flow.data.provider.Query;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.myalerts.ApplicationContext;
+import org.myalerts.ApplicationManager;
 import org.myalerts.domain.StatisticsGroup;
 import org.myalerts.domain.StatisticsItem;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioFilter;
+import org.myalerts.domain.TestScenarioRunnable;
 import org.myalerts.domain.TestScenarioType;
+import org.myalerts.domain.event.TestScenarioDeleteEvent;
+import org.myalerts.domain.event.TestScenarioUpdateEvent;
 import org.myalerts.provider.StatisticsProvider;
 import org.myalerts.repository.TagRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -44,18 +46,19 @@ public class TestScenarioService implements StatisticsProvider {
 
     private static final TestScenarioFilter FAILED_FILTER = new TestScenarioFilter().setByTypeCriteria(TestScenarioType.FAILED);
 
-    private static final Map<Integer, TestScenario> ALL_TESTS = new HashMap<>();
+    private static final Map<Integer, TestScenarioRunnable> ALL_SCENARIOS = new HashMap<>();
 
     private final Lock lock = new ReentrantLock();
 
-    private final ApplicationContext applicationContext;
+    private final ApplicationManager applicationManager;
 
     private final ScheduleTestScenarioService scheduleTestScenarioService;
 
     private final TagRepository tagRepository;
 
     public final Set<String> getAllTags() {
-        return ALL_TESTS.values().stream()
+        return ALL_SCENARIOS.values().stream()
+            .map(TestScenarioRunnable::getTestScenario)
             .flatMap(testScenario -> testScenario.getTagsAsString().stream())
             .collect(Collectors.toSet());
     }
@@ -65,7 +68,8 @@ public class TestScenarioService implements StatisticsProvider {
     }
 
     public Stream<TestScenario> getAll(final TestScenarioFilter filter, final long offset, final long limit) {
-        return ALL_TESTS.values().stream()
+        return ALL_SCENARIOS.values().stream()
+            .map(TestScenarioRunnable::getTestScenario)
             .filter(filter.getByTypeCriteria().getFilter())
             .filter(getPredicateByTagCriteria(filter.getByTagCriteria()))
             .filter(getPredicateByNameCriteria(filter.getByNameCriteria()))
@@ -82,7 +86,7 @@ public class TestScenarioService implements StatisticsProvider {
     }
 
     public Optional<TestScenario> findBy(final int id) {
-        return ofNullable(ALL_TESTS.get(id));
+        return ofNullable(ALL_SCENARIOS.get(id)).map(TestScenarioRunnable::getTestScenario);
     }
 
     public Stream<TestScenario> findBy(final Query<TestScenario, TestScenarioFilter> query) {
@@ -101,15 +105,13 @@ public class TestScenarioService implements StatisticsProvider {
     public void createAndSchedule(@NonNull final TestScenario testScenario) {
         lock.lock();
         try {
-            testScenario.setApplicationContext(applicationContext);
-
-            ofNullable(ALL_TESTS.put(testScenario.getId(), testScenario))
-                .filter(TestScenario::isEnabled)
+            final var testScenarioRunnable = new TestScenarioRunnable(applicationManager, testScenario);
+            ofNullable(ALL_SCENARIOS.put(testScenario.getId(), testScenarioRunnable))
+                .filter(oldTestScenarioRunnable -> oldTestScenarioRunnable.getTestScenario().isEnabled())
                 .ifPresent(scheduleTestScenarioService::unschedule);
-
-            of(testScenario)
-                .filter(TestScenario::isEnabled)
-                .ifPresent(scheduleTestScenarioService::schedule);
+            if (testScenario.isEnabled()) {
+                scheduleTestScenarioService.schedule(testScenarioRunnable);
+            }
         } finally {
             lock.unlock();
         }
@@ -118,48 +120,79 @@ public class TestScenarioService implements StatisticsProvider {
     public void changeActivation(@NonNull final TestScenario testScenario) {
         lock.lock();
         try {
-            of(testScenario)
-                .filter(TestScenario::isEnabled)
-                .ifPresentOrElse(scheduleTestScenarioService::unschedule, () -> scheduleTestScenarioService.schedule(testScenario));
+            testScenario.toggleOnEnabling();
+
+            ofNullable(ALL_SCENARIOS.get(testScenario.getId())).ifPresent(testScenarioRunnable -> {
+                if (testScenarioRunnable.getTestScenario().isEnabled()) {
+                    scheduleTestScenarioService.unschedule(testScenarioRunnable);
+                } else {
+                    scheduleTestScenarioService.schedule(testScenarioRunnable);
+                }
+            });
         } finally {
             lock.unlock();
         }
 
-        testScenario.toggleOnEnabling();
-    }
-
-    public boolean changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
-        lock.lock();
-        try {
-            return testScenario.setScript(newDefinition);
-        } finally {
-            lock.unlock();
-        }
+        applicationManager.getEventBroadcaster()
+            .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
     }
 
     public boolean changeCronExpression(final TestScenario testScenario, final String newCronExpression) {
+        var isOperationPerformed = false;
+
         lock.lock();
         try {
+            final var testScenarioRunnable = ALL_SCENARIOS.get(testScenario.getId());
             if (testScenario.isEnabled()) {
-                scheduleTestScenarioService.unschedule(testScenario);
+                scheduleTestScenarioService.unschedule(testScenarioRunnable);
             }
-            final var isCronReset = testScenario.setCron(newCronExpression);
+            isOperationPerformed = testScenario.setCron(newCronExpression);
             if (testScenario.isEnabled()) {
-                scheduleTestScenarioService.schedule(testScenario);
+                scheduleTestScenarioService.schedule(testScenarioRunnable);
             }
-            return isCronReset;
         } finally {
             lock.unlock();
         }
+
+        if (isOperationPerformed) {
+            applicationManager.getEventBroadcaster()
+                .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
+        }
+        return isOperationPerformed;
+    }
+
+    public boolean changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
+        var isOperationPerformed = false;
+
+        lock.lock();
+        try {
+            isOperationPerformed = testScenario.setScript(newDefinition);
+        } finally {
+            lock.unlock();
+        }
+
+        if (isOperationPerformed) {
+            applicationManager.getEventBroadcaster()
+                .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
+        }
+        return isOperationPerformed;
     }
 
     public boolean changeName(final TestScenario testScenario, final String newName) {
+        var isOperationPerformed = false;
+
         lock.lock();
         try {
-            return testScenario.setName(newName);
+            isOperationPerformed = testScenario.setName(newName);
         } finally {
             lock.unlock();
         }
+
+        if (isOperationPerformed) {
+            applicationManager.getEventBroadcaster()
+                .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
+        }
+        return isOperationPerformed;
     }
 
     public boolean changeTags(final TestScenario testScenario, final Set<String> newTags) {
@@ -178,6 +211,10 @@ public class TestScenarioService implements StatisticsProvider {
                 .filter(item -> !testScenarioTagsAsString.contains(item))
                 .map(tagRepository::getOrCreate)
                 .collect(Collectors.toSet()));
+            if (isRemoved || isAdded) {
+                applicationManager.getEventBroadcaster()
+                    .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
+            }
             return isRemoved || isAdded;
         } finally {
             lock.unlock();
@@ -187,25 +224,25 @@ public class TestScenarioService implements StatisticsProvider {
     public void delete(final TestScenario testScenario) {
         lock.lock();
         try {
+            final var testScenarioRunnable = ALL_SCENARIOS.remove(testScenario.getId());
             if (testScenario.isEnabled()) {
-                scheduleTestScenarioService.unschedule(testScenario);
+                scheduleTestScenarioService.unschedule(testScenarioRunnable);
             }
-
-            ALL_TESTS.remove(testScenario.getId());
-            testScenario.markAsDeleted();
+            applicationManager.getEventBroadcaster()
+                .broadcast(TestScenarioDeleteEvent.builder().testScenario(testScenario).build());
         } finally {
             lock.unlock();
         }
     }
 
     public void scheduleAllNowInAsyncMode() {
-        ALL_TESTS.values().stream()
-            .filter(TestScenario::isEnabled)
+        ALL_SCENARIOS.values().stream()
+            .filter(testScenarioRunnable -> testScenarioRunnable.getTestScenario().isEnabled())
             .forEach(scheduleTestScenarioService::scheduleInAsyncMode);
     }
 
     public void scheduleNowInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
-        scheduleTestScenarioService.scheduleInSyncMode(testScenario);
+        scheduleTestScenarioService.scheduleInSyncMode(ALL_SCENARIOS.get(testScenario.getId()));
     }
 
     @Override
@@ -246,7 +283,7 @@ public class TestScenarioService implements StatisticsProvider {
 
     private Predicate<TestScenario> getPredicateByTagCriteria(final Set<String> byTagCriteria) {
         return !byTagCriteria.isEmpty()
-            ? testScenario -> testScenario.getTags().containsAll(byTagCriteria)
+            ? testScenario -> testScenario.getTagsAsString().containsAll(byTagCriteria)
             : ALWAYS_TRUE_PREDICATE;
     }
 

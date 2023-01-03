@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class ApplicationUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
             .map(CustomUserDetails::new)
-            .orElseThrow(() -> new UsernameNotFoundException("Could not find user with name = " + username));
+            .orElseThrow(() -> new UsernameNotFoundException("Could not find user with name '" + username + "'."));
     }
 
 }

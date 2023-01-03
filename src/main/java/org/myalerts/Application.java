@@ -23,7 +23,7 @@ import org.springframework.core.annotation.Order;
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
-    private final ApplicationContext applicationContext;
+    private final ApplicationManager applicationManager;
 
     public static void main(final String[] args) {
         SpringApplication.run(Application.class, args);
@@ -38,7 +38,7 @@ public class Application extends SpringBootServletInitializer implements AppShel
     }
 
     private void registerListener(final String key, final org.myalerts.domain.event.EventListener<Event> value) {
-        applicationContext.getEventBroadcaster().register(value::onEventReceived, value.getEventType());
+        applicationManager.getEventBroadcaster().register(value::onEventReceived, value.getEventType());
     }
 
 }

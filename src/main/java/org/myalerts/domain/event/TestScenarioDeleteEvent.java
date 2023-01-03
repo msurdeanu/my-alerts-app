@@ -10,7 +10,7 @@ import org.myalerts.domain.TestScenario;
  */
 @Builder
 @Getter
-public class TestDeleteEvent implements Event {
+public class TestScenarioDeleteEvent implements Event {
 
     private final TestScenario testScenario;
 

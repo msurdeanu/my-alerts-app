@@ -2,8 +2,6 @@ package org.myalerts.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.myalerts.ApplicationContext;
-import org.myalerts.EventBroadcaster;
 
 /**
  * @author Mihai Surdeanu
@@ -12,8 +10,6 @@ import org.myalerts.EventBroadcaster;
 @Builder
 public final class ExecutionContext {
 
-    private final ApplicationContext applicationContext;
-
     @Getter
     private final long millisSinceLatestRun;
 
@@ -21,10 +17,6 @@ public final class ExecutionContext {
 
     @Getter
     private boolean markedAsFailed;
-
-    public EventBroadcaster getEventBroadcaster() {
-        return applicationContext.getEventBroadcaster();
-    }
 
     public void markAsFailed(final String message) {
         markedAsFailed = true;

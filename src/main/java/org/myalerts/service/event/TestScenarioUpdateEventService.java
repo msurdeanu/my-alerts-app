@@ -1,9 +1,9 @@
-package org.myalerts.service;
+package org.myalerts.service.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.domain.event.EventListener;
-import org.myalerts.domain.event.TestUpdateEvent;
+import org.myalerts.domain.event.TestScenarioUpdateEvent;
 import org.myalerts.repository.TestScenarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +14,18 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TestScenarioUpdateService implements EventListener<TestUpdateEvent> {
+public class TestScenarioUpdateEventService implements EventListener<TestScenarioUpdateEvent> {
 
     private final TestScenarioRepository testScenarioRepository;
 
     @Override
-    public void onEventReceived(final TestUpdateEvent event) {
+    public void onEventReceived(final TestScenarioUpdateEvent event) {
         testScenarioRepository.save(event.getTestScenario());
     }
 
     @Override
-    public Class<TestUpdateEvent> getEventType() {
-        return TestUpdateEvent.class;
+    public Class<TestScenarioUpdateEvent> getEventType() {
+        return TestScenarioUpdateEvent.class;
     }
 
 }

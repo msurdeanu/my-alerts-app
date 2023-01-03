@@ -3,7 +3,7 @@ package org.myalerts.config;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import lombok.RequiredArgsConstructor;
 import org.myalerts.repository.UserRepository;
-import org.myalerts.service.CustomUserDetailsService;
+import org.myalerts.service.ApplicationUserDetailsService;
 import org.myalerts.view.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class SecurityConfig extends VaadinWebSecurity {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService(userRepository);
+        return new ApplicationUserDetailsService(userRepository);
     }
 
     @Bean

@@ -10,7 +10,7 @@ import org.myalerts.domain.TestScenario;
  */
 @Builder
 @Getter
-public class TestUpdateEvent implements Event {
+public class TestScenarioUpdateEvent implements Event {
 
     private final TestScenario testScenario;
 

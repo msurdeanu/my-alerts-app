@@ -21,7 +21,7 @@ import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
-import org.myalerts.service.TestScenarioResultService;
+import org.myalerts.service.event.TestScenarioRunEventService;
 import org.myalerts.service.TestScenarioService;
 
 import java.util.Collection;
@@ -45,10 +45,10 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
 
     private final TestScenarioService testScenarioService;
 
-    private final TestScenarioResultService testScenarioResultService;
+    private final TestScenarioRunEventService testScenarioResultService;
 
     public TestScenarioView(final TestScenarioService testScenarioService,
-                            final TestScenarioResultService testScenarioResultService) {
+                            final TestScenarioRunEventService testScenarioResultService) {
         super();
         this.testScenarioService = testScenarioService;
         this.testScenarioResultService = testScenarioResultService;

@@ -3,9 +3,9 @@ package org.myalerts.provider;
 import com.vaadin.flow.i18n.I18NProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.myalerts.ApplicationManager;
 import org.myalerts.domain.SupportedLanguage;
 import org.ocpsoft.prettytime.PrettyTime;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class TranslationProvider implements I18NProvider {
 
     public static final String PRETTY_TIME_FORMAT = "pretty.time.format";
 
-    private final ApplicationContext applicationContext;
+    private final ApplicationManager applicationManager;
 
     private PrettyTime cachedPrettyTime;
 
@@ -50,7 +50,7 @@ public class TranslationProvider implements I18NProvider {
             return prettyTimeFormat((Instant) args[0], locale);
         }
 
-        return applicationContext.getBeansOfType(TranslationsProvider.class).values().stream()
+        return applicationManager.getBeansOfTypeAsStream(TranslationsProvider.class)
             .map(TranslationsProvider::getResourceBundles)
             .filter(Objects::nonNull)
             .map(resourcesBundles -> resourcesBundles.get(SupportedLanguage.ENGLISH))
