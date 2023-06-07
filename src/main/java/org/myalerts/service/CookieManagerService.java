@@ -6,7 +6,7 @@ import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;

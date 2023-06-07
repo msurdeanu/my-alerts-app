@@ -7,12 +7,12 @@ import org.myalerts.service.ApplicationUserDetailsService;
 import org.myalerts.view.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @author Mihai Surdeanu
@@ -26,17 +26,19 @@ public class SecurityConfig extends VaadinWebSecurity {
     private final UserRepository userRepository;
 
     @Override
-    protected void configure(final HttpSecurity httpSecurity) throws Exception {
-        super.configure(httpSecurity);
+    @SuppressWarnings("removal")
+    public void configure(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().requestMatchers(
+                new AntPathRequestMatcher("/logo.png"),
+                new AntPathRequestMatcher("/line-awesome/**")).permitAll();
+        super.configure(http);
 
-        setLoginView(httpSecurity, LoginView.class);
+        setLoginView(http, LoginView.class);
     }
 
     @Override
-    public void configure(final WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring().antMatchers("/logo.png");
-
-        super.configure(webSecurity);
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
     }
 
     @Bean
@@ -47,14 +49,6 @@ public class SecurityConfig extends VaadinWebSecurity {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        final var authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
     }
 
 }

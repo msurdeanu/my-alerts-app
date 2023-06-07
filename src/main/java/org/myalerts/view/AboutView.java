@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
 
@@ -12,7 +12,7 @@ import org.myalerts.layout.ResponsiveLayout;
  * @author Mihai Surdeanu
  * @since 1.0.0
  */
-@AnonymousAllowed
+@PermitAll
 @Route(value = AboutView.ROUTE, layout = BaseLayout.class)
 public class AboutView extends ResponsiveLayout implements HasDynamicTitle {
 

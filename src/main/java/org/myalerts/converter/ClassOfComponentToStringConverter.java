@@ -3,8 +3,8 @@ package org.myalerts.converter;
 import com.vaadin.flow.component.Component;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 import static java.util.Optional.ofNullable;
 

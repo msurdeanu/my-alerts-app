@@ -8,7 +8,6 @@ import org.myalerts.domain.event.TestScenarioRunEvent;
 import org.myalerts.repository.TestScenarioResultRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class TestScenarioRunEventService implements EventListener<TestScenarioRu
 
     @Cacheable(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#id")
     public Collection<TestScenarioResult> getLastResults(final int id) {
-        return testScenarioResultRepository.findByScenarioIdOrderByCreatedDesc(id, PageRequest.of(0, 10));
+        return testScenarioResultRepository.findTop10ByScenarioIdOrderByCreatedDesc(id);
     }
 
     @CacheEvict(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenarioRun?.scenarioId")

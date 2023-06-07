@@ -8,8 +8,8 @@ import org.myalerts.domain.event.TestScenarioRunEvent;
 import org.myalerts.exception.AlertingRuntimeException;
 import org.myalerts.provider.HelpersProvider;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import java.time.Instant;
 import java.time.temporal.Temporal;
 

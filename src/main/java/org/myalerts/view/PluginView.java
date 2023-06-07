@@ -11,7 +11,7 @@ import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.service.PluginService;
 import org.pf4j.PluginWrapper;
 
-import javax.annotation.security.RolesAllowed;
+import jakarta.annotation.security.RolesAllowed;
 
 /**
  * @author Mihai Surdeanu

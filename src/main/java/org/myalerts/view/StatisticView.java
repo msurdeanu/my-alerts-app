@@ -2,7 +2,7 @@ package org.myalerts.view;
 
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.component.StatisticsTreeGrid;
 import org.myalerts.layout.BaseLayout;
@@ -17,7 +17,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Slf4j
-@AnonymousAllowed
+@PermitAll
 @Route(value = StatisticView.ROUTE, layout = BaseLayout.class)
 @DependsOn("pluginManager")
 public class StatisticView extends ResponsiveLayout implements HasDynamicTitle {

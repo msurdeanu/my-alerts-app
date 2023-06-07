@@ -12,7 +12,7 @@ import org.myalerts.layout.ResponsiveLayout;
 import org.myalerts.provider.SettingProvider;
 import org.myalerts.transformer.SettingsToComponentsTransformer;
 
-import javax.annotation.security.RolesAllowed;
+import jakarta.annotation.security.RolesAllowed;
 
 /**
  * @author Mihai Surdeanu

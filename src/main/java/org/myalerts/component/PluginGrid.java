@@ -37,7 +37,7 @@ public final class PluginGrid extends Composite<VerticalLayout> {
         final var layout = super.initContent();
 
         layout.setSizeFull();
-        paginatedGrid.setHeightByRows(true);
+        paginatedGrid.setAllRowsVisible(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderId))
             .setHeader(getTranslation("plugin.main-grid.id.column"))
             .setAutoWidth(true);

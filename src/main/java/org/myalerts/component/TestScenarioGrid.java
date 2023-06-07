@@ -61,7 +61,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         final var layout = super.initContent();
 
         layout.setSizeFull();
-        paginatedGrid.setHeightByRows(true);
+        paginatedGrid.setAllRowsVisible(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderIsEnabled))
             .setAutoWidth(true);
         paginatedGrid.addColumn(new ComponentRenderer<>(this::renderName))

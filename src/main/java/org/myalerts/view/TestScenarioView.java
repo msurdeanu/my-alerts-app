@@ -21,8 +21,8 @@ import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.layout.BaseLayout;
 import org.myalerts.layout.ResponsiveLayout;
-import org.myalerts.service.event.TestScenarioRunEventService;
 import org.myalerts.service.TestScenarioService;
+import org.myalerts.service.event.TestScenarioRunEventService;
 
 import java.util.Collection;
 import java.util.Set;
@@ -54,15 +54,15 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         this.testScenarioResultService = testScenarioResultService;
 
         final ConfigurableFilterDataProvider<TestScenario, Void, TestScenarioFilter> configurableFilterDataProvider = DataProvider
-            .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
-            .withConfigurableFilter();
+                .fromFilteringCallbacks(testScenarioService::findBy, testScenarioService::countBy)
+                .withConfigurableFilter();
         configurableFilterDataProvider.setFilter(testScenarioFilter);
 
         testScenarioGrid = new TestScenarioGrid(this, testScenarioService.getAllTags());
         testScenarioGrid.setDataProvider(configurableFilterDataProvider);
 
         add(createHeader(getTranslation("test-scenario.page.subtitle"),
-            createFilterByTag(testScenarioService), createFilterByName(), createFilterByType()));
+                createFilterByTag(testScenarioService), createFilterByName(), createFilterByType()));
         add(createContent(testScenarioGrid));
         add(createFooter());
     }
