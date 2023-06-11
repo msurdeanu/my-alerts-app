@@ -35,6 +35,21 @@
         <junit.version>5.8.1</junit.version>
     </properties>
 
+    <scm>
+        <connection>scm:git:https://github.com/msurdeanu/my-alerts-app.git</connection>
+        <url>https://github.com/msurdeanu/my-alerts-app</url>
+        <developerConnection>scm:git:https://github.com/msurdeanu/my-alerts-app.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>MyAlerts App Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/msurdeanu/my-alerts-app</url>
+        </repository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>central</id>
