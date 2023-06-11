@@ -17,7 +17,13 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        server-id: 'github'
         cache: maven
+
+    - name: Configure Git user
+      run: |
+        git config user.email "release-bot@myalerts.org"
+        git config user.name "Release Bot"
 
     - name: Release a new version
       run: mvn -B release:prepare release:perform --file pom.xml --settings settings.xml
