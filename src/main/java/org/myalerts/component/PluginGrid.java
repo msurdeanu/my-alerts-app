@@ -81,16 +81,12 @@ public final class PluginGrid extends Composite<VerticalLayout> {
     }
 
     private String getPluginStatus(final PluginWrapper plugin) {
-        switch (plugin.getPluginState()) {
-            case DISABLED:
-                return "contrast";
-            case STOPPED:
-                return "primary";
-            case FAILED:
-                return "error";
-            default:
-                return "success";
-        }
+        return switch (plugin.getPluginState()) {
+            case DISABLED -> "contrast";
+            case STOPPED -> "primary";
+            case FAILED -> "error";
+            default -> "success";
+        };
     }
 
 }

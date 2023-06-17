@@ -52,7 +52,7 @@ public class ScheduleTestScenarioService {
 
         lock.lock();
         try {
-            unschedule(testScenarioRunnable);
+            unSchedule(testScenarioRunnable);
             SCENARIOS_SCHEDULED_MAP.put(id, scheduledFuture);
         } finally {
             lock.unlock();
@@ -61,7 +61,7 @@ public class ScheduleTestScenarioService {
         log.info("New test scenario '{}' added to scheduling pool. Running frequency is '{}'.", id, cron);
     }
 
-    public void unschedule(final TestScenarioRunnable testScenarioRunnable) {
+    public void unSchedule(final TestScenarioRunnable testScenarioRunnable) {
         if (testScenarioRunnable == null) {
             return;
         }

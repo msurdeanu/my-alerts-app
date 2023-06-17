@@ -7,13 +7,13 @@ CREATE TABLE menu_items (
 );
 
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
-VALUES ('menu.main.test-scenarios', 'globe_solid', 'org.myalerts.view.TestScenarioView', 'ROLE_GUEST', '1');
+VALUES ('menu.main.test-scenarios', 'globe', 'org.myalerts.view.TestScenarioView', 'ROLE_GUEST', '1');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
-VALUES ('menu.main.plugins', 'plug_solid', 'org.myalerts.view.PluginView', 'ROLE_ADMIN', '2');
+VALUES ('menu.main.plugins', 'plug', 'org.myalerts.view.PluginView', 'ROLE_ADMIN', '2');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
-VALUES ('menu.main.settings', 'cog_solid', 'org.myalerts.view.SettingView', 'ROLE_ADMIN', '3');
+VALUES ('menu.main.settings', 'cog', 'org.myalerts.view.SettingView', 'ROLE_ADMIN', '3');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
-VALUES ('menu.main.statistics', 'tachometer_alt_solid', 'org.myalerts.view.StatisticView', 'ROLE_GUEST', '4');
+VALUES ('menu.main.statistics', 'chart', 'org.myalerts.view.StatisticView', 'ROLE_GUEST', '4');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")
 VALUES ('menu.main.about', 'heart', 'org.myalerts.view.AboutView', 'ROLE_GUEST', '5');
 INSERT INTO menu_items ("label", "icon", "target", "role", "position")

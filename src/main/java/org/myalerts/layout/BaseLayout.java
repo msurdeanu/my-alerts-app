@@ -8,11 +8,11 @@ import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.sidenav.SideNav;
+import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.myalerts.component.AppNav;
-import org.myalerts.component.AppNavItem;
 import org.myalerts.repository.MenuItemRepository;
-import org.myalerts.transformer.MenuItemsToAppNavItemsTransformer;
+import org.myalerts.transformer.MenuItemsToSideNavItemsTransformer;
 
 import java.util.List;
 
@@ -31,10 +31,10 @@ public class BaseLayout extends AppLayout {
         logo.setHeight("44px");
         addToNavbar(IS_OPTIMIZED_FOR_MOBILE, new DrawerToggle(), logo);
 
-        addDrawerContent(new MenuItemsToAppNavItemsTransformer().transform(menuItemRepository.findByOrderByPosition()));
+        addDrawerContent(new MenuItemsToSideNavItemsTransformer().transform(menuItemRepository.findByOrderByPosition()));
     }
 
-    private void addDrawerContent(final List<AppNavItem> routerLinks) {
+    private void addDrawerContent(final List<SideNavItem> routerLinks) {
         final var appName = new H1(getTranslation("app.name"));
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         final var header = new Header(appName);
@@ -42,8 +42,8 @@ public class BaseLayout extends AppLayout {
         addToDrawer(header, scroller, createFooter());
     }
 
-    private AppNav createNavigation(final List<AppNavItem> routerLinks) {
-        final var appNav = new AppNav();
+    private SideNav createNavigation(final List<SideNavItem> routerLinks) {
+        final var appNav = new SideNav();
         routerLinks.forEach(appNav::addItem);
         return appNav;
     }

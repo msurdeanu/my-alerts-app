@@ -1,6 +1,5 @@
 package org.myalerts.view;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.select.Select;
@@ -8,7 +7,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.NonNull;
@@ -35,13 +37,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @AnonymousAllowed
 @Route(value = TestScenarioView.ROUTE, layout = BaseLayout.class)
-public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitle, TestScenarioEventHandler {
+public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitle, HasUrlParameter<String>, TestScenarioEventHandler {
 
     public static final String ROUTE = "test-scenarios";
 
-    private final TestScenarioGrid testScenarioGrid;
-
     private final TestScenarioFilter testScenarioFilter = new TestScenarioFilter();
+
+    private final Select<TestScenarioType> filterByType;
+
+    private final TestScenarioGrid testScenarioGrid;
 
     private final TestScenarioService testScenarioService;
 
@@ -61,8 +65,11 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         testScenarioGrid = new TestScenarioGrid(this, testScenarioService.getAllTags());
         testScenarioGrid.setDataProvider(configurableFilterDataProvider);
 
-        add(createHeader(getTranslation("test-scenario.page.subtitle"),
-                createFilterByTag(testScenarioService), createFilterByName(), createFilterByType()));
+        filterByType = createFilterByType();
+
+        add(createHeader(getTranslation("test-scenario.page.subtitle"), filterByType,
+                createFilterByTag(testScenarioService),
+                createFilterByName()));
         add(createContent(testScenarioGrid));
         add(createFooter());
     }
@@ -70,6 +77,13 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
     @Override
     public String getPageTitle() {
         return getTranslation("site.base.title", getTranslation("menu.main.test-scenarios"));
+    }
+
+    @Override
+    public void setParameter(final BeforeEvent event, final @OptionalParameter String parameter) {
+        if (parameter != null) {
+            filterByType.setValue(TestScenarioType.of(parameter));
+        }
     }
 
     @Override
@@ -129,27 +143,7 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         }
     }
 
-    private Component createFilterByTag(final TestScenarioService testScenarioService) {
-        final var filterByTagComboBox = new MultiSelectComboBox<String>();
-        filterByTagComboBox.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-tag.placeholder"));
-        filterByTagComboBox.setHelperText(getTranslation("test-scenario.main-grid.filter.by-tag.helper"));
-        filterByTagComboBox.setItems(testScenarioService.getAllTags());
-        filterByTagComboBox.addValueChangeListener(event -> onFilteringByTag(event.getValue()));
-        return filterByTagComboBox;
-    }
-
-    private Component createFilterByName() {
-        final var filterByNameTextField = new TextField();
-        filterByNameTextField.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-name.placeholder"));
-        filterByNameTextField.setHelperText(getTranslation("test-scenario.main-grid.filter.by-name.helper"));
-        filterByNameTextField.setClearButtonVisible(true);
-        filterByNameTextField.setValueChangeMode(ValueChangeMode.LAZY);
-        filterByNameTextField.setValueChangeTimeout((int) TimeUnit.SECONDS.toMillis(1));
-        filterByNameTextField.addValueChangeListener(event -> onFilteringByName(event.getValue()));
-        return filterByNameTextField;
-    }
-
-    private Component createFilterByType() {
+    private Select<TestScenarioType> createFilterByType() {
         final var filterByTypeSelect = new Select<TestScenarioType>();
         filterByTypeSelect.setItems(TestScenarioType.getAllItems());
         filterByTypeSelect.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-type.placeholder"));
@@ -160,6 +154,32 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         return filterByTypeSelect;
     }
 
+    private MultiSelectComboBox<String> createFilterByTag(final TestScenarioService testScenarioService) {
+        final var filterByTagComboBox = new MultiSelectComboBox<String>();
+        filterByTagComboBox.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-tag.placeholder"));
+        filterByTagComboBox.setHelperText(getTranslation("test-scenario.main-grid.filter.by-tag.helper"));
+        filterByTagComboBox.setItems(testScenarioService.getAllTags());
+        filterByTagComboBox.addValueChangeListener(event -> onFilteringByTag(event.getValue()));
+        return filterByTagComboBox;
+    }
+
+    private TextField createFilterByName() {
+        final var filterByNameTextField = new TextField();
+        filterByNameTextField.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-name.placeholder"));
+        filterByNameTextField.setHelperText(getTranslation("test-scenario.main-grid.filter.by-name.helper"));
+        filterByNameTextField.setClearButtonVisible(true);
+        filterByNameTextField.setValueChangeMode(ValueChangeMode.LAZY);
+        filterByNameTextField.setValueChangeTimeout((int) TimeUnit.SECONDS.toMillis(1));
+        filterByNameTextField.addValueChangeListener(event -> onFilteringByName(event.getValue()));
+        return filterByNameTextField;
+    }
+
+    private void onFilteringByType(final TestScenarioType value) {
+        testScenarioFilter.setByTypeCriteria(value);
+
+        testScenarioGrid.refreshPage();
+    }
+
     private void onFilteringByTag(final Set<String> tags) {
         testScenarioFilter.setByTagCriteria(tags);
 
@@ -168,12 +188,6 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
 
     private void onFilteringByName(final String value) {
         testScenarioFilter.setByNameCriteria(value.toLowerCase());
-
-        testScenarioGrid.refreshPage();
-    }
-
-    private void onFilteringByType(final TestScenarioType value) {
-        testScenarioFilter.setByTypeCriteria(value);
 
         testScenarioGrid.refreshPage();
     }

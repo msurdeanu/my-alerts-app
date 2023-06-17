@@ -33,7 +33,9 @@ public final class TestScenarioRunnable implements Runnable {
         final var testScenarioDefinition = testScenario.getDefinition();
         final var nextLastRunTime = Instant.now();
         final var testScenarioRunBuilder = TestScenarioRun.builder()
-            .scenarioId(testScenario.getId());
+            .scenarioId(testScenario.getId())
+            .scenarioName(testScenario.getName())
+            .scenarioTags(testScenario.getTagsAsString());
         final var executionContext = ExecutionContext.builder()
             .testScenarioRunBuilder(testScenarioRunBuilder)
             .millisSinceLatestRun(getMillisBetween(testScenario.getLastRunTime(), nextLastRunTime))

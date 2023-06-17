@@ -108,7 +108,7 @@ public class TestScenarioService implements StatisticsProvider {
             final var testScenarioRunnable = new TestScenarioRunnable(applicationManager, testScenario);
             ofNullable(ALL_SCENARIOS.put(testScenario.getId(), testScenarioRunnable))
                 .filter(oldTestScenarioRunnable -> oldTestScenarioRunnable.getTestScenario().isEnabled())
-                .ifPresent(scheduleTestScenarioService::unschedule);
+                .ifPresent(scheduleTestScenarioService::unSchedule);
             if (testScenario.isEnabled()) {
                 scheduleTestScenarioService.schedule(testScenarioRunnable);
             }
@@ -124,7 +124,7 @@ public class TestScenarioService implements StatisticsProvider {
 
             ofNullable(ALL_SCENARIOS.get(testScenario.getId())).ifPresent(testScenarioRunnable -> {
                 if (testScenarioRunnable.getTestScenario().isEnabled()) {
-                    scheduleTestScenarioService.unschedule(testScenarioRunnable);
+                    scheduleTestScenarioService.unSchedule(testScenarioRunnable);
                 } else {
                     scheduleTestScenarioService.schedule(testScenarioRunnable);
                 }
@@ -144,7 +144,7 @@ public class TestScenarioService implements StatisticsProvider {
         try {
             final var testScenarioRunnable = ALL_SCENARIOS.get(testScenario.getId());
             if (testScenario.isEnabled()) {
-                scheduleTestScenarioService.unschedule(testScenarioRunnable);
+                scheduleTestScenarioService.unSchedule(testScenarioRunnable);
             }
             isOperationPerformed = testScenario.setCron(newCronExpression);
             if (testScenario.isEnabled()) {
@@ -226,7 +226,7 @@ public class TestScenarioService implements StatisticsProvider {
         try {
             final var testScenarioRunnable = ALL_SCENARIOS.remove(testScenario.getId());
             if (testScenario.isEnabled()) {
-                scheduleTestScenarioService.unschedule(testScenarioRunnable);
+                scheduleTestScenarioService.unSchedule(testScenarioRunnable);
             }
             applicationManager.getEventBroadcaster()
                 .broadcast(TestScenarioDeleteEvent.builder().testScenario(testScenario).build());
