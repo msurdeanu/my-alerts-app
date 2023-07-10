@@ -49,7 +49,6 @@ Vaadin web applications are full-stack and include both client-side and server-s
 | &nbsp;&nbsp;&nbsp;&nbsp;`component/`                      | Package with all Vaadin custom components             |
 | &nbsp;&nbsp;&nbsp;&nbsp;`config/`                         | Package with different Spring configuration beans     |
 | &nbsp;&nbsp;&nbsp;&nbsp;`converter/`                      | Package with multiple persistence converters          |
-| &nbsp;&nbsp;&nbsp;&nbsp;`dialect/`                        | Package with stuff related with SQLite database       |
 | &nbsp;&nbsp;&nbsp;&nbsp;`domain/`                         | Package with all classes part of application domain   |
 | &nbsp;&nbsp;&nbsp;&nbsp;`provider/`                       | Java package with a set of providers                  |
 | &nbsp;&nbsp;&nbsp;&nbsp;`repository/`                     | Contains a set of JpaRepositories                     |

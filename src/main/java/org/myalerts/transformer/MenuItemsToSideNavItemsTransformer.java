@@ -4,7 +4,6 @@ import com.vaadin.flow.component.sidenav.SideNavItem;
 import org.myalerts.domain.MenuItem;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.vaadin.flow.component.icon.VaadinIcon.valueOf;

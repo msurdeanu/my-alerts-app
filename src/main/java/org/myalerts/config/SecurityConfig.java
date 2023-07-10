@@ -28,9 +28,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     @Override
     @SuppressWarnings("removal")
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers(
-                new AntPathRequestMatcher("/logo.png"),
-                new AntPathRequestMatcher("/line-awesome/**")).permitAll();
+        http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/logo.png")).permitAll();
         super.configure(http);
 
         setLoginView(http, LoginView.class);
