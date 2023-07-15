@@ -3,7 +3,7 @@ package org.myalerts.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.myalerts.domain.TestScenarioResult;
@@ -44,17 +44,17 @@ public final class TestScenarioHistoryDialog extends ResponsiveDialog {
     }
 
     private Component renderRunTime(final TestScenarioResult testScenarioResult) {
-        return new Label(getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
+        return new NativeLabel(getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
     }
 
     private Component renderDuration(final TestScenarioResult testScenarioResult) {
-        return new Label(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDuration()));
+        return new NativeLabel(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDuration()));
     }
 
     private Component renderResult(final TestScenarioResult testScenarioResult) {
         return ofNullable(testScenarioResult.getCause())
             .map(this::mapToTextArea)
-            .orElseGet(() -> new Label(getTranslation("test-scenario.history.no-failure-detected")));
+            .orElseGet(() -> new NativeLabel(getTranslation("test-scenario.history.no-failure-detected")));
     }
 
     private Component mapToTextArea(final String value) {

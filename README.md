@@ -12,7 +12,7 @@ Since alert definition is in pure Groovy, the power of the tool is huge and offe
 
 ## Technology stack
 
-* Java 11 as programming language.
+* Java 17 as programming language.
 * Use [Groovy](https://groovy-lang.org/) as additional language for defining alerts
 * Spring Boot 3 as dependency injection framework
 * [Vaadin 24](https://vaadin.com/) as UI framework

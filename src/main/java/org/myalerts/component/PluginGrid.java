@@ -6,7 +6,7 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.AnchorTarget;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -64,7 +64,7 @@ public final class PluginGrid extends Composite<VerticalLayout> {
     }
 
     private Component renderDescription(final PluginWrapper plugin) {
-        return new Label(plugin.getDescriptor().getPluginDescription());
+        return new NativeLabel(plugin.getDescriptor().getPluginDescription());
     }
 
     private Component renderVersion(final PluginWrapper plugin) {

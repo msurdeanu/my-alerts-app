@@ -8,7 +8,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -103,7 +103,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
                 return span;
             }).forEach(layout::add);
 
-            final var name = new Label(abbreviate(testScenario.getName(), 64));
+            final var name = new NativeLabel(abbreviate(testScenario.getName(), 64));
             name.addClassName(getClassName(testScenario));
             layout.add(name);
             return layout;
@@ -147,7 +147,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
 
     private Component renderCronExpression(final TestScenario testScenario) {
         if (!testScenario.isEditable()) {
-            return new Label(testScenario.getCron());
+            return new NativeLabel(testScenario.getCron());
         }
 
         final var textField = new TextField();
