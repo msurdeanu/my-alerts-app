@@ -120,9 +120,15 @@ VALUES ('cacheMenuItemExpireAfterWrite', 'settings.cache.menu-item.expire-after-
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTestScenarioResultMaxSize', 'settings.cache.test-scenario-result.max-size.label', 'settings.cache.test-scenario-result.max-size.helper', 'int', '100', '0', '11');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('cacheTestScenarioResultExpireAfterAccess', 'settings.cache.test-scenario-result.expire-after-access.label', 'settings.cache.test-scenario-result.expire-after-access.helper', 'int', '3600', '0', '12');
+VALUES ('cacheTestScenarioResultExpireAfterAccess', 'settings.cache.test-scenario-result.expire-after-access.label', 'settings.cache.test-scenario-result.expire-after-access.helper', 'int', '300', '0', '12');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTestScenarioResultExpireAfterWrite', 'settings.cache.test-scenario-result.expire-after-write.label', 'settings.cache.test-scenario-result.expire-after-write.helper', 'int', '0', '0', '13');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('cacheTranslationKeyMaxSize', 'settings.cache.translation-key.max-size.label', 'settings.cache.translation-key.max-size.helper', 'int', '10000', '0', '14');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('cacheTranslationKeyExpireAfterAccess', 'settings.cache.translation-key..expire-after-access.label', 'settings.cache.translation-key.expire-after-access.helper', 'int', '0', '0', '15');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('cacheTranslationKeyExpireAfterWrite', 'settings.cache.translation-key..expire-after-write.label', 'settings.cache.translation-key.expire-after-write.helper', 'int', '3600', '0', '16');
 
 CREATE UNIQUE INDEX settings_key_index ON settings ("key");
 

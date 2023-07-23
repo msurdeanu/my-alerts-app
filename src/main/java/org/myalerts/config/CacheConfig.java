@@ -1,6 +1,7 @@
 package org.myalerts.config;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import jakarta.validation.constraints.NotNull;
 import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.cache.CacheManager;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.List;
 
@@ -28,9 +28,9 @@ public class CacheConfig {
     @Primary
     public CacheManager menuItemCacheManager(final SettingProvider settingProvider) {
         final var cacheManager = new CustomCacheManager(
-            settingProvider.getOrDefault(SettingKeyEnum.CACHE_MENU_ITEM_MAX_SIZE, 20),
-            ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_MENU_ITEM_EXPIRE_AFTER_ACCESS, 0)),
-            ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_MENU_ITEM_EXPIRE_AFTER_WRITE, 86400))
+                settingProvider.getOrDefault(SettingKeyEnum.CACHE_MENU_ITEM_MAX_SIZE, 20),
+                ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_MENU_ITEM_EXPIRE_AFTER_ACCESS, 0)),
+                ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_MENU_ITEM_EXPIRE_AFTER_WRITE, 86_400))
         );
         cacheManager.setCacheNames(List.of("menu-items"));
         return cacheManager;
@@ -39,11 +39,22 @@ public class CacheConfig {
     @Bean
     public CacheManager testScenarioResultCacheManager(final SettingProvider settingProvider) {
         final var cacheManager = new CustomCacheManager(
-            settingProvider.getOrDefault(SettingKeyEnum.CACHE_TEST_SCENARIO_RESULT_MAX_SIZE, 100),
-            ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_ACCESS, 0)),
-            ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_WRITE, 300))
+                settingProvider.getOrDefault(SettingKeyEnum.CACHE_TEST_SCENARIO_RESULT_MAX_SIZE, 100),
+                ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_ACCESS, 300)),
+                ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_TEST_SCENARIO_RESULT_EXPIRE_AFTER_WRITE, 0))
         );
         cacheManager.setCacheNames(List.of("test-scenario-results"));
+        return cacheManager;
+    }
+
+    @Bean
+    public CacheManager translationKeyCacheManager(final SettingProvider settingProvider) {
+        final var cacheManager = new CustomCacheManager(
+                settingProvider.getOrDefault(SettingKeyEnum.CACHE_TRANSLATION_KEY_MAX_SIZE, 10_000),
+                ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_TRANSLATION_KEY_EXPIRE_AFTER_ACCESS, 0)),
+                ofSeconds(settingProvider.getOrDefault(SettingKeyEnum.CACHE_TRANSLATION_KEY_EXPIRE_AFTER_WRITE, 3_600))
+        );
+        cacheManager.setCacheNames(List.of("translation-keys"));
         return cacheManager;
     }
 
@@ -53,8 +64,8 @@ public class CacheConfig {
                                   @NotNull final Duration expireAfterAccess,
                                   @NotNull final Duration expireAfterWrite) {
             final var caffeine = Caffeine.newBuilder()
-                .maximumSize(maxSize)
-                .recordStats();
+                    .maximumSize(maxSize)
+                    .recordStats();
 
             if (expireAfterAccess.getSeconds() > 0) {
                 caffeine.expireAfterAccess(expireAfterAccess);

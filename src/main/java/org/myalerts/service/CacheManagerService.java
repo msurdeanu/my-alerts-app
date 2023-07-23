@@ -1,6 +1,6 @@
 package org.myalerts.service;
 
-import com.github.benmanes.caffeine.cache.stats.CacheStats;
+import com.github.benmanes.caffeine.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,15 +41,16 @@ public class CacheManagerService implements StatisticsProvider {
                 .map(pairOfCache -> StatisticsItem.builder()
                     .name("statistics.internal-caches.group." + pairOfCache.getLeft() + ".name")
                     .icon("vaadin:file-text-o")
-                    .value(cacheStatsToString(((CaffeineCache) pairOfCache.getRight()).getNativeCache().stats()))
+                    .value(cacheToString(((CaffeineCache) pairOfCache.getRight()).getNativeCache()))
                     .description("statistics.internal-caches.group." + pairOfCache.getLeft() + ".description")
                     .build())
                 .collect(Collectors.toList()))
             .build();
     }
 
-    private String cacheStatsToString(final CacheStats cacheStats) {
-        return format("(%.4f, %.4f, %d)", cacheStats.hitRate(), cacheStats.missRate(), cacheStats.totalLoadTime());
+    private String cacheToString(final Cache<Object, Object> cache) {
+        final var cacheStats = cache.stats();
+        return format("(%.4f, %d, %d)", cacheStats.hitRate(), cacheStats.totalLoadTime(), cache.estimatedSize());
     }
 
 }

@@ -1,6 +1,8 @@
 package org.myalerts.domain;
 
 import groovy.lang.Script;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.myalerts.ApplicationManager;
@@ -8,8 +10,6 @@ import org.myalerts.domain.event.TestScenarioRunEvent;
 import org.myalerts.exception.AlertingRuntimeException;
 import org.myalerts.provider.HelpersProvider;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import java.time.Instant;
 import java.time.temporal.Temporal;
 
@@ -33,18 +33,18 @@ public final class TestScenarioRunnable implements Runnable {
         final var testScenarioDefinition = testScenario.getDefinition();
         final var nextLastRunTime = Instant.now();
         final var testScenarioRunBuilder = TestScenarioRun.builder()
-            .scenarioId(testScenario.getId())
-            .scenarioName(testScenario.getName())
-            .scenarioTags(testScenario.getTagsAsString());
+                .scenarioId(testScenario.getId())
+                .scenarioName(testScenario.getName())
+                .scenarioTags(testScenario.getTagsAsString());
         final var executionContext = ExecutionContext.builder()
-            .testScenarioRunBuilder(testScenarioRunBuilder)
-            .millisSinceLatestRun(getMillisBetween(testScenario.getLastRunTime(), nextLastRunTime))
-            .build();
+                .testScenarioRunBuilder(testScenarioRunBuilder)
+                .millisSinceLatestRun(getMillisBetween(testScenario.getLastRunTime(), nextLastRunTime))
+                .build();
 
         final var startTime = System.currentTimeMillis();
         try {
             invokeRunMethod(ofNullable(testScenarioDefinition.getParsedScript())
-                .orElseThrow(() -> new AlertingRuntimeException(testScenarioDefinition.getCause())), executionContext);
+                    .orElseThrow(() -> new AlertingRuntimeException(testScenarioDefinition.getCause())), executionContext);
         } catch (Throwable throwable) {
             executionContext.markAsFailed(throwable);
         } finally {
@@ -52,11 +52,11 @@ public final class TestScenarioRunnable implements Runnable {
             testScenario.setLastRunTime(nextLastRunTime);
 
             applicationManager.getEventBroadcaster().broadcast(TestScenarioRunEvent.builder()
-                .testScenarioRun(testScenarioRunBuilder
-                    .duration(System.currentTimeMillis() - startTime)
-                    .created(Instant.from(nextLastRunTime))
-                    .build())
-                .build());
+                    .testScenarioRun(testScenarioRunBuilder
+                            .duration(System.currentTimeMillis() - startTime)
+                            .created(Instant.from(nextLastRunTime))
+                            .build())
+                    .build());
         }
     }
 
@@ -69,8 +69,8 @@ public final class TestScenarioRunnable implements Runnable {
                                  final Object... functionArgs) {
         try {
             applicationManager.getBeansOfTypeAsStream(HelpersProvider.class)
-                .flatMap(provider -> provider.getTestScenarioRunProperties().stream())
-                .forEach(property -> parsedScript.setProperty(property.getName(), property.getValue()));
+                    .flatMap(HelpersProvider::getTestScenarioRunHelpersAsStream)
+                    .forEach(prop -> parsedScript.setProperty(prop.getName(), prop.getHelperSupplier().get()));
             parsedScript.invokeMethod("run", functionArgs);
         } catch (Exception e) {
             throw new AlertingRuntimeException(e);

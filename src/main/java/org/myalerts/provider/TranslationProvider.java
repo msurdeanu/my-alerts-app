@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.myalerts.ApplicationManager;
 import org.myalerts.domain.SupportedLanguage;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -39,9 +40,10 @@ public class TranslationProvider implements I18NProvider {
         return List.of(ENGLISH);
     }
 
+    @Cacheable(cacheNames = "translation-keys", cacheManager = "translationKeyCacheManager",
+            key = "#key", condition = "!'" + PRETTY_TIME_FORMAT + "'.equals(#key)")
     @Override
     public String getTranslation(final String key, final Locale locale, final Object... args) {
-        // TODO: Use caching mechanism to speed-up translation lookup
         if (key == null) {
             return null;
         }

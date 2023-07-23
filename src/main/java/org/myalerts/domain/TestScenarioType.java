@@ -23,7 +23,7 @@ public enum TestScenarioType {
     PASSED("passed", testScenario -> !testScenario.isFailed()),
     ALL("all", testScenario -> true);
 
-    private static Map<String, TestScenarioType> ALL_TYPES = Map.of(
+    private static final Map<String, TestScenarioType> ALL_TYPES = Map.of(
             "disabled", TestScenarioType.DISABLED,
             "failed", TestScenarioType.FAILED,
             "passed", TestScenarioType.PASSED,
