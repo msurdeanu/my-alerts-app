@@ -13,7 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * @author Mihai Surdeanu
@@ -64,17 +65,21 @@ public class TestScenarioResult implements Persistable<Integer> {
 
     public static class TestScenarioResultBuilder {
         public TestScenarioResultBuilder cause(final String message) {
-            cause = message;
+            cause = internalizeCause(message);
 
             return this;
         }
 
         public TestScenarioResultBuilder cause(final Throwable throwable) {
-            cause = Optional.ofNullable(throwable)
-                .map(item -> Optional.ofNullable(item.getCause()).map(Throwable::getMessage).orElseGet(item::getMessage))
-                .orElse(null);
+            cause = internalizeCause(ofNullable(throwable)
+                .map(item -> ofNullable(item.getCause()).map(Throwable::getMessage).orElseGet(item::getMessage))
+                .orElse(null));
 
             return this;
+        }
+
+        private String internalizeCause(final String cause) {
+            return ofNullable(cause).map(String::intern).orElse(null);
         }
     }
 

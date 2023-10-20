@@ -14,7 +14,7 @@ Since alert definition is in pure Groovy, the power of the tool is huge and offe
 
 * Java 17 as programming language.
 * Use [Groovy](https://groovy-lang.org/) as additional language for defining alerts
-* Spring Boot 3 as dependency injection framework
+* Spring Boot 3.* as dependency injection framework
 * [Vaadin 24](https://vaadin.com/) as UI framework
 * [PF4J 3.*](https://pf4j.org/) as plugin framework
 * [SQLite](https://www.sqlite.org/) as relational database for persisting data like test scenarios and their results.
@@ -34,7 +34,7 @@ Since alert definition is in pure Groovy, the power of the tool is huge and offe
 ## Running the application
 There are two ways to run the application: using `mvn spring-boot:run` or by running the `Application` class directly from your IDE.
 
-You can use any IDE of your preference, but I suggest Intellij IDEA.
+You can use any IDE of your preference, but I suggest [Intellij IDEA](https://www.jetbrains.com/idea/).
 
 ## Structure
 
@@ -53,4 +53,5 @@ Vaadin web applications are full-stack and include both client-side and server-s
 | &nbsp;&nbsp;&nbsp;&nbsp;`provider/`                       | Java package with a set of providers                  |
 | &nbsp;&nbsp;&nbsp;&nbsp;`repository/`                     | Contains a set of JpaRepositories                     |
 | &nbsp;&nbsp;&nbsp;&nbsp;`service/`                        | Contains a set of services exposed by the application |
+| &nbsp;&nbsp;&nbsp;&nbsp;`view/`                           | Contains a set of views exposed by the application    |
 | &nbsp;&nbsp;&nbsp;&nbsp;`Application.java`                | Server entrypoint                                     |
