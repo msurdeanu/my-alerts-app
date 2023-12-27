@@ -23,11 +23,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig extends VaadinWebSecurity {
 
+    public static final String REMEMBER_ME = "remember-me";
+
     private final UserRepository userRepository;
 
     @Override
     @SuppressWarnings("removal")
     public void configure(HttpSecurity http) throws Exception {
+        http.rememberMe().alwaysRemember(true).key(REMEMBER_ME).rememberMeCookieName(REMEMBER_ME);
         http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/logo.png")).permitAll();
         super.configure(http);
 

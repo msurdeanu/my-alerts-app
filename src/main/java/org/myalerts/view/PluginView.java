@@ -23,19 +23,15 @@ public class PluginView extends ResponsiveLayout implements HasDynamicTitle {
 
     public static final String ROUTE = "plugins";
 
-    private final PluginFilter pluginFilter = new PluginFilter();
-
-    private final PluginGrid pluginGrid;
-
     public PluginView(final PluginService pluginService) {
         super();
 
         final ConfigurableFilterDataProvider<PluginWrapper, Void, PluginFilter> configurableFilterDataProvider = DataProvider
             .fromFilteringCallbacks(pluginService::findBy, pluginService::countBy)
             .withConfigurableFilter();
-        configurableFilterDataProvider.setFilter(pluginFilter);
+        configurableFilterDataProvider.setFilter(new PluginFilter());
 
-        pluginGrid = new PluginGrid();
+        final var pluginGrid = new PluginGrid();
         pluginGrid.setDataProvider(configurableFilterDataProvider);
 
         add(createHeader(getTranslation("plugin.page.subtitle")));
