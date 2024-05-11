@@ -1,6 +1,6 @@
 # MyAlerts
 
-**MyAlerts** is a simple tool for creating real-time alerts for monitoring your own services.
+**[MyAlerts](https://myalerts.org)** is a simple tool for creating real-time alerts for monitoring your own services.
 You can easily create alerts, schedule them using cron-jobs and trigger notifications when they are failing.
 
 Uses Java as programming language and Vaadin as UI framework.
