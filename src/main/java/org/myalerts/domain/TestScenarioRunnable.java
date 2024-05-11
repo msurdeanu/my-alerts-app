@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.myalerts.ApplicationManager;
+import org.myalerts.EventBroadcaster;
 import org.myalerts.domain.event.TestScenarioRunEvent;
 import org.myalerts.exception.AlertingRuntimeException;
 import org.myalerts.provider.HelpersProvider;
@@ -51,7 +52,7 @@ public final class TestScenarioRunnable implements Runnable {
             testScenario.setFailed(executionContext.isMarkedAsFailed());
             testScenario.setLastRunTime(nextLastRunTime);
 
-            applicationManager.getEventBroadcaster().broadcast(TestScenarioRunEvent.builder()
+            applicationManager.getBeanOfType(EventBroadcaster.class).broadcast(TestScenarioRunEvent.builder()
                     .testScenarioRun(testScenarioRunBuilder
                             .duration(System.currentTimeMillis() - startTime)
                             .created(Instant.from(nextLastRunTime))

@@ -133,6 +133,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
             onTestScenarioUpdated(testScenario);
         }, Key.ENTER);
         addShortcutListener(layout, () -> onTestScenarioCancelled(testScenario), Key.ESCAPE);
+
         return layout;
     }
 
@@ -168,14 +169,14 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
 
         final var scheduleNowButton = new Button(new Icon(VaadinIcon.START_COG));
         scheduleNowButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-        scheduleNowButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.schedule.title"));
+        scheduleNowButton.setTooltipText(getTranslation("test-scenario.main-grid.actions.button.schedule.title"));
         scheduleNowButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         final var editButton = new Button(new Icon(VaadinIcon.EDIT));
-        editButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.edit.title"));
+        editButton.setTooltipText(getTranslation("test-scenario.main-grid.actions.button.edit.title"));
         editButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         final var deleteButton = new Button();
         deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
-        deleteButton.getElement().setProperty("title", getTranslation("test-scenario.main-grid.actions.button.delete.title"));
+        deleteButton.setTooltipText(getTranslation("test-scenario.main-grid.actions.button.delete.title"));
         deleteButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
         if (isLogged) {
@@ -227,6 +228,5 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
 
         return testScenario.isFailed() ? TestScenarioType.FAILED.getLabel() : TestScenarioType.PASSED.getLabel();
     }
-
 
 }

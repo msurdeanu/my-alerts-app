@@ -159,6 +159,7 @@ public class TestScenarioView extends ResponsiveLayout implements HasDynamicTitl
         filterByTagComboBox.setPlaceholder(getTranslation("test-scenario.main-grid.filter.by-tag.placeholder"));
         filterByTagComboBox.setHelperText(getTranslation("test-scenario.main-grid.filter.by-tag.helper"));
         filterByTagComboBox.setItems(testScenarioService.getAllTags());
+        filterByTagComboBox.setClearButtonVisible(true);
         filterByTagComboBox.addValueChangeListener(event -> onFilteringByTag(event.getValue()));
         return filterByTagComboBox;
     }

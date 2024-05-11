@@ -31,8 +31,6 @@ public final class TestScenarioDetails extends Composite<VerticalLayout> {
 
         editor.addClassName("ace-editor");
         editor.setMode(AceMode.groovy);
-        editor.setAutoComplete(true);
-        editor.setLiveAutocompletion(true);
         layout.add(editor);
 
         saveButton.setEnabled(false);

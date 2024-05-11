@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.myalerts.ApplicationManager;
+import org.myalerts.EventBroadcaster;
 import org.myalerts.domain.StatisticsGroup;
 import org.myalerts.domain.StatisticsItem;
 import org.myalerts.domain.TestScenario;
@@ -53,8 +54,6 @@ public class TestScenarioService implements StatisticsProvider {
     private final ApplicationManager applicationManager;
 
     private final ScheduleTestScenarioService scheduleTestScenarioService;
-
-    private final TagRepository tagRepository;
 
     public final Set<String> getAllTags() {
         return ALL_SCENARIOS.values().stream()
@@ -133,7 +132,7 @@ public class TestScenarioService implements StatisticsProvider {
             lock.unlock();
         }
 
-        applicationManager.getEventBroadcaster()
+        applicationManager.getBeanOfType(EventBroadcaster.class)
             .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
     }
 
@@ -155,7 +154,7 @@ public class TestScenarioService implements StatisticsProvider {
         }
 
         if (isOperationPerformed) {
-            applicationManager.getEventBroadcaster()
+            applicationManager.getBeanOfType(EventBroadcaster.class)
                 .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
         }
         return isOperationPerformed;
@@ -172,7 +171,7 @@ public class TestScenarioService implements StatisticsProvider {
         }
 
         if (isOperationPerformed) {
-            applicationManager.getEventBroadcaster()
+            applicationManager.getBeanOfType(EventBroadcaster.class)
                 .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
         }
         return isOperationPerformed;
@@ -189,7 +188,7 @@ public class TestScenarioService implements StatisticsProvider {
         }
 
         if (isOperationPerformed) {
-            applicationManager.getEventBroadcaster()
+            applicationManager.getBeanOfType(EventBroadcaster.class)
                 .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
         }
         return isOperationPerformed;
@@ -209,10 +208,10 @@ public class TestScenarioService implements StatisticsProvider {
             final var isRemoved = testScenario.removeTagIf(tag -> !newTagsTrimmed.contains(tag.getName()));
             final var isAdded = testScenario.addTags(newTagsTrimmed.stream()
                 .filter(item -> !testScenarioTagsAsString.contains(item))
-                .map(tagRepository::getOrCreate)
+                .map(item -> applicationManager.getBeanOfType(TagRepository.class).getOrCreate(item))
                 .collect(Collectors.toSet()));
             if (isRemoved || isAdded) {
-                applicationManager.getEventBroadcaster()
+                applicationManager.getBeanOfType(EventBroadcaster.class)
                     .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
             }
             return isRemoved || isAdded;
@@ -228,7 +227,7 @@ public class TestScenarioService implements StatisticsProvider {
             if (testScenario.isEnabled()) {
                 scheduleTestScenarioService.unSchedule(testScenarioRunnable);
             }
-            applicationManager.getEventBroadcaster()
+            applicationManager.getBeanOfType(EventBroadcaster.class)
                 .broadcast(TestScenarioDeleteEvent.builder().testScenario(testScenario).build());
         } finally {
             lock.unlock();

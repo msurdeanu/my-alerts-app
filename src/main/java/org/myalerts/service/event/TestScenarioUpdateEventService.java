@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TestScenarioUpdateEventService implements EventListener<TestScenarioUpdateEvent> {
+public final class TestScenarioUpdateEventService implements EventListener<TestScenarioUpdateEvent> {
 
     private final TestScenarioRepository testScenarioRepository;
 

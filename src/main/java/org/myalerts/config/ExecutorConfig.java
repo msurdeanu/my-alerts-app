@@ -37,10 +37,12 @@ public class ExecutorConfig {
 
     @Bean
     public ThreadPoolExecutor threadPoolExecutor(final SettingProvider settingProvider) {
-        return new ThreadPoolExecutor(settingProvider.getOrDefault(SettingKeyEnum.EVENT_CORE_POOL_SIZE, 1),
+        final var threadPoolExecutor = new ThreadPoolExecutor(settingProvider.getOrDefault(SettingKeyEnum.EVENT_CORE_POOL_SIZE, 1),
             settingProvider.getOrDefault(SettingKeyEnum.EVENT_MAX_POOL_SIZE, 2),
-            30L, TimeUnit.SECONDS,
+            60L, TimeUnit.SECONDS,
             new ArrayBlockingQueue<>(5000), new ThreadPoolExecutor.CallerRunsPolicy());
+        threadPoolExecutor.allowCoreThreadTimeOut(true);
+        return threadPoolExecutor;
     }
 
 }

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class TestScenarioReadyEventService {
+public final class TestScenarioReadyEventService {
 
     private final TestScenarioRepository testScenarioRepository;
 

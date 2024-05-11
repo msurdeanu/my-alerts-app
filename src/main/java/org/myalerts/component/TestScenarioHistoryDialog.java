@@ -60,7 +60,7 @@ public final class TestScenarioHistoryDialog extends ResponsiveDialog {
     private Component mapToTextArea(final String value) {
         final var resultTextArea = new TextArea();
         resultTextArea.setReadOnly(true);
-        resultTextArea.setWidth("100%");
+        resultTextArea.setWidthFull();
         resultTextArea.setValue(value);
         resultTextArea.setMaxHeight("120px");
         return resultTextArea;

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TestScenarioDeleteEventService implements EventListener<TestScenarioDeleteEvent> {
+public final class TestScenarioDeleteEventService implements EventListener<TestScenarioDeleteEvent> {
 
     private final TestScenarioRepository testScenarioRepository;
 

@@ -24,10 +24,6 @@ public final class PluginGrid extends Composite<VerticalLayout> {
 
     private final PaginatedGrid<PluginWrapper, ?> paginatedGrid = new PaginatedGrid<>();
 
-    public void refreshPage() {
-        paginatedGrid.refreshPaginator();
-    }
-
     public void setDataProvider(final DataProvider<PluginWrapper, ?> dataProvider) {
         paginatedGrid.setDataProvider(dataProvider);
     }
