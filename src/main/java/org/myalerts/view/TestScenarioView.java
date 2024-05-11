@@ -15,14 +15,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.component.TestScenarioGrid;
+import org.myalerts.view.component.TestScenarioGrid;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioEventHandler;
 import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.domain.TestScenarioType;
-import org.myalerts.layout.BaseLayout;
-import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.view.component.BaseLayout;
+import org.myalerts.view.component.ResponsiveLayout;
 import org.myalerts.service.TestScenarioService;
 import org.myalerts.service.event.TestScenarioRunEventService;
 

@@ -1,4 +1,4 @@
-package org.myalerts.component;
+package org.myalerts.view.component;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;

@@ -4,10 +4,10 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-import org.myalerts.component.PluginGrid;
+import org.myalerts.view.component.PluginGrid;
 import org.myalerts.domain.PluginFilter;
-import org.myalerts.layout.BaseLayout;
-import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.view.component.BaseLayout;
+import org.myalerts.view.component.ResponsiveLayout;
 import org.myalerts.service.PluginService;
 import org.pf4j.PluginWrapper;
 

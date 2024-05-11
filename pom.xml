@@ -8,7 +8,7 @@
     <description>My Alerts is a simple alerting framework based on Java as programming language and Vaadin as UI framework.</description>
     <version>0.9.16-SNAPSHOT</version>
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

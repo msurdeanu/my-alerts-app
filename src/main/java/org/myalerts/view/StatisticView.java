@@ -4,9 +4,9 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import lombok.extern.slf4j.Slf4j;
-import org.myalerts.component.StatisticsTreeGrid;
-import org.myalerts.layout.BaseLayout;
-import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.view.component.StatisticsTreeGrid;
+import org.myalerts.view.component.BaseLayout;
+import org.myalerts.view.component.ResponsiveLayout;
 import org.myalerts.provider.StatisticsProvider;
 import org.springframework.context.annotation.DependsOn;
 

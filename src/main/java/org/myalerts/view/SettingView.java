@@ -7,8 +7,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-import org.myalerts.layout.BaseLayout;
-import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.view.component.BaseLayout;
+import org.myalerts.view.component.ResponsiveLayout;
 import org.myalerts.provider.SettingProvider;
 import org.myalerts.transformer.SettingsToComponentsTransformer;
 

@@ -1,4 +1,4 @@
-package org.myalerts.component;
+package org.myalerts.view.component;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;

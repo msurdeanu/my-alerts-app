@@ -5,8 +5,8 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
-import org.myalerts.layout.BaseLayout;
-import org.myalerts.layout.ResponsiveLayout;
+import org.myalerts.view.component.BaseLayout;
+import org.myalerts.view.component.ResponsiveLayout;
 
 /**
  * @author Mihai Surdeanu
