@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class UserAccountDetails implements UserDetails {
 
     private final User user;
 

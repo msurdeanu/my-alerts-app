@@ -1,19 +1,17 @@
 package org.myalerts.service;
 
-import com.vaadin.flow.data.provider.Query;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.myalerts.ApplicationManager;
 import org.myalerts.EventBroadcaster;
 import org.myalerts.domain.StatisticsGroup;
 import org.myalerts.domain.StatisticsItem;
 import org.myalerts.domain.TestScenario;
-import org.myalerts.domain.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioRunnable;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.domain.event.TestScenarioDeleteEvent;
 import org.myalerts.domain.event.TestScenarioUpdateEvent;
+import org.myalerts.domain.filter.TestScenarioFilter;
 import org.myalerts.provider.StatisticsProvider;
 import org.myalerts.repository.TagRepository;
 import org.springframework.stereotype.Service;
@@ -21,13 +19,11 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,9 +35,7 @@ import static java.util.Optional.ofNullable;
  */
 @Service
 @RequiredArgsConstructor
-public class TestScenarioService implements StatisticsProvider {
-
-    private static final Predicate<TestScenario> ALWAYS_TRUE_PREDICATE = testScenario -> true;
+public class TestScenarioService extends AbstractDataService<TestScenario, TestScenarioFilter> implements StatisticsProvider {
 
     private static final TestScenarioFilter DISABLED_FILTER = new TestScenarioFilter().setByTypeCriteria(TestScenarioType.DISABLED);
 
@@ -55,50 +49,20 @@ public class TestScenarioService implements StatisticsProvider {
 
     private final ScheduleTestScenarioService scheduleTestScenarioService;
 
+    @Override
+    public Stream<TestScenario> getAllItems() {
+        return ALL_SCENARIOS.values().stream().map(TestScenarioRunnable::getTestScenario);
+    }
+
+    @Override
+    protected TestScenarioFilter createFilter() {
+        return new TestScenarioFilter();
+    }
+
     public final Set<String> getAllTags() {
-        return ALL_SCENARIOS.values().stream()
-            .map(TestScenarioRunnable::getTestScenario)
+        return getAllItems()
             .flatMap(testScenario -> testScenario.getTagsAsString().stream())
             .collect(Collectors.toSet());
-    }
-
-    public Stream<TestScenario> getAll() {
-        return getAll(new TestScenarioFilter(), 0, Long.MAX_VALUE);
-    }
-
-    public Stream<TestScenario> getAll(final TestScenarioFilter filter, final long offset, final long limit) {
-        return ALL_SCENARIOS.values().stream()
-            .map(TestScenarioRunnable::getTestScenario)
-            .filter(filter.getByTypeCriteria().getFilter())
-            .filter(getPredicateByTagCriteria(filter.getByTagCriteria()))
-            .filter(getPredicateByNameCriteria(filter.getByNameCriteria()))
-            .skip(offset)
-            .limit(limit);
-    }
-
-    public long getAllSize() {
-        return getAll().count();
-    }
-
-    public long getAllSize(final TestScenarioFilter filter) {
-        return getAll(filter, 0, Long.MAX_VALUE).count();
-    }
-
-    public Optional<TestScenario> findBy(final int id) {
-        return ofNullable(ALL_SCENARIOS.get(id)).map(TestScenarioRunnable::getTestScenario);
-    }
-
-    public Stream<TestScenario> findBy(final Query<TestScenario, TestScenarioFilter> query) {
-        return query.getFilter()
-            .map(filter -> getAll(filter, query.getOffset(), query.getLimit()))
-            .orElseGet(this::getAll);
-    }
-
-    public int countBy(final Query<TestScenario, TestScenarioFilter> query) {
-        return query.getFilter()
-            .map(this::getAllSize)
-            .orElseGet(this::getAllSize)
-            .intValue();
     }
 
     public void createAndSchedule(@NonNull final TestScenario testScenario) {
@@ -272,18 +236,6 @@ public class TestScenarioService implements StatisticsProvider {
                     .build()
             ))
             .build();
-    }
-
-    private Predicate<TestScenario> getPredicateByNameCriteria(final String byNameCriteria) {
-        return StringUtils.isNotEmpty(byNameCriteria)
-            ? testScenario -> StringUtils.containsIgnoreCase(testScenario.getName(), byNameCriteria)
-            : ALWAYS_TRUE_PREDICATE;
-    }
-
-    private Predicate<TestScenario> getPredicateByTagCriteria(final Set<String> byTagCriteria) {
-        return !byTagCriteria.isEmpty()
-            ? testScenario -> testScenario.getTagsAsString().containsAll(byTagCriteria)
-            : ALWAYS_TRUE_PREDICATE;
     }
 
 }

@@ -5,7 +5,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import org.myalerts.view.component.PluginGrid;
-import org.myalerts.domain.PluginFilter;
+import org.myalerts.domain.filter.PluginWrapperFilter;
 import org.myalerts.view.component.BaseLayout;
 import org.myalerts.view.component.ResponsiveLayout;
 import org.myalerts.service.PluginService;
@@ -26,10 +26,10 @@ public class PluginView extends ResponsiveLayout implements HasDynamicTitle {
     public PluginView(final PluginService pluginService) {
         super();
 
-        final ConfigurableFilterDataProvider<PluginWrapper, Void, PluginFilter> configurableFilterDataProvider = DataProvider
+        final ConfigurableFilterDataProvider<PluginWrapper, Void, PluginWrapperFilter> configurableFilterDataProvider = DataProvider
             .fromFilteringCallbacks(pluginService::findBy, pluginService::countBy)
             .withConfigurableFilter();
-        configurableFilterDataProvider.setFilter(new PluginFilter());
+        configurableFilterDataProvider.setFilter(new PluginWrapperFilter());
 
         final var pluginGrid = new PluginGrid();
         pluginGrid.setDataProvider(configurableFilterDataProvider);

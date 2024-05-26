@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.myalerts.view.component.TestScenarioGrid;
 import org.myalerts.domain.TestScenario;
 import org.myalerts.domain.TestScenarioEventHandler;
-import org.myalerts.domain.TestScenarioFilter;
+import org.myalerts.domain.filter.TestScenarioFilter;
 import org.myalerts.domain.TestScenarioResult;
 import org.myalerts.domain.TestScenarioType;
 import org.myalerts.view.component.BaseLayout;

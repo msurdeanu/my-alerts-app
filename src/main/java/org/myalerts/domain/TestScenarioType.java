@@ -34,7 +34,7 @@ public enum TestScenarioType {
     private final String label;
 
     @Getter
-    private final Predicate<? super TestScenario> filter;
+    private final Predicate<TestScenario> filter;
 
     public static List<TestScenarioType> getAllItems() {
         return Arrays.stream(values()).collect(Collectors.toList());

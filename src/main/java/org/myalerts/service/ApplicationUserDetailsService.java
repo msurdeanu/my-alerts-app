@@ -1,7 +1,7 @@
 package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
-import org.myalerts.domain.CustomUserDetails;
+import org.myalerts.domain.UserAccountDetails;
 import org.myalerts.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,7 @@ public class ApplicationUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-            .map(CustomUserDetails::new)
+            .map(UserAccountDetails::new)
             .orElseThrow(() -> new UsernameNotFoundException("Could not find user with name '" + username + "'."));
     }
 
