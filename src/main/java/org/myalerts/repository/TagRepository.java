@@ -11,9 +11,9 @@ import java.util.Optional;
  */
 public interface TagRepository extends JpaRepository<Tag, Integer> {
 
-    Optional<Tag> findByName(final String name);
+    Optional<Tag> findByName(String name);
 
-    default Tag getOrCreate(final String name) {
+    default Tag getOrCreate(String name) {
         return findByName(name).orElseGet(() -> new Tag(name));
     }
 

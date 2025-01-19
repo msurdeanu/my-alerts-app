@@ -35,11 +35,11 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
     private final Binder<SettingProvider> binder;
 
     @Override
-    public List<Component> transform(final List<Setting> settings) {
+    public List<Component> transform(List<Setting> settings) {
         return settings.stream().flatMap(setting -> createComponent(setting).stream()).collect(Collectors.toList());
     }
 
-    private Optional<Component> createComponent(final Setting setting) {
+    private Optional<Component> createComponent(Setting setting) {
         return settingToComponentMapping.map(setting.getType(), setting);
     }
 
@@ -57,7 +57,7 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
             }).build();
     }
 
-    private Component createTextField(final Setting setting) {
+    private Component createTextField(Setting setting) {
         final var textField = new TextField();
         textField.setLabel(textField.getTranslation(setting.getTitle()));
         textField.setHelperText(textField.getTranslation(setting.getDescription()));
@@ -73,7 +73,7 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         return textField;
     }
 
-    private PasswordField createPasswordField(final Setting setting) {
+    private PasswordField createPasswordField(Setting setting) {
         final var passwordField = new PasswordField();
         passwordField.setLabel(passwordField.getTranslation(setting.getTitle()));
         passwordField.setHelperText(passwordField.getTranslation(setting.getDescription()));
@@ -89,7 +89,7 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         return passwordField;
     }
 
-    private IntegerField createIntegerField(final Setting setting) {
+    private IntegerField createIntegerField(Setting setting) {
         final var integerField = new IntegerField();
         integerField.setLabel(integerField.getTranslation(setting.getTitle()));
         integerField.setHelperText(integerField.getTranslation(setting.getDescription()));
@@ -105,7 +105,7 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         return integerField;
     }
 
-    private Checkbox createToggleButton(final Setting setting) {
+    private Checkbox createToggleButton(Setting setting) {
         final var toggleButton = new Checkbox();
         toggleButton.setLabel(toggleButton.getTranslation(setting.getTitle()));
         if (!setting.isEditable()) {

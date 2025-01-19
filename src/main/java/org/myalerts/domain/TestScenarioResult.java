@@ -54,7 +54,7 @@ public class TestScenarioResult implements Persistable<Integer> {
         return true;
     }
 
-    public static TestScenarioResult from(final TestScenarioRun testScenarioRun) {
+    public static TestScenarioResult from(TestScenarioRun testScenarioRun) {
         return TestScenarioResult.builder()
             .scenarioId(testScenarioRun.getScenarioId())
             .cause(testScenarioRun.getCause())
@@ -64,13 +64,13 @@ public class TestScenarioResult implements Persistable<Integer> {
     }
 
     public static class TestScenarioResultBuilder {
-        public TestScenarioResultBuilder cause(final String message) {
+        public TestScenarioResultBuilder cause(String message) {
             cause = internalizeCause(message);
 
             return this;
         }
 
-        public TestScenarioResultBuilder cause(final Throwable throwable) {
+        public TestScenarioResultBuilder cause(Throwable throwable) {
             cause = internalizeCause(ofNullable(throwable)
                 .map(item -> ofNullable(item.getCause()).map(Throwable::getMessage).orElseGet(item::getMessage))
                 .orElse(null));
@@ -78,7 +78,7 @@ public class TestScenarioResult implements Persistable<Integer> {
             return this;
         }
 
-        private String internalizeCause(final String cause) {
+        private String internalizeCause(String cause) {
             return ofNullable(cause).map(String::intern).orElse(null);
         }
     }

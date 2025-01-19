@@ -41,15 +41,14 @@ public final class TestScenarioDetails extends Composite<VerticalLayout> {
         return layout;
     }
 
-    public void setDetails(final TestScenario testScenario) {
+    public void setDetails(TestScenario testScenario) {
         editor.setValue(testScenario.getDefinition().getScript());
         editor.addAceChangedListener(event -> saveButton.setEnabled(isNewDefinition(testScenario, event.getValue())));
 
         saveButton.addClickListener(event -> testScenarioEventHandler.onDefinitionChanged(testScenario, editor.getValue()));
     }
 
-    private boolean isNewDefinition(final TestScenario testScenario,
-                                    final String newDefinition) {
+    private boolean isNewDefinition(TestScenario testScenario, String newDefinition) {
         return !testScenario.getDefinition().getScript().equals(newDefinition);
     }
 

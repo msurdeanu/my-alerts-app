@@ -86,7 +86,7 @@ public class TestScenario {
     private boolean editable = false;
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (this == other) {
             return true;
         }
@@ -118,7 +118,7 @@ public class TestScenario {
         return Boolean.TRUE.equals(failed);
     }
 
-    public boolean addTags(final Set<Tag> tags) {
+    public boolean addTags(Set<Tag> tags) {
         tags.forEach(tag -> {
             this.tags.add(tag);
             tag.getTestScenarios().add(this);
@@ -126,7 +126,7 @@ public class TestScenario {
         return true;
     }
 
-    public boolean removeTagIf(final Predicate<? super Tag> filter) {
+    public boolean removeTagIf(Predicate<? super Tag> filter) {
         var removed = false;
         var eachTag = tags.iterator();
         while (eachTag.hasNext()) {
@@ -140,7 +140,7 @@ public class TestScenario {
         return removed;
     }
 
-    public boolean setCron(final String cron) {
+    public boolean setCron(String cron) {
         if (cron.equals(this.cron)) {
             return false;
         }
@@ -149,7 +149,7 @@ public class TestScenario {
         return true;
     }
 
-    public boolean setName(final String name) {
+    public boolean setName(String name) {
         if (name.equals(this.name)) {
             return false;
         }
@@ -158,7 +158,7 @@ public class TestScenario {
         return true;
     }
 
-    public boolean setScript(final String script) {
+    public boolean setScript(String script) {
         return definition.recreateScript(script);
     }
 

@@ -43,7 +43,7 @@ public class TranslationProvider implements I18NProvider {
     @Cacheable(cacheNames = "translation-keys", cacheManager = "translationKeyCacheManager",
             key = "#key", condition = "!'" + PRETTY_TIME_FORMAT + "'.equals(#key)")
     @Override
-    public String getTranslation(final String key, final Locale locale, final Object... args) {
+    public String getTranslation(String key, Locale locale, Object... args) {
         if (key == null) {
             return null;
         }
@@ -64,7 +64,7 @@ public class TranslationProvider implements I18NProvider {
             .orElse(key);
     }
 
-    private String prettyTimeFormat(final Instant time, final Locale locale) {
+    private String prettyTimeFormat(Instant time, Locale locale) {
         cachedPrettyTime = ofNullable(cachedPrettyTime)
             .filter(prettyTime -> prettyTime.getLocale().equals(locale))
             .orElseGet(() -> new PrettyTime(locale));

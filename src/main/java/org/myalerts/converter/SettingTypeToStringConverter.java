@@ -15,12 +15,12 @@ import static java.util.Optional.ofNullable;
 public class SettingTypeToStringConverter implements AttributeConverter<SettingType, String> {
 
     @Override
-    public String convertToDatabaseColumn(final SettingType attribute) {
+    public String convertToDatabaseColumn(SettingType attribute) {
         return ofNullable(attribute).map(SettingType::getValue).orElse(null);
     }
 
     @Override
-    public SettingType convertToEntityAttribute(final String data) {
+    public SettingType convertToEntityAttribute(String data) {
         return ofNullable(data).map(SettingType::of).orElse(null);
     }
 

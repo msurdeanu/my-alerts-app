@@ -27,7 +27,7 @@ public class ExecutorConfig {
     }
 
     @Bean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler(final SettingProvider settingProvider) {
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler(SettingProvider settingProvider) {
         final var threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_POOL_SIZE, 2));
         threadPoolTaskScheduler.setThreadNamePrefix(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_THREAD_NAME_PREFIX, "test-scenario-pool-"));
@@ -36,7 +36,7 @@ public class ExecutorConfig {
     }
 
     @Bean
-    public ThreadPoolExecutor threadPoolExecutor(final SettingProvider settingProvider) {
+    public ThreadPoolExecutor threadPoolExecutor(SettingProvider settingProvider) {
         final var threadPoolExecutor = new ThreadPoolExecutor(settingProvider.getOrDefault(SettingKeyEnum.EVENT_CORE_POOL_SIZE, 1),
             settingProvider.getOrDefault(SettingKeyEnum.EVENT_MAX_POOL_SIZE, 2),
             60L, TimeUnit.SECONDS,

@@ -40,7 +40,7 @@ public enum TestScenarioType {
         return Arrays.stream(values()).collect(Collectors.toList());
     }
 
-    public static TestScenarioType of(final String label) {
+    public static TestScenarioType of(String label) {
         return ALL_TYPES.getOrDefault(ofNullable(label).orElse(TestScenarioType.ALL.getLabel()), TestScenarioType.ALL);
     }
 

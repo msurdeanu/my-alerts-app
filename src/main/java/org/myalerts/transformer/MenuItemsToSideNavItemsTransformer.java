@@ -17,7 +17,7 @@ import static java.util.Optional.ofNullable;
 public final class MenuItemsToSideNavItemsTransformer implements Transformer<List<MenuItem>, List<SideNavItem>> {
 
     @Override
-    public List<SideNavItem> transform(final List<MenuItem> menuItems) {
+    public List<SideNavItem> transform(List<MenuItem> menuItems) {
         return ofNullable(menuItems)
                 .orElse(List.of())
                 .stream()
@@ -27,7 +27,7 @@ public final class MenuItemsToSideNavItemsTransformer implements Transformer<Lis
                 .collect(Collectors.toList());
     }
 
-    private SideNavItem createRouterLink(final MenuItem menuItem) {
+    private SideNavItem createRouterLink(MenuItem menuItem) {
         final var sideNavItem = new SideNavItem(menuItem.getLabel(), menuItem.getTarget(),
                 valueOf(menuItem.getIcon().toUpperCase()).create());
         sideNavItem.setLabel(sideNavItem.getTranslation(menuItem.getLabel()));

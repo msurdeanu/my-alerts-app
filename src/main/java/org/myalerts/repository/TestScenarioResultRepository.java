@@ -17,6 +17,6 @@ public interface TestScenarioResultRepository extends JpaRepository<TestScenario
     @Query(value = "DELETE FROM results WHERE created <= datetime('now', '-7 day')", nativeQuery = true)
     void deleteAllOlderThanOneWeek();
 
-    List<TestScenarioResult> findTop10ByScenarioIdOrderByCreatedDesc(final int scenarioId);
+    List<TestScenarioResult> findTop10ByScenarioIdOrderByCreatedDesc(int scenarioId);
 
 }

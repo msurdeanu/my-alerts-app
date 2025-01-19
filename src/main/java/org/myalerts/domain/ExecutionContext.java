@@ -18,12 +18,12 @@ public final class ExecutionContext {
     @Getter
     private boolean markedAsFailed;
 
-    public void markAsFailed(final String message) {
+    public void markAsFailed(String message) {
         markedAsFailed = true;
         testScenarioRunBuilder.cause(message);
     }
 
-    public void markAsFailed(final Throwable throwable) {
+    public void markAsFailed(Throwable throwable) {
         markedAsFailed = true;
         testScenarioRunBuilder.cause(throwable);
     }

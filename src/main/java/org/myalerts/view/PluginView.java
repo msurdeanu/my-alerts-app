@@ -23,7 +23,7 @@ public class PluginView extends ResponsiveLayout implements HasDynamicTitle {
 
     public static final String ROUTE = "plugins";
 
-    public PluginView(final PluginService pluginService) {
+    public PluginView(PluginService pluginService) {
         super();
 
         final ConfigurableFilterDataProvider<PluginWrapper, Void, PluginWrapperFilter> configurableFilterDataProvider = DataProvider

@@ -17,18 +17,18 @@ import static java.util.Optional.ofNullable;
 public class ClassOfComponentToStringConverter implements AttributeConverter<Class<? extends Component>, String> {
 
     @Override
-    public String convertToDatabaseColumn(final Class<? extends Component> attribute) {
+    public String convertToDatabaseColumn(Class<? extends Component> attribute) {
         return ofNullable(attribute).map(Class::getName).orElse(null);
     }
 
     @Override
-    public Class<? extends Component> convertToEntityAttribute(final String target) {
+    public Class<? extends Component> convertToEntityAttribute(String target) {
         return ofNullable(target)
             .map(this::findComponentClass)
             .orElse(null);
     }
 
-    private Class<? extends Component> findComponentClass(final String target) {
+    private Class<? extends Component> findComponentClass(String target) {
         try {
             final Class<?> targetClass = Class.forName(target);
             return Component.class.isAssignableFrom(targetClass) ? (Class<? extends Component>) targetClass : null;

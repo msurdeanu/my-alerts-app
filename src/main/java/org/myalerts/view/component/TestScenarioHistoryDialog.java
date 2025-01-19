@@ -20,13 +20,13 @@ import static java.util.Optional.ofNullable;
  */
 public final class TestScenarioHistoryDialog extends ResponsiveDialog {
 
-    public TestScenarioHistoryDialog(final Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
+    public TestScenarioHistoryDialog(Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
         super("testScenarioHistory");
 
         add(createResultGrid(testScenarioResultsSupplier));
     }
 
-    private Grid<TestScenarioResult> createResultGrid(final Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
+    private Grid<TestScenarioResult> createResultGrid(Supplier<Collection<TestScenarioResult>> testScenarioResultsSupplier) {
         final var grid = new Grid<TestScenarioResult>();
         grid.setSizeFull();
         grid.setItems(testScenarioResultsSupplier.get());
@@ -43,21 +43,21 @@ public final class TestScenarioHistoryDialog extends ResponsiveDialog {
         return grid;
     }
 
-    private Component renderRunTime(final TestScenarioResult testScenarioResult) {
+    private Component renderRunTime(TestScenarioResult testScenarioResult) {
         return new NativeLabel(getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, testScenarioResult.getCreated()));
     }
 
-    private Component renderDuration(final TestScenarioResult testScenarioResult) {
+    private Component renderDuration(TestScenarioResult testScenarioResult) {
         return new NativeLabel(getTranslation("test-scenario.history.duration-ms", testScenarioResult.getDuration()));
     }
 
-    private Component renderResult(final TestScenarioResult testScenarioResult) {
+    private Component renderResult(TestScenarioResult testScenarioResult) {
         return ofNullable(testScenarioResult.getCause())
             .map(this::mapToTextArea)
             .orElseGet(() -> new NativeLabel(getTranslation("test-scenario.history.no-failure-detected")));
     }
 
-    private Component mapToTextArea(final String value) {
+    private Component mapToTextArea(String value) {
         final var resultTextArea = new TextArea();
         resultTextArea.setReadOnly(true);
         resultTextArea.setWidthFull();

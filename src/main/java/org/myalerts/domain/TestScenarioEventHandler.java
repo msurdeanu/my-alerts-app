@@ -9,20 +9,20 @@ import java.util.Set;
  */
 public interface TestScenarioEventHandler {
 
-    Collection<TestScenarioResult> getLastResults(final TestScenario testScenario);
+    Collection<TestScenarioResult> getLastResults(TestScenario testScenario);
 
-    void onActivationChanged(final TestScenario testScenario);
+    void onActivationChanged(TestScenario testScenario);
 
-    void onCronExpressionChanged(final TestScenario testScenario, final String newCronExpression);
+    void onCronExpressionChanged(TestScenario testScenario, String newCronExpression);
 
-    void onDefinitionChanged(final TestScenario testScenario, final String newDefinition);
+    void onDefinitionChanged(TestScenario testScenario, String newDefinition);
 
-    void onDelete(final TestScenario testScenario);
+    void onDelete(TestScenario testScenario);
 
-    void onNameChanged(final TestScenario testScenario, final String newName);
+    void onNameChanged(TestScenario testScenario, String newName);
 
-    void onScheduleNow(final TestScenario testScenario);
+    void onScheduleNow(TestScenario testScenario);
 
-    void onTagsChanged(final TestScenario testScenario, final Set<String> newTags);
+    void onTagsChanged(TestScenario testScenario, Set<String> newTags);
 
 }

@@ -17,7 +17,7 @@ import java.lang.reflect.Proxy;
 public class ApplicationConfig {
 
     @Bean
-    public SettingProvider settingProvider(final SettingRepository settingRepository) {
+    public SettingProvider settingProvider(SettingRepository settingRepository) {
         return (SettingProvider) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{SettingProvider.class},
             new DatabaseSettingProvider(new DefaultSettingProvider(), settingRepository));
     }

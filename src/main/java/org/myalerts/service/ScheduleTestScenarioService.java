@@ -39,7 +39,7 @@ public class ScheduleTestScenarioService {
 
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-    public void schedule(final TestScenarioRunnable testScenarioRunnable) {
+    public void schedule(TestScenarioRunnable testScenarioRunnable) {
         if (testScenarioRunnable == null) {
             return;
         }
@@ -61,7 +61,7 @@ public class ScheduleTestScenarioService {
         log.info("New test scenario '{}' added to scheduling pool. Running frequency is '{}'.", id, cron);
     }
 
-    public void unSchedule(final TestScenarioRunnable testScenarioRunnable) {
+    public void unSchedule(TestScenarioRunnable testScenarioRunnable) {
         if (testScenarioRunnable == null) {
             return;
         }
@@ -83,7 +83,7 @@ public class ScheduleTestScenarioService {
         }
     }
 
-    public void scheduleInAsyncMode(final TestScenarioRunnable testScenarioRunnable) {
+    public void scheduleInAsyncMode(TestScenarioRunnable testScenarioRunnable) {
         if (testScenarioRunnable == null) {
             return;
         }
@@ -91,7 +91,7 @@ public class ScheduleTestScenarioService {
         threadPoolTaskScheduler.schedule(testScenarioRunnable, Instant.now());
     }
 
-    public void scheduleInSyncMode(final TestScenarioRunnable testScenarioRunnable) throws InterruptedException, ExecutionException, TimeoutException {
+    public void scheduleInSyncMode(TestScenarioRunnable testScenarioRunnable) throws InterruptedException, ExecutionException, TimeoutException {
         if (testScenarioRunnable == null) {
             return;
         }

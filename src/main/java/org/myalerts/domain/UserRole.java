@@ -36,13 +36,13 @@ public enum UserRole {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
     }
 
-    private boolean hasRole(final String role) {
+    private boolean hasRole(String role) {
         return ofNullable(SecurityContextHolder.getContext().getAuthentication())
             .map(auth -> auth.getAuthorities().stream().anyMatch(granted -> granted.getAuthority().equals(role)))
             .orElse(false);
     }
 
-    public static UserRole of(final String label) {
+    public static UserRole of(String label) {
         return Arrays.stream(UserRole.values())
             .filter(role -> role.getLabel().equals(label))
             .findFirst()

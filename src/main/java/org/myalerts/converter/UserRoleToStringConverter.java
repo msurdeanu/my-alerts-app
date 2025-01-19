@@ -15,12 +15,12 @@ import static java.util.Optional.ofNullable;
 public class UserRoleToStringConverter implements AttributeConverter<UserRole, String> {
 
     @Override
-    public String convertToDatabaseColumn(final UserRole attribute) {
+    public String convertToDatabaseColumn(UserRole attribute) {
         return ofNullable(attribute).map(UserRole::getLabel).orElse(null);
     }
 
     @Override
-    public UserRole convertToEntityAttribute(final String data) {
+    public UserRole convertToEntityAttribute(String data) {
         return ofNullable(data).map(UserRole::of).orElse(UserRole.GUEST);
     }
 

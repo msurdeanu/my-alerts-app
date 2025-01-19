@@ -14,7 +14,7 @@ you want.
 
 ## Technology stack
 
-* Java 17 as programming language.
+* Java 21 as programming language.
 * Use [Groovy](https://groovy-lang.org/) as additional language for defining alerts
 * Spring Boot 3.* as dependency injection framework
 * [Vaadin 24](https://vaadin.com/) as UI framework

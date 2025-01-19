@@ -19,7 +19,7 @@ public final class TestScenarioUpdateEventService implements EventListener<TestS
     private final TestScenarioRepository testScenarioRepository;
 
     @Override
-    public void onEventReceived(final TestScenarioUpdateEvent event) {
+    public void onEventReceived(TestScenarioUpdateEvent event) {
         testScenarioRepository.save(event.getTestScenario());
     }
 

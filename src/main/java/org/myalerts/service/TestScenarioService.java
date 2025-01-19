@@ -65,7 +65,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
             .collect(Collectors.toSet());
     }
 
-    public void createAndSchedule(@NonNull final TestScenario testScenario) {
+    public void createAndSchedule(@NonNull TestScenario testScenario) {
         lock.lock();
         try {
             final var testScenarioRunnable = new TestScenarioRunnable(applicationManager, testScenario);
@@ -80,7 +80,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
         }
     }
 
-    public void changeActivation(@NonNull final TestScenario testScenario) {
+    public void changeActivation(@NonNull TestScenario testScenario) {
         lock.lock();
         try {
             testScenario.toggleOnEnabling();
@@ -100,7 +100,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
             .broadcast(TestScenarioUpdateEvent.builder().testScenario(testScenario).build());
     }
 
-    public boolean changeCronExpression(final TestScenario testScenario, final String newCronExpression) {
+    public boolean changeCronExpression(TestScenario testScenario, String newCronExpression) {
         var isOperationPerformed = false;
 
         lock.lock();
@@ -124,7 +124,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
         return isOperationPerformed;
     }
 
-    public boolean changeDefinition(@NonNull final TestScenario testScenario, final String newDefinition) {
+    public boolean changeDefinition(@NonNull TestScenario testScenario, String newDefinition) {
         var isOperationPerformed = false;
 
         lock.lock();
@@ -141,7 +141,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
         return isOperationPerformed;
     }
 
-    public boolean changeName(final TestScenario testScenario, final String newName) {
+    public boolean changeName(TestScenario testScenario, String newName) {
         var isOperationPerformed = false;
 
         lock.lock();
@@ -158,7 +158,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
         return isOperationPerformed;
     }
 
-    public boolean changeTags(final TestScenario testScenario, final Set<String> newTags) {
+    public boolean changeTags(TestScenario testScenario, Set<String> newTags) {
         final var newTagsTrimmed = newTags.stream().map(String::trim).collect(Collectors.toSet());
 
         lock.lock();
@@ -184,7 +184,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
         }
     }
 
-    public void delete(final TestScenario testScenario) {
+    public void delete(TestScenario testScenario) {
         lock.lock();
         try {
             final var testScenarioRunnable = ALL_SCENARIOS.remove(testScenario.getId());
@@ -204,7 +204,7 @@ public class TestScenarioService extends AbstractDataService<TestScenario, TestS
             .forEach(scheduleTestScenarioService::scheduleInAsyncMode);
     }
 
-    public void scheduleNowInSyncMode(final TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
+    public void scheduleNowInSyncMode(TestScenario testScenario) throws InterruptedException, ExecutionException, TimeoutException {
         scheduleTestScenarioService.scheduleInSyncMode(ALL_SCENARIOS.get(testScenario.getId()));
     }
 

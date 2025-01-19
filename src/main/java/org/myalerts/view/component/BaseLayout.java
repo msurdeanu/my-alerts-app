@@ -28,13 +28,13 @@ import java.util.List;
  */
 public class BaseLayout extends AppLayout {
 
-    public BaseLayout(final AuthenticationContext authContext, final MenuItemRepository menuItemRepository) {
+    public BaseLayout(AuthenticationContext authContext, MenuItemRepository menuItemRepository) {
         createHeader(authContext);
 
         addDrawerContent(new MenuItemsToSideNavItemsTransformer().transform(menuItemRepository.findByOrderByPosition()));
     }
 
-    private void createHeader(final AuthenticationContext authContext) {
+    private void createHeader(AuthenticationContext authContext) {
         final var logoLayout = new HorizontalLayout();
         final var logo = new Image(getTranslation("app.logo.src"), getTranslation("app.logo.alt"));
         logo.setHeight("44px");
@@ -58,7 +58,7 @@ public class BaseLayout extends AppLayout {
         addToNavbar(header);
     }
 
-    private void addDrawerContent(final List<SideNavItem> routerLinks) {
+    private void addDrawerContent(List<SideNavItem> routerLinks) {
         final var appName = new H1(getTranslation("app.name"));
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         final var header = new Header(appName);
@@ -66,7 +66,7 @@ public class BaseLayout extends AppLayout {
         addToDrawer(header, scroller, createFooter());
     }
 
-    private SideNav createNavigation(final List<SideNavItem> routerLinks) {
+    private SideNav createNavigation(List<SideNavItem> routerLinks) {
         final var appNav = new SideNav();
         routerLinks.forEach(appNav::addItem);
         return appNav;

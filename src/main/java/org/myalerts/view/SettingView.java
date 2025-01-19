@@ -28,7 +28,7 @@ public class SettingView extends ResponsiveLayout implements HasDynamicTitle {
 
     private final SettingProvider settingProvider;
 
-    public SettingView(final SettingProvider settingProvider) {
+    public SettingView(SettingProvider settingProvider) {
         this.settingProvider = settingProvider;
 
         add(createHeader(getTranslation("settings.page.subtitle")), createContent(createFormLayout()), createFooter());

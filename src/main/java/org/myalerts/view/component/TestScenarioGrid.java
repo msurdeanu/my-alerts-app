@@ -52,7 +52,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         paginatedGrid.refreshPaginator();
     }
 
-    public void setDataProvider(final DataProvider<TestScenario, ?> dataProvider) {
+    public void setDataProvider(DataProvider<TestScenario, ?> dataProvider) {
         paginatedGrid.setDataProvider(dataProvider);
     }
 
@@ -88,13 +88,13 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    private Component renderIsEnabled(final TestScenario testScenario) {
+    private Component renderIsEnabled(TestScenario testScenario) {
         final var toggleButton = new Checkbox(testScenario.isEnabled());
         toggleButton.addValueChangeListener(event -> testScenarioEventHandler.onActivationChanged(testScenario));
         return toggleButton;
     }
 
-    private Component renderName(final TestScenario testScenario) {
+    private Component renderName(TestScenario testScenario) {
         final var layout = new HorizontalLayout();
         if (!testScenario.isEditable()) {
             testScenario.getTags().stream().map(tag -> {
@@ -137,7 +137,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    private Component renderLastRun(final TestScenario testScenario) {
+    private Component renderLastRun(TestScenario testScenario) {
         final var lastRunButton = new Button(ofNullable(testScenario.getLastRunTime())
             .map(lastRun -> getTranslation(TranslationProvider.PRETTY_TIME_FORMAT, lastRun))
             .orElseGet(() -> getTranslation("test-scenario.main-grid.not-available")));
@@ -146,7 +146,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         return lastRunButton;
     }
 
-    private Component renderCronExpression(final TestScenario testScenario) {
+    private Component renderCronExpression(TestScenario testScenario) {
         if (!testScenario.isEditable()) {
             return new NativeLabel(testScenario.getCron());
         }
@@ -164,7 +164,7 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         return textField;
     }
 
-    private Component renderActions(final TestScenario testScenario) {
+    private Component renderActions(TestScenario testScenario) {
         final var layout = new HorizontalLayout();
 
         final var scheduleNowButton = new Button(new Icon(VaadinIcon.START_COG));
@@ -201,27 +201,27 @@ public final class TestScenarioGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    private void onTestScenarioToEdit(final TestScenario testScenario) {
+    private void onTestScenarioToEdit(TestScenario testScenario) {
         testScenario.toggleOnEditing();
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onTestScenarioUpdated(final TestScenario testScenario) {
+    private void onTestScenarioUpdated(TestScenario testScenario) {
         testScenario.setEditable(false);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onTestScenarioCancelled(final TestScenario testScenario) {
+    private void onTestScenarioCancelled(TestScenario testScenario) {
         testScenario.setEditable(false);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private void onScheduleNow(final TestScenario testScenario) {
+    private void onScheduleNow(TestScenario testScenario) {
         testScenarioEventHandler.onScheduleNow(testScenario);
         paginatedGrid.getDataProvider().refreshItem(testScenario);
     }
 
-    private String getClassName(final TestScenario testScenario) {
+    private String getClassName(TestScenario testScenario) {
         if (!testScenario.isEnabled()) {
             return TestScenarioType.DISABLED.getLabel();
         }

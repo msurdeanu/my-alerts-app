@@ -61,13 +61,11 @@ public final class TestScenarioRunnable implements Runnable {
         }
     }
 
-    private long getMillisBetween(@Null final Temporal startInclusive,
-                                  @NotNull final Temporal endExclusive) {
+    private long getMillisBetween(@Null Temporal startInclusive, @NotNull Temporal endExclusive) {
         return between(ofNullable(startInclusive).orElseGet(() -> Instant.ofEpochSecond(0)), endExclusive).toMillis();
     }
 
-    private void invokeRunMethod(final Script parsedScript,
-                                 final Object... functionArgs) {
+    private void invokeRunMethod(Script parsedScript, Object... functionArgs) {
         try {
             applicationManager.getBeansOfTypeAsStream(HelpersProvider.class)
                     .flatMap(HelpersProvider::getTestScenarioRunHelpersAsStream)

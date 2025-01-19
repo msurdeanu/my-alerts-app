@@ -28,7 +28,7 @@ public final class StatisticsTreeGrid extends Composite<VerticalLayout> {
 
     private final Map<StatisticsItem, List<StatisticsItem>> statsMap;
 
-    public StatisticsTreeGrid(final List<StatisticsProvider> statisticsProviders) {
+    public StatisticsTreeGrid(List<StatisticsProvider> statisticsProviders) {
         statsMap = buildAllStatistics(statisticsProviders);
     }
 
@@ -66,13 +66,13 @@ public final class StatisticsTreeGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    private Map<StatisticsItem, List<StatisticsItem>> buildAllStatistics(final List<StatisticsProvider> statisticsProviders) {
+    private Map<StatisticsItem, List<StatisticsItem>> buildAllStatistics(List<StatisticsProvider> statisticsProviders) {
         return statisticsProviders.stream()
             .map(StatisticsProvider::getStatisticsGroup)
             .collect(Collectors.toMap(StatisticsGroup::getRoot, StatisticsGroup::getLeafs, (it1, it2) -> it1, LinkedHashMap::new));
     }
 
-    private Component getComputedValue(final StatisticsItem statisticsItem) {
+    private Component getComputedValue(StatisticsItem statisticsItem) {
         final var span = new Span(statisticsItem.getValueAsString());
         ofNullable(statisticsItem.getDescription())
             .ifPresent(desc -> Tooltip.forComponent(span)

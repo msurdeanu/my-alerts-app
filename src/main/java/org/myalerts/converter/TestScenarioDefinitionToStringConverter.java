@@ -15,16 +15,16 @@ import static java.util.Optional.ofNullable;
 public class TestScenarioDefinitionToStringConverter implements AttributeConverter<TestScenarioDefinition, String> {
 
     @Override
-    public String convertToDatabaseColumn(final TestScenarioDefinition attribute) {
+    public String convertToDatabaseColumn(TestScenarioDefinition attribute) {
         return ofNullable(attribute).map(TestScenarioDefinition::getScript).orElse(null);
     }
 
     @Override
-    public TestScenarioDefinition convertToEntityAttribute(final String data) {
+    public TestScenarioDefinition convertToEntityAttribute(String data) {
         return ofNullable(data).map(this::mapToTestScenarioDefinition).orElse(null);
     }
 
-    private TestScenarioDefinition mapToTestScenarioDefinition(final String definition) {
+    private TestScenarioDefinition mapToTestScenarioDefinition(String definition) {
         return new TestScenarioDefinition(definition);
     }
 

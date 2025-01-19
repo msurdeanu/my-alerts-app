@@ -19,11 +19,11 @@ public final class TestScenarioDefinition {
 
     private String cause;
 
-    public TestScenarioDefinition(final String script) {
+    public TestScenarioDefinition(String script) {
         recreateScript(script);
     }
 
-    public boolean recreateScript(final String script) {
+    public boolean recreateScript(String script) {
         if (script.equals(this.script)) {
             return false;
         }

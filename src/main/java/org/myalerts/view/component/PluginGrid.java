@@ -24,7 +24,7 @@ public final class PluginGrid extends Composite<VerticalLayout> {
 
     private final PaginatedGrid<PluginWrapper, ?> paginatedGrid = new PaginatedGrid<>();
 
-    public void setDataProvider(final DataProvider<PluginWrapper, ?> dataProvider) {
+    public void setDataProvider(DataProvider<PluginWrapper, ?> dataProvider) {
         paginatedGrid.setDataProvider(dataProvider);
     }
 
@@ -54,29 +54,29 @@ public final class PluginGrid extends Composite<VerticalLayout> {
         return layout;
     }
 
-    private Component renderId(final PluginWrapper plugin) {
+    private Component renderId(PluginWrapper plugin) {
         final var pluginDescriptor = plugin.getDescriptor();
         return new Anchor(pluginDescriptor.getProvider(), pluginDescriptor.getPluginId(), AnchorTarget.BLANK);
     }
 
-    private Component renderDescription(final PluginWrapper plugin) {
+    private Component renderDescription(PluginWrapper plugin) {
         return new NativeLabel(plugin.getDescriptor().getPluginDescription());
     }
 
-    private Component renderVersion(final PluginWrapper plugin) {
+    private Component renderVersion(PluginWrapper plugin) {
         final var pluginDescriptor = plugin.getDescriptor();
         return new Html(getTranslation("plugin.main-grid.version",
             pluginDescriptor.getVersion(), pluginDescriptor.getRequires()));
     }
 
-    private Component renderStatus(final PluginWrapper plugin) {
+    private Component renderStatus(PluginWrapper plugin) {
         final var status = getPluginStatus(plugin);
         final var span = new Span(getTranslation("plugin.main-grid.status." + status));
         span.getElement().getThemeList().add("badge " + status);
         return span;
     }
 
-    private String getPluginStatus(final PluginWrapper plugin) {
+    private String getPluginStatus(PluginWrapper plugin) {
         return switch (plugin.getPluginState()) {
             case DISABLED -> "contrast";
             case STOPPED -> "primary";
