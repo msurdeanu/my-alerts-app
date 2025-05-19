@@ -2,10 +2,11 @@ package org.myalerts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.myalerts.ApplicationManager;
 import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.domain.TestScenarioRunnable;
 import org.myalerts.provider.SettingProvider;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +36,7 @@ public class ScheduleTestScenarioService {
 
     private final Lock lock = new ReentrantLock();
 
-    private final SettingProvider settingProvider;
-
-    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
+    private final ApplicationManager applicationManager;
 
     public void schedule(TestScenarioRunnable testScenarioRunnable) {
         if (testScenarioRunnable == null) {
@@ -47,8 +46,8 @@ public class ScheduleTestScenarioService {
         final var testScenario = testScenarioRunnable.getTestScenario();
         final var id = testScenario.getId();
         final var cron = testScenario.getCron();
-        final ScheduledFuture<?> scheduledFuture = threadPoolTaskScheduler.schedule(testScenarioRunnable,
-            new CronTrigger("0 " + cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
+        final ScheduledFuture<?> scheduledFuture = applicationManager.getBeanOfType(TaskScheduler.class)
+            .schedule(testScenarioRunnable, new CronTrigger("0 " + cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
 
         lock.lock();
         try {
@@ -88,7 +87,7 @@ public class ScheduleTestScenarioService {
             return;
         }
 
-        threadPoolTaskScheduler.schedule(testScenarioRunnable, Instant.now());
+        applicationManager.getBeanOfType(TaskScheduler.class).schedule(testScenarioRunnable, Instant.now());
     }
 
     public void scheduleInSyncMode(TestScenarioRunnable testScenarioRunnable) throws InterruptedException, ExecutionException, TimeoutException {
@@ -96,8 +95,9 @@ public class ScheduleTestScenarioService {
             return;
         }
 
-        threadPoolTaskScheduler.schedule(testScenarioRunnable, Instant.now())
-            .get(settingProvider.getOrDefault(SettingKeyEnum.TEST_SCENARIO_EXEC_TIMEOUT, (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
+        applicationManager.getBeanOfType(TaskScheduler.class).schedule(testScenarioRunnable, Instant.now())
+            .get(applicationManager.getBeanOfType(SettingProvider.class).getOrDefault(SettingKeyEnum.TEST_SCENARIO_EXEC_TIMEOUT,
+                (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
     }
 
 }

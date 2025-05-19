@@ -33,7 +33,7 @@ public class ClassOfComponentToStringConverter implements AttributeConverter<Cla
             final Class<?> targetClass = Class.forName(target);
             return Component.class.isAssignableFrom(targetClass) ? (Class<? extends Component>) targetClass : null;
         } catch (ClassNotFoundException notUsed) {
-            // If class is not found, the target component will be null and will not appear in the final menu.
+            // If a class is not found, the target component will be null and will not appear in the final menu.
             // Enable logging on debug to investigate possible issues.
             log.debug("Component class could not be found for target '{}'", target);
         }

@@ -15,16 +15,29 @@ spring:
         # Pretty print all SQL queries in console
         format_sql: true
   datasource:
-    # Property to specify location of main SQLite database
+    # Property to specify the location of the main SQLite database
     url: jdbc:sqlite:database.db
     # Database driver
     driver-class-name: org.sqlite.JDBC
   mustache:
     check-template-location: false
+  threads:
+    virtual:
+      enabled: true
 
-settings:
-  test-scenario-scheduler:
-    # Number of threads part of test scenario scheduling pool
-    pool-size: 2
-    # A thread prefix to easily identify threads from scheduling pool
-    thread-name-prefix: "test-scenario-pool-"
+logging:
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    # Property for defining root level for application logs.
+    root: INFO # use DEBUG as a value for activating DEBUG level
+    # Uncomment the following property if you want to activate debug level only for classes created by this app.
+    #org:
+    #  myalerts: DEBUG
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB # Limit for log file size
+      max-history: 10 # Activate log rolling
+  file:
+    name: application.log # Default name for a logging file

@@ -35,19 +35,19 @@ public final class TestScenarioFilter implements Filter<TestScenario> {
                 : item -> true);
     }
 
-    public TestScenarioFilter setByTypeCriteria(final TestScenarioType byTypeCriteria) {
+    public TestScenarioFilter setByTypeCriteria(TestScenarioType byTypeCriteria) {
         this.byTypeCriteria = byTypeCriteria;
 
         return this;
     }
 
-    public TestScenarioFilter setByNameCriteria(final String byNameCriteria) {
+    public TestScenarioFilter setByNameCriteria(String byNameCriteria) {
         this.byNameCriteria = byNameCriteria;
 
         return this;
     }
 
-    public TestScenarioFilter setByTagCriteria(final Set<String> byTagCriteria) {
+    public TestScenarioFilter setByTagCriteria(Set<String> byTagCriteria) {
         this.byTagCriteria = byTagCriteria;
 
         return this;

@@ -27,16 +27,12 @@ public enum SettingKeyEnum {
     COOKIE_EXPIRY_IN_SECONDS("cookieExpiryInSeconds"),
     GRID_PAGE_SIZE("gridPageSize"),
     GRID_PAGINATOR_SIZE("gridPaginatorSize"),
-    TEST_SCENARIO_POOL_SIZE("testScenarioPoolSize"),
-    TEST_SCENARIO_THREAD_NAME_PREFIX("testScenarioThreadNamePrefix"),
-    TEST_SCENARIO_EXEC_TIMEOUT("testScenarioExecTimeout"),
-    EVENT_CORE_POOL_SIZE("eventCorePoolSize"),
-    EVENT_MAX_POOL_SIZE("eventMaxPoolSize");
+    TEST_SCENARIO_EXEC_TIMEOUT("testScenarioExecTimeout");
 
     @Getter
     private final String key;
 
-    public static SettingKeyEnum of(final String value) {
+    public static SettingKeyEnum of(String value) {
         return Arrays.stream(SettingKeyEnum.values())
             .filter(item -> item.getKey().equals(value))
             .findFirst()

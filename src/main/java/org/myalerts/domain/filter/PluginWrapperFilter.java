@@ -25,7 +25,7 @@ public final class PluginWrapperFilter implements Filter<PluginWrapper> {
             : item -> true;
     }
 
-    public PluginWrapperFilter setByNameCriteria(final String byNameCriteria) {
+    public PluginWrapperFilter setByNameCriteria(String byNameCriteria) {
         this.byNameCriteria = byNameCriteria;
 
         return this;
