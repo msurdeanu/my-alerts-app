@@ -1,15 +1,16 @@
 package org.myalerts.provider;
 
 import com.vaadin.flow.i18n.I18NProvider;
+import groovy.lang.Tuple2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.ApplicationManager;
 import org.myalerts.domain.SupportedLanguage;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
@@ -17,7 +18,6 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 import static java.util.Locale.ENGLISH;
-import static java.util.Optional.ofNullable;
 
 /**
  * @author Mihai Surdeanu
@@ -33,8 +33,6 @@ public class TranslationProvider implements I18NProvider {
 
     private final ApplicationManager applicationManager;
 
-    private PrettyTime cachedPrettyTime;
-
     @Override
     public List<Locale> getProvidedLocales() {
         return List.of(ENGLISH);
@@ -48,8 +46,9 @@ public class TranslationProvider implements I18NProvider {
             return null;
         }
 
-        if (PRETTY_TIME_FORMAT.equals(key) && args.length == 1 && args[0] instanceof Instant) {
-            return prettyTimeFormat((Instant) args[0], locale);
+        if (PRETTY_TIME_FORMAT.equals(key) && args.length == 1 && args[0] instanceof Instant instant) {
+            final var prettiedTime = prettyTime(instant);
+            return getTranslation(prettiedTime.getV1(), locale, prettiedTime.getV2());
         }
 
         return applicationManager.getBeansOfTypeAsStream(TranslationsProvider.class)
@@ -64,11 +63,18 @@ public class TranslationProvider implements I18NProvider {
             .orElse(key);
     }
 
-    private String prettyTimeFormat(Instant time, Locale locale) {
-        cachedPrettyTime = ofNullable(cachedPrettyTime)
-            .filter(prettyTime -> prettyTime.getLocale().equals(locale))
-            .orElseGet(() -> new PrettyTime(locale));
-        return cachedPrettyTime.format(time);
+    private Tuple2<String, Long> prettyTime(Instant instant) {
+        final var duration = Duration.between(instant, Instant.now());
+        final var seconds = duration.getSeconds();
+        if (seconds < 60) {
+            return Tuple2.tuple("pretty.time.seconds", seconds);
+        } else if (seconds < 3600) {
+            return Tuple2.tuple("pretty.time.minutes", seconds / 60);
+        } else if (seconds < 86400) {
+            return Tuple2.tuple("pretty.time.hours", seconds / 3600);
+        } else {
+            return Tuple2.tuple("pretty.time.days", seconds / 86400);
+        }
     }
 
 }

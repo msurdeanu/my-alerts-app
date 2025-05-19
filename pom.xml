@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.5</version>
     </parent>
 
     <properties>
@@ -22,12 +22,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>24.6.2</vaadin.version>
-        <grid-pagination.version>4.0.0</grid-pagination.version>
+        <vaadin.version>24.7.4</vaadin.version>
+        <grid-pagination.version>4.0.1</grid-pagination.version>
         <ace.version>3.4.2</ace.version>
-        <lombok.version>1.18.36</lombok.version>
+        <lombok.version>1.18.38</lombok.version>
         <jool.version>0.9.14</jool.version>
-        <prettytime.version>5.0.2.Final</prettytime.version>
         <flyway-core.version>9.19.1</flyway-core.version>
         <pf4j-spring.version>0.9.0</pf4j-spring.version>
         <groovy.version>4.0.24</groovy.version>
@@ -93,17 +92,13 @@
     <dependencies>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-core</artifactId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
             <exclusions>
                 <exclusion>
-                    <artifactId>swagger-core</artifactId>
-                    <groupId>io.swagger</groupId>
+                    <artifactId>hilla</artifactId>
+                    <groupId>com.vaadin</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -112,12 +107,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>javassist</artifactId>
-                    <groupId>org.javassist</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -156,11 +145,6 @@
             <version>${jool.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ocpsoft.prettytime</groupId>
-            <artifactId>prettytime</artifactId>
-            <version>${prettytime.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway-core.version}</version>
@@ -168,7 +152,7 @@
         <dependency>
             <groupId>org.myalerts</groupId>
             <artifactId>my-alerts-api</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.pf4j</groupId>
