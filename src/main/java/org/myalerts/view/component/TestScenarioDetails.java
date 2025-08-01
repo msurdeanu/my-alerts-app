@@ -31,6 +31,7 @@ public final class TestScenarioDetails extends Composite<VerticalLayout> {
 
         editor.addClassName("ace-editor");
         editor.setMode(AceMode.groovy);
+        editor.setUseWorker(true);
         layout.add(editor);
 
         saveButton.setEnabled(false);

@@ -1,4 +1,6 @@
 /target/
+libs/
+!libs/.gitkeep
 .idea/
 .settings
 .project

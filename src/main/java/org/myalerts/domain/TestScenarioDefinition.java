@@ -3,6 +3,7 @@ package org.myalerts.domain;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import lombok.Getter;
+import org.myalerts.holder.ParentClassLoaderHolder;
 
 /**
  * @author Mihai Surdeanu
@@ -10,8 +11,6 @@ import lombok.Getter;
  */
 @Getter
 public final class TestScenarioDefinition {
-
-    private static final GroovyShell GROOVY_SHELL = new GroovyShell();
 
     private String script;
 
@@ -36,7 +35,7 @@ public final class TestScenarioDefinition {
 
     private void recreateScriptEngine() {
         try {
-            parsedScript = GROOVY_SHELL.parse(script);
+            parsedScript = new GroovyShell(ParentClassLoaderHolder.INSTANCE.getClassLoader()).parse(script);
         } catch (Exception e) {
             cause = e.getMessage();
             parsedScript = null;

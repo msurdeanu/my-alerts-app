@@ -13,22 +13,23 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.4</version>
     </parent>
 
     <properties>
         <java.version>21</java.version>
 
-        <vaadin.version>24.7.4</vaadin.version>
+        <vaadin.version>24.8.5</vaadin.version>
         <grid-pagination.version>4.0.1</grid-pagination.version>
+        <my-alerts-api.version>1.0.6</my-alerts-api.version>
         <ace.version>3.4.2</ace.version>
         <lombok.version>1.18.38</lombok.version>
-        <jool.version>0.9.14</jool.version>
-        <flyway-core.version>9.19.1</flyway-core.version>
-        <pf4j-spring.version>0.9.0</pf4j-spring.version>
-        <groovy.version>4.0.24</groovy.version>
-        <junit-jupiter.version>5.11.4</junit-jupiter.version>
-        <mockito-junit-jupiter.version>5.14.2</mockito-junit-jupiter.version>
+        <jool.version>0.9.15</jool.version>
+        <flyway-core.version>11.10.5</flyway-core.version>
+        <pf4j-spring.version>0.10.0</pf4j-spring.version>
+        <groovy.version>4.0.28</groovy.version>
+        <junit-jupiter.version>5.13.4</junit-jupiter.version>
+        <mockito-junit-jupiter.version>5.18.0</mockito-junit-jupiter.version>
     </properties>
 
     <scm>
@@ -149,7 +150,7 @@
         <dependency>
             <groupId>org.myalerts</groupId>
             <artifactId>my-alerts-api</artifactId>
-            <version>1.0.4</version>
+            <version>${my-alerts-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.pf4j</groupId>
@@ -159,11 +160,6 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-json</artifactId>
             <version>${groovy.version}</version>
         </dependency>
         <dependency>

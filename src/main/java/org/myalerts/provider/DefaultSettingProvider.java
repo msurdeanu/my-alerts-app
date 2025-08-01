@@ -2,7 +2,6 @@ package org.myalerts.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.domain.Setting;
-import org.myalerts.domain.SettingKeyEnum;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,35 +21,35 @@ public class DefaultSettingProvider implements SettingProvider {
     }
 
     @Override
-    public Integer getOrDefault(SettingKeyEnum key, Integer defaultValue) {
-        log.warn(DEFAULT_VALUE_IS_PROVIDED, key.getKey());
+    public Integer getOrDefault(String key, Integer defaultValue) {
+        log.warn(DEFAULT_VALUE_IS_PROVIDED, key);
         return defaultValue;
     }
 
     @Override
-    public Boolean getOrDefault(SettingKeyEnum key, Boolean defaultValue) {
-        log.warn(DEFAULT_VALUE_IS_PROVIDED, key.getKey());
+    public Boolean getOrDefault(String key, Boolean defaultValue) {
+        log.warn(DEFAULT_VALUE_IS_PROVIDED, key);
         return defaultValue;
     }
 
     @Override
-    public String getOrDefault(SettingKeyEnum key, String defaultValue) {
-        log.warn(DEFAULT_VALUE_IS_PROVIDED, key.getKey());
+    public String getOrDefault(String key, String defaultValue) {
+        log.warn(DEFAULT_VALUE_IS_PROVIDED, key);
         return defaultValue;
     }
 
     @Override
-    public void set(SettingKeyEnum key, Integer toValue) {
+    public void set(String key, Integer toValue) {
         // Nothing to do
     }
 
     @Override
-    public void set(SettingKeyEnum key, Boolean toValue) {
+    public void set(String key, Boolean toValue) {
         // Nothing to do
     }
 
     @Override
-    public void set(SettingKeyEnum key, String toValue) {
+    public void set(String key, String toValue) {
         // Nothing to do
     }
 

@@ -41,3 +41,8 @@ logging:
       max-history: 10 # Activate log rolling
   file:
     name: application.log # Default name for a logging file
+
+my-alerts:
+  config:
+    library:
+      base-directory: "libs"

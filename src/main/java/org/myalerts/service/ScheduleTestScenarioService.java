@@ -3,7 +3,6 @@ package org.myalerts.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.myalerts.ApplicationManager;
-import org.myalerts.domain.SettingKeyEnum;
 import org.myalerts.domain.TestScenarioRunnable;
 import org.myalerts.provider.SettingProvider;
 import org.springframework.scheduling.TaskScheduler;
@@ -96,7 +95,7 @@ public class ScheduleTestScenarioService {
         }
 
         applicationManager.getBeanOfType(TaskScheduler.class).schedule(testScenarioRunnable, Instant.now())
-            .get(applicationManager.getBeanOfType(SettingProvider.class).getOrDefault(SettingKeyEnum.TEST_SCENARIO_EXEC_TIMEOUT,
+            .get(applicationManager.getBeanOfType(SettingProvider.class).getOrDefault("testScenarioExecTimeout",
                 (int) TimeUnit.MINUTES.toSeconds(60)), TimeUnit.SECONDS);
     }
 
