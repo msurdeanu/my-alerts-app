@@ -2,6 +2,7 @@ package org.myalerts.config;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import lombok.RequiredArgsConstructor;
+import org.myalerts.provider.SettingProvider;
 import org.myalerts.repository.UserRepository;
 import org.myalerts.service.ApplicationUserDetailsService;
 import org.myalerts.view.LoginView;
@@ -23,16 +24,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig extends VaadinWebSecurity {
 
-    private final BaseConfig baseConfig;
+    private final SettingProvider settingProvider;
     private final UserRepository userRepository;
 
     @Override
     @SuppressWarnings("removal")
     public void configure(HttpSecurity http) throws Exception {
         http.rememberMe(
-            config -> config.alwaysRemember(true).key(baseConfig.getRememberMeCookieName())
-                .tokenValiditySeconds(baseConfig.getRememberMeCookieDays() * 86400)
-                .rememberMeCookieName(baseConfig.getRememberMeCookieName()));
+            config -> config.alwaysRemember(true).key(settingProvider.getOrDefault("rememberMeCookieName", "ma-rm"))
+                .tokenValiditySeconds(settingProvider.getOrDefault("rememberMeCookieDays", 30) * 86400)
+                .rememberMeCookieName(settingProvider.getOrDefault("rememberMeCookieName", "ma-rm")));
         http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/logo.png")).permitAll();
         super.configure(http);
 

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,9 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
 
     private Mapper1<SettingType, Setting, Optional<Component>> createMapper() {
         return Mapper1.<SettingType, Setting, Optional<Component>>builder(new EnumMap<>(SettingType.class))
-            .map(SettingType.TEXT, setting -> Optional.of(createTextField(setting)))
+            .map(SettingType.STR, setting -> Optional.of(createTextField(setting)))
+            .map(SettingType.STR_H, setting -> Optional.empty())
+            .map(SettingType.TEXT, setting -> Optional.of(createTextArea(setting)))
             .map(SettingType.TEXT_H, setting -> Optional.empty())
             .map(SettingType.PASSWORD, setting -> Optional.of(createPasswordField(setting)))
             .map(SettingType.INTEGER, setting -> Optional.of(createIntegerField(setting)))
@@ -69,6 +72,22 @@ public class SettingsToComponentsTransformer implements Transformer<List<Setting
         );
 
         return textField;
+    }
+
+    private Component createTextArea(Setting setting) {
+        final var textArea = new TextArea();
+        textArea.setLabel(textArea.getTranslation(setting.getTitle()));
+        textArea.setHelperText(textArea.getTranslation(setting.getDescription()));
+        if (!setting.isEditable()) {
+            textArea.setReadOnly(true);
+        }
+
+        binder.forField(textArea).bind(
+            settingProvider -> settingProvider.getOrDefault(setting.getKey(), StringUtils.EMPTY),
+            (settingProvider, newValue) -> settingProvider.set(setting.getKey(), newValue)
+        );
+
+        return textArea;
     }
 
     private PasswordField createPasswordField(Setting setting) {

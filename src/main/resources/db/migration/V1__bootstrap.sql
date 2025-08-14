@@ -98,41 +98,50 @@ CREATE TABLE settings
 );
 
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('version', '', '', 'text_h', '1.0', '0', '0');
+VALUES ('version', '', '', 'str_h', '1.0', '0', '0');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('language', 'settings.language.label', 'settings.language.helper', 'text', 'en', '1', '1');
+VALUES ('language', 'settings.language.label', 'settings.language.helper', 'str', 'en', '1', '1');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
-VALUES ('salt', 'settings.salt.label', 'settings.salt.helper', 'text', lower(hex(randomblob(16))), '1', '2');
+VALUES ('salt', 'settings.salt.label', 'settings.salt.helper', 'str', lower(hex(randomblob(16))), '1', '2');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('rememberMeCookieName', 'settings.remember-me.cookie-name.label',
+        'settings.remember-me.cookie-name.helper', 'str', 'ma-rm', '1', '3');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('rememberMeCookieDays', 'settings.remember-me.cookie-days.label',
+        'settings.remember-me.cookie-days.helper', 'int', '30', '1', '4');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('testScenarioExecTimeout', 'settings.test-scenario.exec-timeout.label',
-        'settings.test-scenario.exec-timeout.helper', 'int', '60', '1', '3');
+        'settings.test-scenario.exec-timeout.helper', 'int', '60', '1', '5');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheMenuItemMaxSize', 'settings.cache.menu-item.max-size.label', 'settings.cache.menu-item.max-size.helper',
-        'int', '20', '0', '4');
+        'int', '20', '0', '6');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheMenuItemExpireAfterAccess', 'settings.cache.menu-item.expire-after-access.label',
-        'settings.cache.menu-item.expire-after-access.helper', 'int', '0', '0', '5');
+        'settings.cache.menu-item.expire-after-access.helper', 'int', '0', '0', '7');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheMenuItemExpireAfterWrite', 'settings.cache.menu-item.expire-after-write.label',
-        'settings.cache.menu-item.expire-after-write.helper', 'int', '86400', '0', '6');
+        'settings.cache.menu-item.expire-after-write.helper', 'int', '86400', '0', '8');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTestScenarioResultMaxSize', 'settings.cache.test-scenario-result.max-size.label',
-        'settings.cache.test-scenario-result.max-size.helper', 'int', '100', '0', '7');
+        'settings.cache.test-scenario-result.max-size.helper', 'int', '100', '0', '9');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTestScenarioResultExpireAfterAccess', 'settings.cache.test-scenario-result.expire-after-access.label',
-        'settings.cache.test-scenario-result.expire-after-access.helper', 'int', '300', '0', '8');
+        'settings.cache.test-scenario-result.expire-after-access.helper', 'int', '300', '0', '10');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTestScenarioResultExpireAfterWrite', 'settings.cache.test-scenario-result.expire-after-write.label',
-        'settings.cache.test-scenario-result.expire-after-write.helper', 'int', '0', '0', '9');
+        'settings.cache.test-scenario-result.expire-after-write.helper', 'int', '0', '0', '11');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTranslationKeyMaxSize', 'settings.cache.translation-key.max-size.label',
-        'settings.cache.translation-key.max-size.helper', 'int', '10000', '0', '10');
+        'settings.cache.translation-key.max-size.helper', 'int', '10000', '0', '11');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTranslationKeyExpireAfterAccess', 'settings.cache.translation-key.expire-after-access.label',
-        'settings.cache.translation-key.expire-after-access.helper', 'int', '0', '0', '11');
+        'settings.cache.translation-key.expire-after-access.helper', 'int', '0', '0', '13');
 INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
 VALUES ('cacheTranslationKeyExpireAfterWrite', 'settings.cache.translation-key.expire-after-write.label',
-        'settings.cache.translation-key.expire-after-write.helper', 'int', '3600', '0', '12');
+        'settings.cache.translation-key.expire-after-write.helper', 'int', '3600', '0', '14');
+INSERT INTO settings ("key", "title", "description", "type", "value", "editable", "position")
+VALUES ('aboutPageContent', 'settings.cache.about-page.content.label',
+        'settings.cache.about-page.content.helper', 'text', '# Test', '1', '15');
 
 CREATE UNIQUE INDEX settings_key_index ON settings ("key");
 

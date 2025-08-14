@@ -39,7 +39,7 @@ public class Tag implements Comparable<Tag> {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (this == other) {
             return true;
         }
@@ -56,7 +56,7 @@ public class Tag implements Comparable<Tag> {
     }
 
     @Override
-    public int compareTo(final Tag other) {
+    public int compareTo(Tag other) {
         return name.compareTo(other.name);
     }
 

@@ -12,6 +12,8 @@ import static java.util.Arrays.stream;
 @RequiredArgsConstructor
 public enum SettingType {
 
+    STR("str"),
+    STR_H("str_h"),
     TEXT("text"),
     TEXT_H("text_h"),
     PASSWORD("pass"),
@@ -23,7 +25,7 @@ public enum SettingType {
     @Getter
     private final String value;
 
-    public static SettingType of(final String value) {
+    public static SettingType of(String value) {
         return stream(values())
             .filter(settingType -> settingType.getValue().equals(value))
             .findFirst()

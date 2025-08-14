@@ -12,16 +12,8 @@ public interface SettingProvider {
 
     List<Setting> getAll();
 
-    Integer getOrDefault(String key, Integer defaultValue);
+    <T> T getOrDefault(String key, T defaultValue);
 
-    Boolean getOrDefault(String key, Boolean defaultValue);
-
-    String getOrDefault(String key, String defaultValue);
-
-    void set(String key, Integer toValue);
-
-    void set(String key, Boolean toValue);
-
-    void set(String key, String toValue);
+    <T> void set(String key, T toValue);
 
 }

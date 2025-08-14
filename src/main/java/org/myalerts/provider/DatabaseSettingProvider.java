@@ -68,6 +68,8 @@ public final class DatabaseSettingProvider implements InvocationHandler {
 
     private static Mapper1<SettingType, String, Optional<Object>> createMapper() {
         return Mapper1.<SettingType, String, Optional<Object>>builder(new EnumMap<>(SettingType.class))
+            .map(SettingType.STR, Optional::of)
+            .map(SettingType.STR_H, Optional::of)
             .map(SettingType.TEXT, Optional::of)
             .map(SettingType.TEXT_H, Optional::of)
             .map(SettingType.PASSWORD, Optional::of)

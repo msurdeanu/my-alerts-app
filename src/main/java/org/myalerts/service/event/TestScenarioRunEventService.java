@@ -31,7 +31,7 @@ public class TestScenarioRunEventService implements EventListener<TestScenarioRu
     @CacheEvict(cacheNames = "test-scenario-results", cacheManager = "testScenarioResultCacheManager", key = "#event.testScenarioRun?.scenarioId")
     @Override
     public void onEventReceived(TestScenarioRunEvent event) {
-        testScenarioResultRepository.save(TestScenarioResult.from(event.getTestScenarioRun()));
+        testScenarioResultRepository.save(TestScenarioResult.of(event.getTestScenarioRun()));
     }
 
     @Override

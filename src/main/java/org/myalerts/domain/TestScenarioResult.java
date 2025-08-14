@@ -54,7 +54,7 @@ public class TestScenarioResult implements Persistable<Integer> {
         return true;
     }
 
-    public static TestScenarioResult from(TestScenarioRun testScenarioRun) {
+    public static TestScenarioResult of(TestScenarioRun testScenarioRun) {
         return TestScenarioResult.builder()
             .scenarioId(testScenarioRun.getScenarioId())
             .cause(testScenarioRun.getCause())
